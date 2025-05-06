@@ -24,11 +24,17 @@ namespace ForDaku
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            DrawRoulette(e);
+        }
+
+        void DrawRoulette(PaintEventArgs e)
+        {
             Graphics g = e.Graphics;
             Rectangle rect = new Rectangle(0, 0, panel1.Width, panel1.Height); // 파이 그릴 영역
 
             List<MyListItem> itemList = new List<MyListItem>();
 
+            // flowlayout에서 리스트 추출
             foreach (MyListItem item in flowLayoutPanel1.Controls)
             {
                 itemList.Add(item);
@@ -36,9 +42,32 @@ namespace ForDaku
 
             Brush brush = Brushes.Blue; // 색상 선택
             float startAngle = 0;       // 시작 각도 (0도)
-            float sweepAngle = 120;     // 파이 조각 각도 (120도)
+            float sweepAngle = 0;     // 파이 조각 각도 (120도)
 
-            g.FillPie(brush, rect, startAngle, sweepAngle);
+            foreach (MyListItem item in itemList)
+            {
+                // 색상 가져오기
+                brush = new SolidBrush(item.ItemColor);
+                // 확률 가져오기
+                float probability = item.NumericUpDownValue / (float)GetAllCount();
+                // 확률을 각도로 변환
+                sweepAngle = ProbabilityToDegree(probability);
+                // 색, 영역, 시작 각도, 영역 각도(몇도까지 할지)
+                g.FillPie(brush, rect, startAngle, sweepAngle);
+                // 시작 각도 업데이트
+                startAngle += sweepAngle;
+            }
+        }
+
+        void UpdateRoulette()
+        {
+            panel1.Invalidate();
+            panel1.Update();
+        }
+
+        float ProbabilityToDegree(float probability)
+        {
+            return (float)(probability * 360.0);
         }
 
         float DegreeToRadian(float degree)
@@ -74,18 +103,21 @@ namespace ForDaku
             item.NumericUpDownValue = myListItem1.NumericUpDownValue;
             item.NumericUpDownControl.ValueChanged += (s, ev) =>
             {
-                ChangeAllProbability();
+                UpdateProbability();
+                UpdateRoulette();
             };
             item.ButtonControl.Click += (s, ev) =>
             {
                 flowLayoutPanel1.Controls.Remove(item);
-                ChangeAllProbability();
+                UpdateProbability();
+                UpdateRoulette();
             };
             flowLayoutPanel1.Controls.Add(item);
-            ChangeAllProbability();
+            UpdateProbability();
+            UpdateRoulette();
         }
 
-        public void ChangeAllProbability()
+        public void UpdateProbability()
         {
             int allCount = GetAllCount();
             foreach (MyListItem item in flowLayoutPanel1.Controls)
@@ -148,5 +180,6 @@ namespace ForDaku
         {
 
         }
+
     }
 }
