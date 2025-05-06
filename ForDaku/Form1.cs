@@ -18,8 +18,11 @@ namespace ForDaku
     {
         float rotationAngle = 0f;
         Timer spinTimer;
-        float spinVelocity = 10f; // 초기 속도
-        float spinDeceleration = 0.1f; // 감속도
+        float spinVelocity = 40f; // 초기 속도
+        float spinDeceleration = 0.5f; // 감속도
+
+        bool isDecelerating = false;
+        float minVelocity = 0.1f; // 멈출 기준 속도
 
         public Form1()
         {
@@ -59,14 +62,22 @@ namespace ForDaku
 
         void StartSpin()
         {
-            spinVelocity = 20f; // 원하는 속도로 설정
+            spinVelocity = 40f;
+            isDecelerating = false;
+
             if (spinTimer == null)
             {
                 spinTimer = new Timer();
-                spinTimer.Interval = 16; // 약 60 FPS
+                spinTimer.Interval = 16;
                 spinTimer.Tick += SpinTimer_Tick;
             }
+
             spinTimer.Start();
+        }
+
+        void StartDeceleration()
+        {
+            isDecelerating = true;
         }
 
         private void SpinTimer_Tick(object sender, EventArgs e)
@@ -75,12 +86,19 @@ namespace ForDaku
             if (rotationAngle >= 360f)
                 rotationAngle -= 360f;
 
-            spinVelocity -= spinDeceleration;
-            if (spinVelocity <= 0)
+            // 감속 중일 때만 속도 감소
+            if (isDecelerating)
             {
-                spinVelocity = 0;
-                spinTimer.Stop();
-                // 필요하다면 여기에 당첨 항목 계산 로직 추가
+                spinVelocity -= spinDeceleration;
+                if (spinVelocity <= minVelocity)
+                {
+                    spinVelocity = 0;
+                    spinTimer.Stop();
+                    isDecelerating = false;
+
+                    button2.Text = "회전";
+                    button2.Enabled = true;
+                }
             }
 
             UpdateRoulette();
@@ -281,7 +299,16 @@ namespace ForDaku
 
         private void button2_Click(object sender, EventArgs e)
         {
-            StartSpin();
+            if (button2.Text == "회전")
+            {
+                StartSpin();                   // 회전 시작
+                button2.Text = "정지";         // 텍스트 변경
+            }
+            else if (button2.Text == "정지")
+            {
+                StartDeceleration();           // 감속 시작
+                button2.Enabled = false;       // 버튼 비활성화
+            }
         }
     }
 

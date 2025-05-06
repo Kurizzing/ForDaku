@@ -28,21 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new ForDaku.DoubleBufferedPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
-            this.myListItem1 = new ForDaku.MyListItem();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.myListItem1 = new ForDaku.MyListItem();
+            this.panel1 = new ForDaku.DoubleBufferedPanel();
             this.SuspendLayout();
-            // 
-            // panel1
-            // 
-            this.panel1.Location = new System.Drawing.Point(10, 50);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 820);
-            this.panel1.TabIndex = 0;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // flowLayoutPanel1
             // 
@@ -63,24 +55,13 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // myListItem1
-            // 
-            this.myListItem1.ItemColor = System.Drawing.SystemColors.Control;
-            this.myListItem1.LabelText = "label1";
-            this.myListItem1.Location = new System.Drawing.Point(830, 525);
-            this.myListItem1.Name = "myListItem1";
-            this.myListItem1.NumericUpDownValue = 0;
-            this.myListItem1.Size = new System.Drawing.Size(520, 57);
-            this.myListItem1.TabIndex = 4;
-            this.myListItem1.TextBoxValue = "";
-            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(848, 772);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(126, 69);
             this.button2.TabIndex = 5;
-            this.button2.Text = "button2";
+            this.button2.Text = "회전";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -94,6 +75,25 @@
             this.label1.Size = new System.Drawing.Size(326, 27);
             this.label1.TabIndex = 6;
             this.label1.Text = "label1111111111111111";
+            // 
+            // myListItem1
+            // 
+            this.myListItem1.ItemColor = System.Drawing.SystemColors.Control;
+            this.myListItem1.LabelText = "label1";
+            this.myListItem1.Location = new System.Drawing.Point(830, 525);
+            this.myListItem1.Name = "myListItem1";
+            this.myListItem1.NumericUpDownValue = 0;
+            this.myListItem1.Size = new System.Drawing.Size(520, 57);
+            this.myListItem1.TabIndex = 4;
+            this.myListItem1.TextBoxValue = "";
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(10, 50);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(800, 820);
+            this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // Form1
             // 
