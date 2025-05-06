@@ -34,7 +34,27 @@ namespace ForDaku
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            DrawRoulette(e);
+            Graphics g = e.Graphics;
+
+            // 중심을 panel1의 위로 이동
+            g.TranslateTransform(panel1.ClientSize.Width / 2, 0);
+
+            int triangleHeight = 20; // 삼각형 높이
+            int triangleWidth = 20; // 삼각형 너비
+            // 삼각형 좌표 (아래쪽을 향하는 삼각형)
+            Point[] triangle =
+            {
+                new Point(0, triangleHeight),     // 꼭짓점 아래쪽
+                new Point((int)(-triangleWidth/2.0f), 0),   // 왼쪽 위
+                new Point((int)(+triangleWidth/2.0f), 0)     // 오른쪽 위
+            };
+            g.FillPolygon(Brushes.Red, triangle);
+            
+            g.ResetTransform(); // 변환 초기화
+            g.TranslateTransform(0, 20);
+            // todo: 패널 높이 조절 자동화 필요
+
+            DrawRoulette(g, panel1.Width, panel1.Height - triangleHeight);  // 이 결과가 가로세로 비율 1:1이 되어야 원이 됨
         }
 
         void StartSpin()
@@ -66,13 +86,12 @@ namespace ForDaku
             UpdateRoulette();
         }
 
-        void DrawRoulette(PaintEventArgs e)
+        void DrawRoulette(Graphics g, int width, int height)
         {
-            Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
             // 중심점 계산
-            Rectangle rect = new Rectangle(0, 0, panel1.Width, panel1.Height); // 원 영역
+            Rectangle rect = new Rectangle(0, 0, width, height); // 원 영역
             PointF center = new PointF(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
 
             List<MyListItem> itemList = new List<MyListItem>();
@@ -83,7 +102,6 @@ namespace ForDaku
                 {
                     itemList.Add(item);
                 }
-
             }
 
             Brush brush = Brushes.Blue; // 색상 선택
@@ -122,10 +140,21 @@ namespace ForDaku
                     g.Restore(state);
                 }
 
+                // 현재 당첨 아이템
+                if (startAngle <= PointDegree(rotationAngle) && PointDegree(rotationAngle) <= startAngle + sweepAngle)
+                {
+                    label1.Text = item.TextBoxValue;
+                }
+
                 startAngle += sweepAngle;
             }
 
+            
+        }
 
+        float PointDegree(float degree)
+        {
+            return (270 - degree + 360) % 360;
         }
 
         void UpdateRoulette()
