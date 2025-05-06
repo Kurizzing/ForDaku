@@ -3,19 +3,42 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace ForDaku
 {
+    public class DoubleBufferedPanel : Panel
+    {
+        public DoubleBufferedPanel()
+        {
+            this.DoubleBuffered = true;
+            this.ResizeRedraw = true;
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            this.ResumeLayout(false);
+
+        }
+    }
     public partial class Form1 : Form
     {
+        float rotationAngle = 0f;
+        Timer spinTimer;
+        float spinVelocity = 10f; // 초기 속도
+        float spinDeceleration = 0.1f; // 감속도
+
         public Form1()
         {
             InitializeComponent();
+            this.DoubleBuffered = true; // 더블 버퍼링 활성화
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -28,13 +51,45 @@ namespace ForDaku
             DrawRoulette(e);
         }
 
+        void StartSpin()
+        {
+            spinVelocity = 20f; // 원하는 속도로 설정
+            if (spinTimer == null)
+            {
+                spinTimer = new Timer();
+                spinTimer.Interval = 16; // 약 60 FPS
+                spinTimer.Tick += SpinTimer_Tick;
+            }
+            spinTimer.Start();
+        }
+
+        private void SpinTimer_Tick(object sender, EventArgs e)
+        {
+            rotationAngle += spinVelocity;
+            if (rotationAngle >= 360f)
+                rotationAngle -= 360f;
+
+            spinVelocity -= spinDeceleration;
+            if (spinVelocity <= 0)
+            {
+                spinVelocity = 0;
+                spinTimer.Stop();
+                // 필요하다면 여기에 당첨 항목 계산 로직 추가
+            }
+
+            UpdateRoulette();
+        }
+
         void DrawRoulette(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Rectangle rect = new Rectangle(0, 0, panel1.Width, panel1.Height); // 파이 그릴 영역
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+
+            // 중심점 계산
+            Rectangle rect = new Rectangle(0, 0, panel1.Width, panel1.Height); // 원 영역
+            PointF center = new PointF(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
 
             List<MyListItem> itemList = new List<MyListItem>();
-
             // flowlayout에서 리스트 추출
             foreach (Control ctrl in flowLayoutPanel1.Controls)
             {
@@ -42,24 +97,28 @@ namespace ForDaku
                 {
                     itemList.Add(item);
                 }
+
             }
 
             Brush brush = Brushes.Blue; // 색상 선택
             float startAngle = 0;       // 시작 각도 (0도)
             float sweepAngle = 0;     // 파이 조각 각도 (120도)
 
+            // 회전 적용
+            g.TranslateTransform(center.X, center.Y);
+            g.RotateTransform(rotationAngle);
+            g.TranslateTransform(-center.X, -center.Y);
+
             foreach (MyListItem item in itemList)
             {
-                // 색상 가져오기
                 brush = new SolidBrush(item.ItemColor);
                 float probability = item.NumericUpDownValue / (float)GetAllCount();
                 sweepAngle = ProbabilityToDegree(probability);
 
                 g.FillPie(brush, rect, startAngle, sweepAngle);
 
-                // 중심과 각도 계산
+                // 중간 각도
                 float midAngle = startAngle + sweepAngle / 2;
-                PointF center = new PointF(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
                 float radius = rect.Width / 2 * 0.7f;
                 double radians = midAngle * Math.PI / 180;
 
@@ -70,17 +129,10 @@ namespace ForDaku
 
                 using (Font font = new Font("굴림", 16))
                 {
-                    // 현재 상태 저장
                     var state = g.Save();
-
-                    // 텍스트 회전 처리
                     g.TranslateTransform(textPos.X, textPos.Y);
-                    g.RotateTransform(midAngle); // midAngle만큼 회전
-
-                    // 텍스트 그리기 (로컬 좌표 기준이므로 약간 위치 조정)
+                    g.RotateTransform(midAngle);
                     g.DrawString(item.TextBoxValue, font, Brushes.Black, new PointF(-20, -10));
-
-                    // 원래대로 복구
                     g.Restore(state);
                 }
 
@@ -212,5 +264,9 @@ namespace ForDaku
 
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            StartSpin();
+        }
     }
 }
