@@ -15,7 +15,6 @@ namespace ForDaku
         public Form1()
         {
             InitializeComponent();
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -27,6 +26,14 @@ namespace ForDaku
         {
             Graphics g = e.Graphics;
             Rectangle rect = new Rectangle(0, 0, panel1.Width, panel1.Height); // 파이 그릴 영역
+
+            List<MyListItem> itemList = new List<MyListItem>();
+
+            foreach (MyListItem item in flowLayoutPanel1.Controls)
+            {
+                itemList.Add(item);
+            }
+
             Brush brush = Brushes.Blue; // 색상 선택
             float startAngle = 0;       // 시작 각도 (0도)
             float sweepAngle = 120;     // 파이 조각 각도 (120도)
@@ -34,17 +41,57 @@ namespace ForDaku
             g.FillPie(brush, rect, startAngle, sweepAngle);
         }
 
+        float DegreeToRadian(float degree)
+        {
+            return (float)(degree * Math.PI / 180.0);
+        }
+
+        float radianToDegree(float radian)
+        {
+            return (float)(radian * 180.0 / Math.PI);
+        }
+
+        int GetAllCount()
+        {
+            int count = 0;
+            foreach (MyListItem item in flowLayoutPanel1.Controls)
+            {
+                count += item.NumericUpDownValue;
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// 버튼 클릭 시 새로운 MyListItem을 생성하여 FlowLayoutPanel에 추가합니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            
-
             var item = new MyListItem();
+            item.ItemColor = GenerateDistinctColor();
             item.TextBoxValue = myListItem1.TextBoxValue;
             item.NumericUpDownValue = myListItem1.NumericUpDownValue;
-            item.LabelText = myListItem1.LabelText;
-            item.ItemColor = GenerateDistinctColor();
+            item.NumericUpDownControl.ValueChanged += (s, ev) =>
+            {
+                ChangeAllProbability();
+            };
+            item.ButtonControl.Click += (s, ev) =>
+            {
+                flowLayoutPanel1.Controls.Remove(item);
+                ChangeAllProbability();
+            };
             flowLayoutPanel1.Controls.Add(item);
-            
+            ChangeAllProbability();
+        }
+
+        public void ChangeAllProbability()
+        {
+            int allCount = GetAllCount();
+            foreach (MyListItem item in flowLayoutPanel1.Controls)
+            {
+                item.LabelText = (item.NumericUpDownValue / (float)allCount * 100).ToString("0.0") + "%";
+            }
         }
 
         private void myListItem1_Load(object sender, EventArgs e)

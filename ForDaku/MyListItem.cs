@@ -31,6 +31,16 @@ namespace ForDaku
             set { numericUpDown1.Value = value; }
         }
 
+        public NumericUpDown NumericUpDownControl
+        {
+            get { return numericUpDown1; }
+        }
+
+        public Button ButtonControl
+        {
+            get { return button1; }
+        }
+
         public string LabelText
         {
             get { return label1.Text; }
@@ -61,12 +71,12 @@ namespace ForDaku
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // UserControl을 포함한 FlowLayoutPanel에서 자신을 제거
-            FlowLayoutPanel parentPanel = this.Parent as FlowLayoutPanel;
-            if (parentPanel != null)
-            {
-                parentPanel.Controls.Remove(this);  // UserControl 제거
-            }
+            //// UserControl을 포함한 FlowLayoutPanel에서 자신을 제거
+            //FlowLayoutPanel parentPanel = this.Parent as FlowLayoutPanel;
+            //if (parentPanel != null)
+            //{
+            //    parentPanel.Controls.Remove(this);  // UserControl 제거
+            //}
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
