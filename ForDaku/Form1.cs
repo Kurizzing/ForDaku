@@ -13,21 +13,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace ForDaku
 {
-    public class DoubleBufferedPanel : Panel
-    {
-        public DoubleBufferedPanel()
-        {
-            this.DoubleBuffered = true;
-            this.ResizeRedraw = true;
-        }
-
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            this.ResumeLayout(false);
-
-        }
-    }
+    
     public partial class Form1 : Form
     {
         float rotationAngle = 0f;
@@ -267,6 +253,22 @@ namespace ForDaku
         private void button2_Click(object sender, EventArgs e)
         {
             StartSpin();
+        }
+    }
+
+    public class DoubleBufferedPanel : Panel
+    {
+        public DoubleBufferedPanel()
+        {
+            this.DoubleBuffered = true;
+            this.ResizeRedraw = true;
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            this.ResumeLayout(false);
+
         }
     }
 }
