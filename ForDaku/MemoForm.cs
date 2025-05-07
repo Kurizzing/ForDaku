@@ -22,6 +22,8 @@ namespace ForDaku
         private bool isResizing = false;
         private Point lastMousePosition;
 
+        List<(string, int)> itemList;
+
 
         private RouletteForm rouletteForm;
         public MemoForm()
@@ -258,7 +260,7 @@ namespace ForDaku
 
         private void button1_Click(object sender, EventArgs e)
         {
-            rouletteForm = new RouletteForm(this);
+            rouletteForm = new RouletteForm(this, itemList);
             
             rouletteForm.Show();
         }
@@ -278,14 +280,11 @@ namespace ForDaku
 
         }
 
-        private void sortButton_Click(object sender, EventArgs e)
+        private List<(string, int)> MakeList()
         {
-            label1.Text = "정렬 버튼 클릭됨";
-            RichTextBox richTextBox = richTextBox1;
+            itemList = new List<(string, int)>();
 
-            string textBoxString = richTextBox.Text;
-            List<(string, int)> itemList = new List<(string, int)>();
-
+            string textBoxString = richTextBox1.Text;
             string[] lines = textBoxString.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
             label1.Text = $"{lines.Length}";
 
@@ -302,6 +301,15 @@ namespace ForDaku
                     itemList.Add((deckName, count));
                 }
             }
+            return itemList;
+        }
+
+        private void sortButton_Click(object sender, EventArgs e)
+        {
+            label1.Text = "정렬 버튼 클릭됨";
+            RichTextBox richTextBox = richTextBox1;
+
+            MakeList();
 
             // 선택된 정렬 옵션에 따라 정렬
             switch (optionComboBox.SelectedIndex)

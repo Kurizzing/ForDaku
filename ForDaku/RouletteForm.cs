@@ -17,6 +17,7 @@ namespace ForDaku
     public partial class RouletteForm : Form
     {
         private MemoForm memoForm;
+        List<(string, int)> itemList;
         float rotationAngle = 0f;
         Timer spinTimer;
         float spinVelocity = 40f; // 초기 속도
@@ -25,11 +26,20 @@ namespace ForDaku
         bool isDecelerating = false;
         float minVelocity = 0.1f; // 멈출 기준 속도
 
-        public RouletteForm(MemoForm memoForm)
+        public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
         {
             this.memoForm = memoForm;
+            if (itemList != null)
+            {
+                this.itemList = itemList;
+            }
+            
             InitializeComponent();
             this.DoubleBuffered = true; // 더블 버퍼링 활성화
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                addItemToRoulette(itemList[i].Item1, itemList[i].Item2);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -208,17 +218,12 @@ namespace ForDaku
             return count;
         }
 
-        /// <summary>
-        /// 버튼 클릭 시 새로운 MyListItem을 생성하여 FlowLayoutPanel에 추가합니다.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void addItemToRoulette(string textBoxValue, int numericUpDownValue)
         {
             var item = new MyListItem();
             item.ItemColor = GenerateDistinctColor();
-            item.TextBoxValue = myListItem1.TextBoxValue;
-            item.NumericUpDownValue = myListItem1.NumericUpDownValue;
+            item.TextBoxValue = textBoxValue;
+            item.NumericUpDownValue = numericUpDownValue;
             item.NumericUpDownControl.ValueChanged += (s, ev) =>
             {
                 UpdateProbability();
@@ -233,6 +238,17 @@ namespace ForDaku
             flowLayoutPanel.Controls.Add(item);
             UpdateProbability();
             UpdateRoulette();
+        }
+
+        /// <summary>
+        /// 버튼 클릭 시 새로운 MyListItem을 생성하여 FlowLayoutPanel에 추가합니다.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)
+        {
+            addItemToRoulette(myListItem1.TextBoxValue, myListItem1.NumericUpDownValue);
+
         }
 
         public void UpdateProbability()
