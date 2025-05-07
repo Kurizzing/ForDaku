@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,6 +56,11 @@ namespace ForDaku
                 {
                     // 'Ctrl + F' 눌렀을 때 찾기 대화상자 표시
                     ShowFindDialog(richTextBox);
+                }
+                if (e.Control && e.KeyCode == Keys.S)
+                {
+                    SaveToFile();  // 기존에 만든 저장 함수 호출
+                    e.SuppressKeyPress = true; // 삑 소리 방지
                 }
             };
 
@@ -353,6 +359,45 @@ namespace ForDaku
         private void richTextBox2_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void SaveToFile()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog.Title = "Save Text File";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(saveFileDialog.FileName, richTextBox1.Text);
+            }
+        }
+
+        private void LoadFromFile()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.Title = "Open Text File";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                richTextBox1.Text = File.ReadAllText(openFileDialog.FileName);
+            }
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            SaveToFile();
+        }
+
+        private void loadButton_Click(object sender, EventArgs e)
+        {
+            LoadFromFile();
         }
     }
 }
