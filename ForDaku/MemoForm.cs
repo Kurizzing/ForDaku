@@ -260,6 +260,7 @@ namespace ForDaku
 
         private void button1_Click(object sender, EventArgs e)
         {
+            MakeList();
             rouletteForm = new RouletteForm(this, itemList);
             
             rouletteForm.Show();

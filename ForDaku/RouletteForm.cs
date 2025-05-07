@@ -36,10 +36,12 @@ namespace ForDaku
             
             InitializeComponent();
             this.DoubleBuffered = true; // 더블 버퍼링 활성화
-            for (int i = 0; i < itemList.Count; i++)
-            {
-                addItemToRoulette(itemList[i].Item1, itemList[i].Item2);
-            }
+
+            if (itemList != null)
+                for (int i = 0; i < itemList.Count; i++)
+                {
+                    addItemToRoulette(itemList[i].Item1, itemList[i].Item2);
+                }
         }
 
         private void Form1_Load(object sender, EventArgs e)
