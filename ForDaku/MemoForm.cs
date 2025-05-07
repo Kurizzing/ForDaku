@@ -32,15 +32,20 @@ namespace ForDaku
             richTextBox.Font = new Font("굴림", 30);
             richTextBox.SelectionFont = new Font("굴림", 30);
             richTextBox.ImeMode = ImeMode.Hangul;
-            richTextBox1.LanguageOption = 0;
+            richTextBox.LanguageOption = 0;
             richTextBox.Text = "드래곤메이드 5";
 
-            richTextBox1.GotFocus += RichTextBox_Enter;
+            richTextBox1.GotFocus += RichTextBox_Focus;
 
-            richTextBox1.LostFocus += (sender, e) =>
-            {
-                label1.Text = "리치텍스트박스 포커스 아웃";
-            };
+            richTextBox2.Font = new Font("굴림", 30);
+            richTextBox2.SelectionFont = new Font("굴림", 30);
+            richTextBox2.ImeMode = ImeMode.Hangul;
+            richTextBox2.LanguageOption = 0;
+
+            //richTextBox1.LostFocus += (sender, e) =>
+            //{
+            //    label1.Text = "리치텍스트박스 포커스 아웃";
+            //};
 
             // Ctrl + F 핫키 처리
             this.KeyPreview = true;
@@ -52,6 +57,17 @@ namespace ForDaku
                     ShowFindDialog(richTextBox);
                 }
             };
+
+            ComboBox sortOption = optionComboBox;
+            sortOption.Items.Add("빈도순");
+            sortOption.Items.Add("이름순");
+            sortOption.Items.Add("무작위");
+            sortOption.Items.Add("최대최소순");
+            sortOption.SelectedIndex = 0; // 기본값 설정
+            //sortOption.SelectedIndexChanged += (sender, e) => {
+            //    label1.Text = "선택된 항목: " + sortOption.SelectedItem.ToString();
+            //    // 선택된 항목에 따른 정렬 처리
+            //};
 
             //// 폼이 비활성화되면 선택 영역 상태 저장
             //this.Deactivate += (sender, e) =>
@@ -134,7 +150,7 @@ namespace ForDaku
         //    this.Cursor = Cursors.Default;  // 크기 조정 완료 후 기본 커서로 돌아감
         //}
 
-        private void RichTextBox_Enter(object sender, EventArgs e)
+        private void RichTextBox_Focus(object sender, EventArgs e)
         {
             RichTextBox richTextBox = richTextBox1;
             // RichTextBox에 포커스가 들어오면 선택 영역 복원
@@ -143,7 +159,6 @@ namespace ForDaku
                 richTextBox.Select(lastSearchIndex, lastSelectionLength);
                 richTextBox.SelectionBackColor = richTextBox.BackColor; // 배경색 복원
             }
-            label1.Text = "엔터";
         }
 
         private void ShowFindDialog(RichTextBox richTextBox)
@@ -243,6 +258,99 @@ namespace ForDaku
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MemoForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void sortButton_Click(object sender, EventArgs e)
+        {
+            label1.Text = "정렬 버튼 클릭됨";
+            RichTextBox richTextBox = richTextBox1;
+
+            string textBoxString = richTextBox.Text;
+            List<(string, int)> itemList = new List<(string, int)>();
+
+            string[] lines = textBoxString.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
+            label1.Text = $"{lines.Length}";
+
+
+            foreach (var line in lines)
+            {
+                string[] parts = line.Split(new[] { ' ' }, StringSplitOptions.None);
+
+                if (parts.Length == 2)
+                {
+                    string deckName = parts[0];
+                    int count = int.Parse(parts[1]);
+
+                    itemList.Add((deckName, count));
+                }
+            }
+
+            // 선택된 정렬 옵션에 따라 정렬
+            switch (optionComboBox.SelectedIndex)
+            {
+                case 0: // 빈도순
+                    itemList = itemList.OrderByDescending(x => x.Item2).ToList();
+                    break;
+                case 1: // 이름순
+                    itemList = itemList.OrderBy(x => x.Item1).ToList();
+                    break;
+                case 2: // 무작위
+                    Random random = new Random();
+                    itemList = itemList.OrderBy(x => random.Next()).ToList();
+                    break;
+                case 3: // 최대최소순
+                    var descending = itemList.OrderByDescending(x => x.Item2).ToList(); // 많은 값부터
+                    var ascending = itemList.OrderBy(x => x.Item2).ToList();             // 적은 값부터
+
+                    var result = new List<(string, int)>();
+                    int i = 0;
+                    while (i < descending.Count || i < ascending.Count)
+                    {
+                        if (i < descending.Count)
+                            result.Add(descending[i]);
+                        if (i < ascending.Count)
+                            result.Add(ascending[i]);
+                        i++;
+                    }
+
+                    // 중복 제거 (많은 값 == 적은 값인 항목이 중복될 수 있음)
+                    result = result.Distinct().ToList();
+
+                    itemList = result;
+                    break;
+            }
+
+            // 정렬된 결과를 RichTextBox에 다시 표시
+            richTextBox.Clear();
+            foreach (var item in itemList)
+            {
+                richTextBox.AppendText($"{item.Item1} {item.Item2}{Environment.NewLine}");
+            }
+        }
+
+        private void optionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
         {
 
         }
