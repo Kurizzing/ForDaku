@@ -14,8 +14,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 namespace ForDaku
 {
     
-    public partial class Form1 : Form
+    public partial class RouletteForm : Form
     {
+        private MemoForm memoForm;
         float rotationAngle = 0f;
         Timer spinTimer;
         float spinVelocity = 40f; // 초기 속도
@@ -24,8 +25,9 @@ namespace ForDaku
         bool isDecelerating = false;
         float minVelocity = 0.1f; // 멈출 기준 속도
 
-        public Form1()
+        public RouletteForm(MemoForm memoForm)
         {
+            this.memoForm = memoForm;
             InitializeComponent();
             this.DoubleBuffered = true; // 더블 버퍼링 활성화
         }
@@ -40,7 +42,7 @@ namespace ForDaku
             Graphics g = e.Graphics;
 
             // 중심을 panel1의 위로 이동
-            g.TranslateTransform(panel1.ClientSize.Width / 2, 0);
+            g.TranslateTransform(roulettePanel.ClientSize.Width / 2, 0);
 
             int triangleHeight = 20; // 삼각형 높이
             int triangleWidth = 20; // 삼각형 너비
@@ -57,7 +59,7 @@ namespace ForDaku
             g.TranslateTransform(0, 20);
             // todo: 패널 높이 조절 자동화 필요
 
-            DrawRoulette(g, panel1.Width, panel1.Height - triangleHeight);  // 이 결과가 가로세로 비율 1:1이 되어야 원이 됨
+            DrawRoulette(g, roulettePanel.Width, roulettePanel.Height - triangleHeight);  // 이 결과가 가로세로 비율 1:1이 되어야 원이 됨
         }
 
         void StartSpin()
@@ -96,8 +98,8 @@ namespace ForDaku
                     spinTimer.Stop();
                     isDecelerating = false;
 
-                    button2.Text = "회전";
-                    button2.Enabled = true;
+                    rotateButton.Text = "회전";
+                    rotateButton.Enabled = true;
                 }
             }
 
@@ -114,7 +116,7 @@ namespace ForDaku
 
             List<MyListItem> itemList = new List<MyListItem>();
             // flowlayout에서 리스트 추출
-            foreach (Control ctrl in flowLayoutPanel1.Controls)
+            foreach (Control ctrl in flowLayoutPanel.Controls)
             {
                 if (ctrl is MyListItem item)
                 {
@@ -161,7 +163,7 @@ namespace ForDaku
                 // 현재 당첨 아이템
                 if (startAngle <= PointDegree(rotationAngle) && PointDegree(rotationAngle) <= startAngle + sweepAngle)
                 {
-                    label1.Text = item.TextBoxValue;
+                    prizeLabel.Text = item.TextBoxValue;
                 }
 
                 startAngle += sweepAngle;
@@ -177,8 +179,8 @@ namespace ForDaku
 
         void UpdateRoulette()
         {
-            panel1.Invalidate();
-            panel1.Update();
+            roulettePanel.Invalidate();
+            roulettePanel.Update();
         }
 
         float ProbabilityToDegree(float probability)
@@ -199,7 +201,7 @@ namespace ForDaku
         int GetAllCount()
         {
             int count = 0;
-            foreach (MyListItem item in flowLayoutPanel1.Controls)
+            foreach (MyListItem item in flowLayoutPanel.Controls)
             {
                 count += item.NumericUpDownValue;
             }
@@ -224,11 +226,11 @@ namespace ForDaku
             };
             item.ButtonControl.Click += (s, ev) =>
             {
-                flowLayoutPanel1.Controls.Remove(item);
+                flowLayoutPanel.Controls.Remove(item);
                 UpdateProbability();
                 UpdateRoulette();
             };
-            flowLayoutPanel1.Controls.Add(item);
+            flowLayoutPanel.Controls.Add(item);
             UpdateProbability();
             UpdateRoulette();
         }
@@ -236,7 +238,7 @@ namespace ForDaku
         public void UpdateProbability()
         {
             int allCount = GetAllCount();
-            foreach (MyListItem item in flowLayoutPanel1.Controls)
+            foreach (MyListItem item in flowLayoutPanel.Controls)
             {
                 item.LabelText = (item.NumericUpDownValue / (float)allCount * 100).ToString("0.0") + "%";
             }
@@ -299,16 +301,27 @@ namespace ForDaku
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (button2.Text == "회전")
+            if (rotateButton.Text == "회전")
             {
                 StartSpin();                   // 회전 시작
-                button2.Text = "정지";         // 텍스트 변경
+                rotateButton.Text = "정지";         // 텍스트 변경
             }
-            else if (button2.Text == "정지")
+            else if (rotateButton.Text == "정지")
             {
                 StartDeceleration();           // 감속 시작
-                button2.Enabled = false;       // 버튼 비활성화
+                rotateButton.Enabled = false;       // 버튼 비활성화
             }
+        }
+
+        private void ToMemoFormButton_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            memoForm.Show();
+        }
+
+        private void prizeLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
