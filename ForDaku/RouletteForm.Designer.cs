@@ -33,23 +33,24 @@
             this.itemAddButton = new System.Windows.Forms.Button();
             this.rotateButton = new System.Windows.Forms.Button();
             this.prizeLabel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.timerControl1 = new ForDaku.TimerControl();
             this.myListItem1 = new ForDaku.MyListItem();
             this.roulettePanel = new ForDaku.DoubleBufferedPanel();
-            this.timerControl1 = new ForDaku.TimerControl();
             this.SuspendLayout();
             // 
             // flowLayoutPanel
             // 
             this.flowLayoutPanel.AutoScroll = true;
-            this.flowLayoutPanel.Location = new System.Drawing.Point(830, 50);
+            this.flowLayoutPanel.Location = new System.Drawing.Point(1192, 50);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
-            this.flowLayoutPanel.Size = new System.Drawing.Size(807, 460);
+            this.flowLayoutPanel.Size = new System.Drawing.Size(700, 460);
             this.flowLayoutPanel.TabIndex = 1;
             this.flowLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
             // 
             // itemAddButton
             // 
-            this.itemAddButton.Location = new System.Drawing.Point(1373, 525);
+            this.itemAddButton.Location = new System.Drawing.Point(1524, 532);
             this.itemAddButton.Name = "itemAddButton";
             this.itemAddButton.Size = new System.Drawing.Size(157, 57);
             this.itemAddButton.TabIndex = 2;
@@ -59,7 +60,8 @@
             // 
             // rotateButton
             // 
-            this.rotateButton.Location = new System.Drawing.Point(848, 772);
+            this.rotateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.rotateButton.Location = new System.Drawing.Point(981, 951);
             this.rotateButton.Name = "rotateButton";
             this.rotateButton.Size = new System.Drawing.Size(126, 69);
             this.rotateButton.TabIndex = 5;
@@ -79,11 +81,28 @@
             this.prizeLabel.Text = "label1111111111111111";
             this.prizeLabel.Click += new System.EventHandler(this.prizeLabel_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(979, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 12);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "label1";
+            // 
+            // timerControl1
+            // 
+            this.timerControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.timerControl1.Location = new System.Drawing.Point(981, 766);
+            this.timerControl1.Name = "timerControl1";
+            this.timerControl1.Size = new System.Drawing.Size(340, 140);
+            this.timerControl1.TabIndex = 7;
+            // 
             // myListItem1
             // 
             this.myListItem1.ItemColor = System.Drawing.SystemColors.Control;
             this.myListItem1.LabelText = "label1";
-            this.myListItem1.Location = new System.Drawing.Point(830, 525);
+            this.myListItem1.Location = new System.Drawing.Point(981, 532);
             this.myListItem1.Name = "myListItem1";
             this.myListItem1.NumericUpDownValue = 0;
             this.myListItem1.Size = new System.Drawing.Size(520, 57);
@@ -94,22 +113,16 @@
             // 
             this.roulettePanel.Location = new System.Drawing.Point(10, 50);
             this.roulettePanel.Name = "roulettePanel";
-            this.roulettePanel.Size = new System.Drawing.Size(800, 820);
+            this.roulettePanel.Size = new System.Drawing.Size(950, 990);
             this.roulettePanel.TabIndex = 0;
             this.roulettePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
-            // timerControl1
-            // 
-            this.timerControl1.Location = new System.Drawing.Point(1070, 701);
-            this.timerControl1.Name = "timerControl1";
-            this.timerControl1.Size = new System.Drawing.Size(340, 140);
-            this.timerControl1.TabIndex = 7;
             // 
             // RouletteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.timerControl1);
             this.Controls.Add(this.prizeLabel);
             this.Controls.Add(this.rotateButton);
@@ -119,7 +132,9 @@
             this.Controls.Add(this.roulettePanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RouletteForm";
-            this.Text = "룰렛";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "xxx";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -135,6 +150,7 @@
         private System.Windows.Forms.Button rotateButton;
         private System.Windows.Forms.Label prizeLabel;
         private TimerControl timerControl1;
+        private System.Windows.Forms.Label label1;
     }
 }
 

@@ -58,6 +58,14 @@ namespace ForDaku
                 {
                     addItemToRoulette(itemList[i].Item1, itemList[i].Item2);
                 }
+
+            this.SizeChanged += Form1_SizeChanged;
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            label1.Text = $"새로운 크기: {this.ClientSize.Width} x {this.ClientSize.Height}";
+            UpdateRoulette();
         }
 
         public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
@@ -78,6 +86,16 @@ namespace ForDaku
                 }
         }
 
+        private (float, float) LTToCenter(float x, float y, float width, float height)
+        {
+            return (x + width / 2, y + height / 2);
+        }
+
+        private (float, float) CenterToLT(float x, float y, float width, float height)
+        {
+            return (x - width / 2, y - height / 2);
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -87,11 +105,34 @@ namespace ForDaku
         {
             Graphics g = e.Graphics;
 
+            // 크기 조정
+            int triangleHeight = 40; // 삼각형 높이
+            int triangleWidth = 40; // 삼각형 너비
+
+            float clientWidth = this.ClientSize.Width;
+            float clientHeight = this.ClientSize.Height;
+
+            float panelHeight = (clientHeight - rotateButton.Height - prizeLabel.Height - 150);
+            float panelWidth = panelHeight - triangleHeight;
+
+            roulettePanel.Height = (int)panelHeight;
+            roulettePanel.Width = (int)panelWidth;
+
+            // 위치 조정
+            float panelX = clientWidth / 4;
+            float panelY = clientHeight / 2;
+
+            float prizeLabelX = panelX;
+            float prizeLabelY = panelY + panelHeight - 20;
+            (float panelL, float panelT) = CenterToLT(panelX, panelY, roulettePanel.Width, roulettePanel.Height);
+            roulettePanel.Location = new Point((int)panelL, (int)panelT);
+
+            
+
             // 중심을 panel1의 위로 이동
             g.TranslateTransform(roulettePanel.ClientSize.Width / 2, 0);
 
-            int triangleHeight = 20; // 삼각형 높이
-            int triangleWidth = 20; // 삼각형 너비
+            
             // 삼각형 좌표 (아래쪽을 향하는 삼각형)
             Point[] triangle =
             {
@@ -102,7 +143,7 @@ namespace ForDaku
             g.FillPolygon(Brushes.Red, triangle);
             
             g.ResetTransform(); // 변환 초기화
-            g.TranslateTransform(0, 20);
+            g.TranslateTransform(0, triangleHeight);
             // todo: 패널 높이 조절 자동화 필요
 
             DrawRoulette(g, roulettePanel.Width, roulettePanel.Height - triangleHeight);  // 이 결과가 가로세로 비율 1:1이 되어야 원이 됨
