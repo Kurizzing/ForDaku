@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,39 @@ namespace ForDaku
 
         bool isDecelerating = false;
         float minVelocity = 0.1f; // 멈출 기준 속도
+
+        // for test
+        public RouletteForm()
+        {
+            InitializeComponent();
+            this.DoubleBuffered = true; // 더블 버퍼링 활성화
+
+
+            string txt = File.ReadAllText("C:/Users/lkuku/Desktop/a.txt");
+
+            itemList = new List<(string, int)>();
+            string[] lines = txt.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
+
+
+            foreach (var line in lines)
+            {
+                string[] parts = line.Split(new[] { ' ' }, StringSplitOptions.None);
+
+                if (parts.Length == 2)
+                {
+                    string deckName = parts[0];
+                    int count = int.Parse(parts[1]);
+
+                    itemList.Add((deckName, count));
+                }
+            }
+
+            if (itemList != null)
+                for (int i = 0; i < itemList.Count; i++)
+                {
+                    addItemToRoulette(itemList[i].Item1, itemList[i].Item2);
+                }
+        }
 
         public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
         {
