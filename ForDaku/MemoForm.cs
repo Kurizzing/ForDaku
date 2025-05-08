@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,6 +31,29 @@ namespace ForDaku
         public MemoForm()
         {
             InitializeComponent();
+
+            sortButton.FlatStyle = FlatStyle.Flat;
+            sortButton.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(sortButton, sortButton.Image);
+            saveButton.FlatStyle = FlatStyle.Flat;
+            saveButton.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(saveButton, saveButton.Image);
+            loadButton.FlatStyle = FlatStyle.Flat;
+            loadButton.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(loadButton, loadButton.Image);
+
+            urlButtonMM.FlatStyle = FlatStyle.Flat;
+            urlButtonMM.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(urlButtonMM, urlButtonMM.Image);
+            urlButtonDC.FlatStyle = FlatStyle.Flat;
+            urlButtonDC.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(urlButtonDC, urlButtonDC.Image);
+            urlButtonYT.FlatStyle = FlatStyle.Flat;
+            urlButtonYT.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(urlButtonYT, urlButtonYT.Image);
+            urlButtonCF.FlatStyle = FlatStyle.Flat;
+            urlButtonCF.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(urlButtonCF, urlButtonCF.Image);
 
             // RichTextBox 설정
             RichTextBox richTextBox = richTextBox1;
@@ -63,6 +88,14 @@ namespace ForDaku
                 {
                     SaveToFile();  // 기존에 만든 저장 함수 호출
                     e.SuppressKeyPress = true; // 삑 소리 방지
+                }
+                if (e.Control && e.KeyCode == Keys.R)
+                {
+                    e.Handled = true;           // 기본 동작(예: 새로고침 등) 막기
+
+                    sortButton.PerformClick();  // 버튼 클릭 동작 실행
+                    richTextBox1.SelectionStart = 0;  // 커서를 텍스트의 첫 번째로 설정
+                    richTextBox1.ScrollToCaret();     // 스크롤을 커서 위치로 이동시킴
                 }
             };
 
@@ -157,6 +190,42 @@ namespace ForDaku
         //    isResizing = false;
         //    this.Cursor = Cursors.Default;  // 크기 조정 완료 후 기본 커서로 돌아감
         //}
+
+        private void SetResizedButtonImageWithAspect(Button btn, Image originalImage)
+        {
+            int buttonWidth = btn.ClientSize.Width;
+            int buttonHeight = btn.ClientSize.Height;
+
+            float imageAspect = (float)originalImage.Width / originalImage.Height;
+            float buttonAspect = (float)buttonWidth / buttonHeight;
+
+            int drawWidth, drawHeight;
+
+            if (imageAspect > buttonAspect)
+            {
+                // 이미지가 버튼보다 더 가로로 긴 경우 → 가로 최대
+                drawWidth = buttonWidth;
+                drawHeight = (int)(buttonWidth / imageAspect);
+            }
+            else
+            {
+                // 이미지가 버튼보다 더 세로로 긴 경우 → 세로 최대
+                drawHeight = buttonHeight;
+                drawWidth = (int)(buttonHeight * imageAspect);
+            }
+
+            // 리사이징된 이미지 생성
+            Bitmap resizedImage = new Bitmap(drawWidth, drawHeight);
+            using (Graphics g = Graphics.FromImage(resizedImage))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.Clear(Color.Transparent);
+                g.DrawImage(originalImage, 0, 0, drawWidth, drawHeight);
+            }
+
+            btn.Image = resizedImage;
+            btn.ImageAlign = ContentAlignment.MiddleCenter;
+        }
 
         private void RichTextBox_Focus(object sender, EventArgs e)
         {
@@ -287,7 +356,6 @@ namespace ForDaku
 
             string textBoxString = richTextBox1.Text;
             string[] lines = textBoxString.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
-            label1.Text = $"{lines.Length}";
 
 
             foreach (var line in lines)
@@ -307,7 +375,6 @@ namespace ForDaku
 
         private void sortButton_Click(object sender, EventArgs e)
         {
-            label1.Text = "정렬 버튼 클릭됨";
             RichTextBox richTextBox = richTextBox1;
 
             MakeList();
@@ -407,6 +474,46 @@ namespace ForDaku
         private void loadButton_Click(object sender, EventArgs e)
         {
             LoadFromFile();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void openURL(string url)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true   // 필수: 기본 브라우저로 열리게 함
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("웹 페이지를 열 수 없습니다: " + ex.Message);
+            }
+        }
+
+        private void urlButtonMM_Click(object sender, EventArgs e)
+        {
+            openURL("https://www.masterduelmeta.com/");
+        }
+
+        private void urlButtonDC_Click(object sender, EventArgs e)
+        {
+            openURL("https://gall.dcinside.com/mgallery/board/lists/?id=masterduel");
+        }
+
+        private void urlButtonYT_Click(object sender, EventArgs e)
+        {
+            openURL("https://www.youtube.com/@Kim_Daku");
+        }
+
+        private void urlButtonCF_Click(object sender, EventArgs e)
+        {
+            openURL("https://cafe.naver.com/kimdaku");
         }
     }
 }
