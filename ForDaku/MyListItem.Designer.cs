@@ -96,6 +96,7 @@
             this.Controls.Add(this.textBox1);
             this.Name = "MyListItem";
             this.Size = new System.Drawing.Size(520, 57);
+            this.Load += new System.EventHandler(this.MyListItem_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

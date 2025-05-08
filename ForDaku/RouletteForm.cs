@@ -341,6 +341,11 @@ namespace ForDaku
         {
 
         }
+
+        private void timerControl1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class DoubleBufferedPanel : Panel

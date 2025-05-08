@@ -83,5 +83,10 @@ namespace ForDaku
         {
 
         }
+
+        private void MyListItem_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

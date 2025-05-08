@@ -66,6 +66,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TimerControl.Designer.cs">
+      <DependentUpon>TimerControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="RouletteForm.resx">
       <DependentUpon>RouletteForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -84,6 +90,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TimerControl.resx">
+      <DependentUpon>TimerControl.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

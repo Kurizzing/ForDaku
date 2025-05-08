@@ -39,6 +39,7 @@
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
+            this.timerControl1 = new ForDaku.TimerControl();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -141,11 +142,19 @@
             this.loadButton.UseVisualStyleBackColor = true;
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
+            // timerControl1
+            // 
+            this.timerControl1.Location = new System.Drawing.Point(1021, 570);
+            this.timerControl1.Name = "timerControl1";
+            this.timerControl1.Size = new System.Drawing.Size(340, 140);
+            this.timerControl1.TabIndex = 10;
+            // 
             // MemoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.timerControl1);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.richTextBox2);
@@ -176,5 +185,6 @@
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button loadButton;
+        private TimerControl timerControl1;
     }
 }
