@@ -10,8 +10,8 @@ namespace ForDaku
         private TimeSpan remainingTime;
 
         // UI 컨트롤 필드
-        private NumericUpDown numericMinute;
-        private NumericUpDown numericSecond;
+        private CustomNumericUpDown numericMinute;
+        private CustomNumericUpDown numericSecond;
         private Button btnStart;
         private Button btnReset;
         private Button btnAdd10s;
@@ -31,8 +31,28 @@ namespace ForDaku
 
         private void InitializeCustomUI()
         {
-            numericMinute = minNumericUpDown;
-            numericSecond = secNumericUpDown;
+            numericMinute = new CustomNumericUpDown();
+            numericMinute.Location = new Point(35, 17);
+            numericMinute.Maximum = 59;
+            numericMinute.Minimum = 0;
+            numericMinute.Font = new Font("굴림", 30F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(129)));
+            numericMinute.Size = new Size(70, 53);
+            this.Controls.Add(numericMinute);
+
+            numericSecond = new CustomNumericUpDown();
+            numericSecond.Location = new Point(133, 17);
+            numericSecond.Maximum = 59;
+            numericSecond.Minimum = 0;
+            numericSecond.Size = new Size(70, 53);
+            numericSecond.Font = new Font("굴림", 30F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(129)));
+            this.Controls.Add(numericSecond);
+
+            numericMinute.UpButtonClicked += (s, ev) => AddMinutes(1);
+            numericMinute.DownButtonClicked += (s, ev) => AddMinutes(-1);
+
+            numericSecond.UpButtonClicked += (s, ev) => AddSeconds(1);
+            numericSecond.DownButtonClicked += (s, ev) => AddSeconds(-1);
+
 
             btnStart = startButton;
             btnReset = resetButton;
@@ -62,6 +82,14 @@ namespace ForDaku
             else
             {
                 timer.Stop();
+
+                // clear
+                btnStart.Click -= btnStart_Click;
+                btnStart.Click -= btnRestart_Click;
+                btnStart.Click -= btnStop_Click;
+
+                btnStart.Click += btnStart_Click;
+                btnStart.Text = "Start";
                 MessageBox.Show("타이머 종료!");
             }
         }
@@ -70,7 +98,7 @@ namespace ForDaku
         {
             numericMinute.Value = remainingTime.Minutes;
             numericSecond.Value = remainingTime.Seconds;
-
+            label3.Text = $"{remainingTime.Hours:D2}:{remainingTime.Minutes:D2}:{remainingTime.Seconds:D2}";
         }
 
         private void StartTimer()
@@ -78,10 +106,32 @@ namespace ForDaku
             remainingTime = new TimeSpan(0, (int)numericMinute.Value, (int)numericSecond.Value);
             if (remainingTime.TotalSeconds > 0)
             {
-                numericMinute.Enabled = false;
-                numericSecond.Enabled = false;
+                //numericMinute.Enabled = false;
+                //numericSecond.Enabled = false;
                 timer.Start();
+
+                startButton.Text = "Stop";
+                btnStart.Click -= btnStart_Click;
+                btnStart.Click += btnStop_Click;
             }
+        }
+
+        private void RestartTimer()
+        {
+            timer.Start();
+
+            startButton.Text = "Stop";
+            btnStart.Click -= btnRestart_Click;
+            btnStart.Click += btnStop_Click;
+        }
+
+        private void StopTimer()
+        {
+            timer.Stop();
+
+            btnStart.Text = "ReStart";
+            btnStart.Click -= btnStop_Click;
+            btnStart.Click += btnRestart_Click;
         }
 
         private void ResetTimer()
@@ -89,23 +139,63 @@ namespace ForDaku
             timer.Stop();
             remainingTime = TimeSpan.Zero;
             numericMinute.Value = numericSecond.Value = 0;
-            numericMinute.Enabled = true;
-            numericSecond.Enabled = true;
+
+            btnStart.Text = "Start";
+            // clear
+            btnStart.Click -= btnStart_Click;
+            btnStart.Click -= btnRestart_Click;
+            btnStart.Click -= btnStop_Click;
+
+            btnStart.Click += btnStart_Click;
+
+            UpdateDisplay();
+            //numericMinute.Enabled = true;
+            //numericSecond.Enabled = true;
         }
 
-        private void AddTime(int seconds)
+        private void AddMinutes(int minutes)
         {
-            remainingTime = remainingTime.Add(TimeSpan.FromSeconds(seconds));
+            if (remainingTime.Minutes + minutes > 59)
+            {
+                remainingTime = new TimeSpan(remainingTime.Hours, 59, remainingTime.Seconds);
+            }
+            else if (remainingTime.Minutes + minutes < 0)
+            {
+                remainingTime = new TimeSpan(remainingTime.Hours, 0, remainingTime.Seconds);
+            }
+            else
+            {
+                remainingTime = remainingTime.Add(TimeSpan.FromMinutes(minutes));
+            }
+            UpdateDisplay();
+        }
+
+        private void AddSeconds(int seconds)
+        {
+            if (remainingTime.Seconds + seconds > 59)
+            {
+                remainingTime = new TimeSpan(remainingTime.Hours, remainingTime.Minutes, 59);
+            }
+            else if (remainingTime.Seconds + seconds < 0)
+            {
+                remainingTime = new TimeSpan(remainingTime.Hours, remainingTime.Minutes, 0);
+            }
+            else
+            {
+                remainingTime = remainingTime.Add(TimeSpan.FromSeconds(seconds));
+            }
             UpdateDisplay();
         }
 
         // 버튼 이벤트
         private void btnStart_Click(object sender, EventArgs e) => StartTimer();
         private void btnReset_Click(object sender, EventArgs e) => ResetTimer();
-        private void btnAdd10s_Click(object sender, EventArgs e) => AddTime(10);
-        private void btnAdd1m_Click(object sender, EventArgs e) => AddTime(60);
-        private void btnAdd5m_Click(object sender, EventArgs e) => AddTime(300);
-        private void btnAdd10m_Click(object sender, EventArgs e) => AddTime(600);
+        private void btnRestart_Click(object sender, EventArgs e) => RestartTimer();
+        private void btnStop_Click(object sender, EventArgs e) => StopTimer();
+        private void btnAdd10s_Click(object sender, EventArgs e) => AddSeconds(10);
+        private void btnAdd1m_Click(object sender, EventArgs e) => AddMinutes(1);
+        private void btnAdd5m_Click(object sender, EventArgs e) => AddMinutes(5);
+        private void btnAdd10m_Click(object sender, EventArgs e) => AddMinutes(10);
 
         private void TimerControl_Load(object sender, EventArgs e)
         {
@@ -164,6 +254,11 @@ namespace ForDaku
         {
             base.DownButton(); // 원래 동작 유지
             DownButtonClicked?.Invoke(this, EventArgs.Empty); // 커스텀 이벤트 발생
+        }
+
+        protected override void UpdateEditText()
+        {
+            this.Text = this.Value.ToString("00");
         }
     }
 }

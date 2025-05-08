@@ -35,6 +35,7 @@
             this.prizeLabel = new System.Windows.Forms.Label();
             this.myListItem1 = new ForDaku.MyListItem();
             this.roulettePanel = new ForDaku.DoubleBufferedPanel();
+            this.timerControl1 = new ForDaku.TimerControl();
             this.SuspendLayout();
             // 
             // flowLayoutPanel
@@ -97,11 +98,19 @@
             this.roulettePanel.TabIndex = 0;
             this.roulettePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // timerControl1
+            // 
+            this.timerControl1.Location = new System.Drawing.Point(1070, 701);
+            this.timerControl1.Name = "timerControl1";
+            this.timerControl1.Size = new System.Drawing.Size(340, 140);
+            this.timerControl1.TabIndex = 7;
+            // 
             // RouletteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.timerControl1);
             this.Controls.Add(this.prizeLabel);
             this.Controls.Add(this.rotateButton);
             this.Controls.Add(this.myListItem1);
@@ -125,6 +134,7 @@
         private MyListItem myListItem1;
         private System.Windows.Forms.Button rotateButton;
         private System.Windows.Forms.Label prizeLabel;
+        private TimerControl timerControl1;
     }
 }
 

@@ -24,8 +24,6 @@ namespace ForDaku
 
         private void InitializeComponent()
         {
-            this.minNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.secNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.resetButton = new System.Windows.Forms.Button();
             this.startButton = new System.Windows.Forms.Button();
             this.tenSecButton = new System.Windows.Forms.Button();
@@ -35,37 +33,7 @@ namespace ForDaku
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.minNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.secNumericUpDown)).BeginInit();
             this.SuspendLayout();
-            // 
-            // minNumericUpDown
-            // 
-            this.minNumericUpDown.Font = new System.Drawing.Font("굴림", 30F);
-            this.minNumericUpDown.Location = new System.Drawing.Point(35, 17);
-            this.minNumericUpDown.Maximum = new decimal(new int[] {
-            59,
-            0,
-            0,
-            0});
-            this.minNumericUpDown.Name = "minNumericUpDown";
-            this.minNumericUpDown.Size = new System.Drawing.Size(70, 53);
-            this.minNumericUpDown.TabIndex = 0;
-            this.minNumericUpDown.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-            // 
-            // secNumericUpDown
-            // 
-            this.secNumericUpDown.Font = new System.Drawing.Font("굴림", 30F);
-            this.secNumericUpDown.Location = new System.Drawing.Point(133, 17);
-            this.secNumericUpDown.Maximum = new decimal(new int[] {
-            59,
-            0,
-            0,
-            0});
-            this.secNumericUpDown.Name = "secNumericUpDown";
-            this.secNumericUpDown.Size = new System.Drawing.Size(70, 53);
-            this.secNumericUpDown.TabIndex = 1;
-            this.secNumericUpDown.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
             // 
             // resetButton
             // 
@@ -171,22 +139,15 @@ namespace ForDaku
             this.Controls.Add(this.tenSecButton);
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.resetButton);
-            this.Controls.Add(this.secNumericUpDown);
-            this.Controls.Add(this.minNumericUpDown);
             this.Name = "TimerControl";
             this.Size = new System.Drawing.Size(340, 140);
             this.Load += new System.EventHandler(this.TimerControl_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.minNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.secNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private NumericUpDown minNumericUpDown;
-        private NumericUpDown secNumericUpDown;
         private Button resetButton;
         private Button startButton;
         private Button tenSecButton;
