@@ -25,6 +25,11 @@ namespace ForDaku
             set { textBox1.Text = value; }
         }
 
+        public TextBox TextBoxControl
+        {
+            get { return textBox1; }
+        }
+
         public int NumericUpDownValue
         {
             get { return (int)numericUpDown1.Value; }

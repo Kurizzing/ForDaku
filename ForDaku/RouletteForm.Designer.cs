@@ -50,12 +50,11 @@
             // 
             // prizeLabel
             // 
-            this.prizeLabel.AutoSize = true;
             this.prizeLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.prizeLabel.Font = new System.Drawing.Font("굴림", 20F);
-            this.prizeLabel.Location = new System.Drawing.Point(489, 9);
+            this.prizeLabel.Location = new System.Drawing.Point(10, 9);
             this.prizeLabel.Name = "prizeLabel";
-            this.prizeLabel.Size = new System.Drawing.Size(326, 27);
+            this.prizeLabel.Size = new System.Drawing.Size(950, 27);
             this.prizeLabel.TabIndex = 6;
             this.prizeLabel.Text = "label1111111111111111";
             this.prizeLabel.Click += new System.EventHandler(this.prizeLabel_Click);

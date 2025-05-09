@@ -65,6 +65,12 @@ namespace ForDaku
                 }
 
             this.SizeChanged += Form1_SizeChanged;
+            prizeLabel.AutoEllipsis = true; // 텍스트가 길어지면 ...
+            prizeLabel.TextAlign = ContentAlignment.MiddleCenter;
+
+            RepositionControls();
+
+
         }
 
         public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
@@ -85,13 +91,14 @@ namespace ForDaku
                 }
 
             this.SizeChanged += Form1_SizeChanged;
+            prizeLabel.AutoEllipsis = true; // 텍스트가 길어지면 ...
+            prizeLabel.TextAlign = ContentAlignment.MiddleCenter;
 
+            RepositionControls();
         }
 
-        private void Form1_SizeChanged(object sender, EventArgs e)
+        private void RepositionControls()
         {
-            label1.Text = $"새로운 크기: {this.ClientSize.Width} x {this.ClientSize.Height}";
-
             // ! 룰렛 연관 컨트롤들 화면 배치
             // 크기 조정
             roulettePanel.Height = (ClientSize.Height - rotateButton.Height - prizeLabel.Height - 150);
@@ -135,7 +142,7 @@ namespace ForDaku
 
             addListItem.Location = new Point((int)(flowLayoutPanel.Location.X), (int)(flowLayoutPanel.Location.Y + flowLayoutPanel.Height + margin));
 
-            
+
 
             //flowLayoutPanel.Height = (int)(ClientSize.Height - (timerControl1.Height + addListItem.Height + margin * 4));
             //flowLayoutPanel.Location = new Point((int)(roulettePanel.Location.X + roulettePanel.Width + margin), (int)margin);
@@ -143,7 +150,11 @@ namespace ForDaku
             //addListItem.Location = new Point((int)(flowLayoutPanel.Location.X), (int)(flowLayoutPanel.Location.Y + flowLayoutPanel.Height + margin));
 
             //timerControl1.Location = new Point((int)(flowLayoutPanel.Location.X), (int)(addListItem.Location.Y + addListItem.Height + margin));
+        }
 
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            RepositionControls();
         }
 
         
@@ -232,6 +243,10 @@ namespace ForDaku
 
         void DrawRoulette(Graphics g, int width, int height)
         {
+            if (GetAllCount() == 0)
+            {
+                return;
+            }
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
             // 중심점 계산
@@ -337,6 +352,10 @@ namespace ForDaku
             var item = new MyListItem();
             item.ItemColor = GenerateDistinctColor();
             item.TextBoxValue = textBoxValue;
+            item.TextBoxControl.TextChanged += (s, ev) =>
+            {
+                UpdateRoulette();
+            };
             item.NumericUpDownValue = numericUpDownValue;
             item.ButtonControl.Text = "-";
             item.NumericUpDownControl.ValueChanged += (s, ev) =>
