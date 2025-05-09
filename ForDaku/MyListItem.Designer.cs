@@ -30,9 +30,9 @@
         {
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,14 +59,6 @@
             this.numericUpDown1.TabIndex = 2;
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(422, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(54, 34);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "label1";
-            // 
             // panel1
             // 
             this.panel1.Location = new System.Drawing.Point(4, 15);
@@ -84,6 +76,14 @@
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(422, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(54, 34);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "label1";
             // 
             // MyListItem
             // 
@@ -107,8 +107,8 @@
 
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label1;
     }
 }

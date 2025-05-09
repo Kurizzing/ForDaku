@@ -27,6 +27,11 @@ namespace ForDaku
         bool isDecelerating = false;
         float minVelocity = 0.1f; // 멈출 기준 속도
 
+        int triangleHeight = 40; // 삼각형 높이
+        int triangleWidth = 40; // 삼각형 너비
+        float margin = 20;
+
+
         // for test
         public RouletteForm()
         {
@@ -65,7 +70,59 @@ namespace ForDaku
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             label1.Text = $"새로운 크기: {this.ClientSize.Width} x {this.ClientSize.Height}";
+
+            // ! 룰렛 연관 컨트롤들 화면 배치
+            // 크기 조정
+            roulettePanel.Height = (ClientSize.Height - rotateButton.Height - prizeLabel.Height - 150);
+            roulettePanel.Width = roulettePanel.Height - triangleHeight;
+
+            // 위치 조정
+            float panelX = this.ClientSize.Width / 4;
+            float panelY = ClientSize.Height / 2;
+
+            float prizeLabelX = panelX;
+            float prizeLabelL = CenterToLT(prizeLabelX, 20, prizeLabel.Width, prizeLabel.Height).Item1;
+            float prizeLabelT = margin;
+            prizeLabel.Location = new Point((int)prizeLabelL, (int)prizeLabelT);
+
+            float panelL = CenterToLT(panelX, panelY, roulettePanel.Width, roulettePanel.Height).Item1;
+            float panelT = prizeLabelT + prizeLabel.Height + margin;
+            roulettePanel.Location = new Point((int)panelL, (int)panelT);
+
+            // rotateButton은 남은 공간 중앙에 위치
+            float remainingSpace = ClientSize.Height - (panelT + roulettePanel.Height);
+            float rotateButtonX = panelX;
+            float rotateButtonY = panelT + roulettePanel.Height + remainingSpace / 2;
+            (float rotateButtonL, float rotateButtonT) = CenterToLT(rotateButtonX, rotateButtonY, rotateButton.Width, rotateButton.Height);
+            //float rotateButtonT = panelT + roulettePanel.Height + margin;
+            rotateButton.Location = new Point((int)rotateButtonL, (int)rotateButtonT);
+
             UpdateRoulette();
+
+            // ! 항목 리스트, 타이머 화면 배치
+            // 항목 리스트 가로: 클라이언트의 1/4
+            // 항목 리스트 세로: 타이머, 항목 아이템 추가 제외한 모든 공간
+            // 항목 리스트 바로 밑에 항목 아이템 추가, 그 밑에 타이머 순
+            // Center 기준으로 할 필요없이 LT로 다 될듰? 룰렛 패널 기준으로
+
+            //flowLayoutPanel.Width = (int)(ClientSize.Width / 4);
+            flowLayoutPanel.Height = (int)(ClientSize.Height - (timerControl1.Height + addListItem.Height + margin * 4));
+            float flowLayoutPanelL = roulettePanel.Location.X + roulettePanel.Width + margin;
+
+            timerControl1.Location = new Point((int)(flowLayoutPanelL), (int)(margin));
+            flowLayoutPanel.Location = new Point((int)(flowLayoutPanelL), (int)(timerControl1.Location.Y + timerControl1.Height + margin));
+
+            addListItem.Location = new Point((int)(flowLayoutPanel.Location.X), (int)(flowLayoutPanel.Location.Y + flowLayoutPanel.Height + margin));
+
+            
+
+            //flowLayoutPanel.Height = (int)(ClientSize.Height - (timerControl1.Height + addListItem.Height + margin * 4));
+            //flowLayoutPanel.Location = new Point((int)(roulettePanel.Location.X + roulettePanel.Width + margin), (int)margin);
+
+            //addListItem.Location = new Point((int)(flowLayoutPanel.Location.X), (int)(flowLayoutPanel.Location.Y + flowLayoutPanel.Height + margin));
+
+            //timerControl1.Location = new Point((int)(flowLayoutPanel.Location.X), (int)(addListItem.Location.Y + addListItem.Height + margin));
+
         }
 
         public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
@@ -105,34 +162,9 @@ namespace ForDaku
         {
             Graphics g = e.Graphics;
 
-            // 크기 조정
-            int triangleHeight = 40; // 삼각형 높이
-            int triangleWidth = 40; // 삼각형 너비
-
-            float clientWidth = this.ClientSize.Width;
-            float clientHeight = this.ClientSize.Height;
-
-            float panelHeight = (clientHeight - rotateButton.Height - prizeLabel.Height - 150);
-            float panelWidth = panelHeight - triangleHeight;
-
-            roulettePanel.Height = (int)panelHeight;
-            roulettePanel.Width = (int)panelWidth;
-
-            // 위치 조정
-            float panelX = clientWidth / 4;
-            float panelY = clientHeight / 2;
-
-            float prizeLabelX = panelX;
-            float prizeLabelY = panelY + panelHeight - 20;
-            (float panelL, float panelT) = CenterToLT(panelX, panelY, roulettePanel.Width, roulettePanel.Height);
-            roulettePanel.Location = new Point((int)panelL, (int)panelT);
-
-            
-
             // 중심을 panel1의 위로 이동
             g.TranslateTransform(roulettePanel.ClientSize.Width / 2, 0);
 
-            
             // 삼각형 좌표 (아래쪽을 향하는 삼각형)
             Point[] triangle =
             {
@@ -324,7 +356,7 @@ namespace ForDaku
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            addItemToRoulette(myListItem1.TextBoxValue, myListItem1.NumericUpDownValue);
+            addItemToRoulette(addListItem.TextBoxValue, addListItem.NumericUpDownValue);
 
         }
 
@@ -418,6 +450,11 @@ namespace ForDaku
         }
 
         private void timerControl1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void myListItem1_Load_1(object sender, EventArgs e)
         {
 
         }

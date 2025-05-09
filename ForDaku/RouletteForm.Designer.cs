@@ -35,16 +35,16 @@
             this.prizeLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.timerControl1 = new ForDaku.TimerControl();
-            this.myListItem1 = new ForDaku.MyListItem();
+            this.addListItem = new ForDaku.MyListItem();
             this.roulettePanel = new ForDaku.DoubleBufferedPanel();
             this.SuspendLayout();
             // 
             // flowLayoutPanel
             // 
             this.flowLayoutPanel.AutoScroll = true;
-            this.flowLayoutPanel.Location = new System.Drawing.Point(1192, 50);
+            this.flowLayoutPanel.Location = new System.Drawing.Point(981, 50);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
-            this.flowLayoutPanel.Size = new System.Drawing.Size(700, 460);
+            this.flowLayoutPanel.Size = new System.Drawing.Size(572, 460);
             this.flowLayoutPanel.TabIndex = 1;
             this.flowLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
             // 
@@ -84,7 +84,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(979, 9);
+            this.label1.Location = new System.Drawing.Point(1715, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 12);
             this.label1.TabIndex = 8;
@@ -98,16 +98,17 @@
             this.timerControl1.Size = new System.Drawing.Size(340, 140);
             this.timerControl1.TabIndex = 7;
             // 
-            // myListItem1
+            // addListItem
             // 
-            this.myListItem1.ItemColor = System.Drawing.SystemColors.Control;
-            this.myListItem1.LabelText = "label1";
-            this.myListItem1.Location = new System.Drawing.Point(981, 532);
-            this.myListItem1.Name = "myListItem1";
-            this.myListItem1.NumericUpDownValue = 0;
-            this.myListItem1.Size = new System.Drawing.Size(520, 57);
-            this.myListItem1.TabIndex = 4;
-            this.myListItem1.TextBoxValue = "";
+            this.addListItem.ItemColor = System.Drawing.SystemColors.Control;
+            this.addListItem.LabelText = "label1";
+            this.addListItem.Location = new System.Drawing.Point(981, 532);
+            this.addListItem.Name = "addListItem";
+            this.addListItem.NumericUpDownValue = 0;
+            this.addListItem.Size = new System.Drawing.Size(520, 57);
+            this.addListItem.TabIndex = 4;
+            this.addListItem.TextBoxValue = "";
+            this.addListItem.Load += new System.EventHandler(this.myListItem1_Load_1);
             // 
             // roulettePanel
             // 
@@ -122,11 +123,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.addListItem);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.timerControl1);
             this.Controls.Add(this.prizeLabel);
             this.Controls.Add(this.rotateButton);
-            this.Controls.Add(this.myListItem1);
             this.Controls.Add(this.itemAddButton);
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.roulettePanel);
@@ -146,7 +147,7 @@
         private DoubleBufferedPanel roulettePanel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
         private System.Windows.Forms.Button itemAddButton;
-        private MyListItem myListItem1;
+        private MyListItem addListItem;
         private System.Windows.Forms.Button rotateButton;
         private System.Windows.Forms.Label prizeLabel;
         private TimerControl timerControl1;
