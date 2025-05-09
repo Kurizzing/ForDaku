@@ -67,6 +67,27 @@ namespace ForDaku
             this.SizeChanged += Form1_SizeChanged;
         }
 
+        public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
+        {
+            this.memoForm = memoForm;
+            if (itemList != null)
+            {
+                this.itemList = itemList;
+            }
+
+            InitializeComponent();
+            this.DoubleBuffered = true; // 더블 버퍼링 활성화
+
+            if (itemList != null)
+                for (int i = 0; i < itemList.Count; i++)
+                {
+                    addItemToRoulette(itemList[i].Item1, itemList[i].Item2);
+                }
+
+            this.SizeChanged += Form1_SizeChanged;
+
+        }
+
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             label1.Text = $"새로운 크기: {this.ClientSize.Width} x {this.ClientSize.Height}";
@@ -125,23 +146,7 @@ namespace ForDaku
 
         }
 
-        public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
-        {
-            this.memoForm = memoForm;
-            if (itemList != null)
-            {
-                this.itemList = itemList;
-            }
-            
-            InitializeComponent();
-            this.DoubleBuffered = true; // 더블 버퍼링 활성화
-
-            if (itemList != null)
-                for (int i = 0; i < itemList.Count; i++)
-                {
-                    addItemToRoulette(itemList[i].Item1, itemList[i].Item2);
-                }
-        }
+        
 
         private (float, float) LTToCenter(float x, float y, float width, float height)
         {
@@ -333,6 +338,7 @@ namespace ForDaku
             item.ItemColor = GenerateDistinctColor();
             item.TextBoxValue = textBoxValue;
             item.NumericUpDownValue = numericUpDownValue;
+            item.ButtonControl.Text = "-";
             item.NumericUpDownControl.ValueChanged += (s, ev) =>
             {
                 UpdateProbability();
@@ -456,7 +462,18 @@ namespace ForDaku
 
         private void myListItem1_Load_1(object sender, EventArgs e)
         {
+            addListItem.ButtonControl.Text = "+";
+            addListItem.LabelText = "";
+            addListItem.ButtonControl.Click += (s, ev) =>
+            {
+                flowLayoutPanel.SuspendLayout();
+                addItemToRoulette(addListItem.TextBoxValue, addListItem.NumericUpDownValue);
 
+
+                flowLayoutPanel.ResumeLayout(true);
+                // 스크롤 맨 아래로
+                flowLayoutPanel.ScrollControlIntoView(flowLayoutPanel.Controls[flowLayoutPanel.Controls.Count-1]);
+            };
         }
     }
 

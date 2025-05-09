@@ -30,44 +30,23 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RouletteForm));
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.itemAddButton = new System.Windows.Forms.Button();
-            this.rotateButton = new System.Windows.Forms.Button();
             this.prizeLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.timerControl1 = new ForDaku.TimerControl();
+            this.rotateButton = new System.Windows.Forms.Button();
             this.addListItem = new ForDaku.MyListItem();
+            this.timerControl1 = new ForDaku.TimerControl();
             this.roulettePanel = new ForDaku.DoubleBufferedPanel();
             this.SuspendLayout();
             // 
             // flowLayoutPanel
             // 
             this.flowLayoutPanel.AutoScroll = true;
-            this.flowLayoutPanel.Location = new System.Drawing.Point(981, 50);
+            this.flowLayoutPanel.Location = new System.Drawing.Point(981, 210);
+            this.flowLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
             this.flowLayoutPanel.Size = new System.Drawing.Size(572, 460);
             this.flowLayoutPanel.TabIndex = 1;
             this.flowLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
-            // 
-            // itemAddButton
-            // 
-            this.itemAddButton.Location = new System.Drawing.Point(1524, 532);
-            this.itemAddButton.Name = "itemAddButton";
-            this.itemAddButton.Size = new System.Drawing.Size(157, 57);
-            this.itemAddButton.TabIndex = 2;
-            this.itemAddButton.Text = "+";
-            this.itemAddButton.UseVisualStyleBackColor = true;
-            this.itemAddButton.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // rotateButton
-            // 
-            this.rotateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.rotateButton.Location = new System.Drawing.Point(981, 951);
-            this.rotateButton.Name = "rotateButton";
-            this.rotateButton.Size = new System.Drawing.Size(126, 69);
-            this.rotateButton.TabIndex = 5;
-            this.rotateButton.Text = "회전";
-            this.rotateButton.UseVisualStyleBackColor = true;
-            this.rotateButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // prizeLabel
             // 
@@ -90,25 +69,36 @@
             this.label1.TabIndex = 8;
             this.label1.Text = "label1";
             // 
-            // timerControl1
+            // rotateButton
             // 
-            this.timerControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.timerControl1.Location = new System.Drawing.Point(981, 766);
-            this.timerControl1.Name = "timerControl1";
-            this.timerControl1.Size = new System.Drawing.Size(340, 140);
-            this.timerControl1.TabIndex = 7;
+            this.rotateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.rotateButton.Location = new System.Drawing.Point(981, 946);
+            this.rotateButton.Name = "rotateButton";
+            this.rotateButton.Size = new System.Drawing.Size(126, 69);
+            this.rotateButton.TabIndex = 5;
+            this.rotateButton.Text = "회전";
+            this.rotateButton.UseVisualStyleBackColor = true;
+            this.rotateButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // addListItem
             // 
             this.addListItem.ItemColor = System.Drawing.SystemColors.Control;
             this.addListItem.LabelText = "label1";
-            this.addListItem.Location = new System.Drawing.Point(981, 532);
+            this.addListItem.Location = new System.Drawing.Point(981, 687);
             this.addListItem.Name = "addListItem";
             this.addListItem.NumericUpDownValue = 0;
             this.addListItem.Size = new System.Drawing.Size(520, 57);
             this.addListItem.TabIndex = 4;
             this.addListItem.TextBoxValue = "";
             this.addListItem.Load += new System.EventHandler(this.myListItem1_Load_1);
+            // 
+            // timerControl1
+            // 
+            this.timerControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.timerControl1.Location = new System.Drawing.Point(981, 50);
+            this.timerControl1.Name = "timerControl1";
+            this.timerControl1.Size = new System.Drawing.Size(340, 140);
+            this.timerControl1.TabIndex = 7;
             // 
             // roulettePanel
             // 
@@ -123,12 +113,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.rotateButton);
             this.Controls.Add(this.addListItem);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.timerControl1);
             this.Controls.Add(this.prizeLabel);
-            this.Controls.Add(this.rotateButton);
-            this.Controls.Add(this.itemAddButton);
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.roulettePanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -146,7 +135,6 @@
 
         private DoubleBufferedPanel roulettePanel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
-        private System.Windows.Forms.Button itemAddButton;
         private MyListItem addListItem;
         private System.Windows.Forms.Button rotateButton;
         private System.Windows.Forms.Label prizeLabel;
