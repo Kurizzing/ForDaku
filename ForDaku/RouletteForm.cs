@@ -4,11 +4,16 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Printing;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.AxHost;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
@@ -38,7 +43,9 @@ namespace ForDaku
         int amplitude = 5;      // 진동 범위
         int speed = 75;         // 타이머 간격(ms)
         Timer timer1 = new Timer();
-
+        
+        MyListItem prizeItem = null; // 당첨 아이템
+        Font prizeFont = new Font("굴림", 30, FontStyle.Bold);
 
         // for test
         public RouletteForm()
@@ -73,8 +80,6 @@ namespace ForDaku
                 }
 
             this.SizeChanged += Form1_SizeChanged;
-            prizeLabel.AutoEllipsis = true; // 텍스트가 길어지면 ...
-            prizeLabel.TextAlign = ContentAlignment.MiddleCenter;
 
 
             RepositionControls();
@@ -102,12 +107,11 @@ namespace ForDaku
                 }
 
             this.SizeChanged += Form1_SizeChanged;
-            prizeLabel.AutoEllipsis = true; // 텍스트가 길어지면 ...
-            prizeLabel.TextAlign = ContentAlignment.MiddleCenter;
 
             RepositionControls();
             timer1.Interval = speed;
             timer1.Tick += Timer1_Tick;
+
 
         }
 
@@ -115,23 +119,40 @@ namespace ForDaku
         {
             // ! 룰렛 연관 컨트롤들 화면 배치
             // 크기 조정
-            roulettePanel.Height = (ClientSize.Height - rotateButton.Height - prizeLabel.Height - triangleHeight - 150);
+            roulettePanel.Height = (ClientSize.Height - rotateButton.Height - prizePanel.Height - triangleHeight - 150);
             roulettePanel.Width = roulettePanel.Height;
+
+            //// prizePanel 크기 조정
+            //// 텍스트 크기 계산
+            //SizeF textSize;
+            //using (Graphics g = this.CreateGraphics())
+            //{
+            //    textSize = g.MeasureString("Hello", this.Font);
+            //}
+            //prizePanel.Width = (int)(textSize.Width);
+            //prizePanel.Height = (int)(textSize.Height); // 텍스트 크기 조정
+
+            prizePanel.Width = (int)(roulettePanel.Width * 0.5f);
 
             // 위치 조정
             float panelX = this.ClientSize.Width / 4;
             float panelY = ClientSize.Height / 2;
 
-            float prizeLabelX = panelX;
-            float prizeLabelL = CenterToLT(prizeLabelX, 20, prizeLabel.Width, prizeLabel.Height).Item1;
-            float prizeLabelT = margin;
-            prizeLabel.Location = new Point((int)prizeLabelL, (int)prizeLabelT);
+            //float prizeLabelX = panelX;
+            //float prizeLabelL = CenterToLT(prizeLabelX, 20, prizeLabel.Width, prizeLabel.Height).Item1;
+            //float prizeLabelT = margin;
+            //prizeLabel.Location = new Point((int)prizeLabelL, (int)prizeLabelT);
+
+            float prizePanelX = panelX;
+            float prizePanelL = CenterToLT(prizePanelX, 20, prizePanel.Width, prizePanel.Height).Item1;
+            float prizePanelT = margin;
+            prizePanel.Location = new Point((int)prizePanelL, (int)prizePanelT);
 
             triangleDrawPanel.Width = triangleWidth;
             triangleDrawPanel.Height = triangleHeight;
             float trianglePanelX = panelX;
             float trianglePanelL = CenterToLT(trianglePanelX, 20, triangleDrawPanel.Width, triangleDrawPanel.Height).Item1;
-            float trianglePanelT = prizeLabelT + prizeLabel.Height + margin;
+            float trianglePanelT = prizePanelT + prizePanel.Height + margin * 0.5f;
 
             triangleDrawPanel.Location = new Point((int)trianglePanelL, (int)trianglePanelT);
 
@@ -333,19 +354,88 @@ namespace ForDaku
                     center.Y + (float)(radius * Math.Sin(radians))
                 );
 
-                using (Font font = new Font("굴림", 16))
+                //using (Font font = new Font("굴림", 16))
+                //using (StringFormat sf = new StringFormat())
+                //{
+                //    sf.Alignment = StringAlignment.Center;         // 수평 중앙 정렬
+                //    sf.LineAlignment = StringAlignment.Center;     // 수직 중앙 정렬
+
+                //    var state = g.Save();
+                //    g.TranslateTransform(textPos.X, textPos.Y);
+                //    g.RotateTransform(midAngle);
+                //    g.DrawString(item.TextBoxValue, font, Brushes.Black, PointF.Empty, sf);
+                //    g.Restore(state);
+                //}
+
+                using (Font font = new Font("굴림", 20, FontStyle.Bold))
+                using (StringFormat sf = new StringFormat())
                 {
-                    var state = g.Save();
-                    g.TranslateTransform(textPos.X, textPos.Y);
-                    g.RotateTransform(midAngle);
-                    g.DrawString(item.TextBoxValue, font, Brushes.Black, new PointF(-20, -10));
-                    g.Restore(state);
+                    sf.Alignment = StringAlignment.Center;
+                    sf.LineAlignment = StringAlignment.Center;
+
+                    using (GraphicsPath path = new GraphicsPath())
+                    {
+                        path.AddString(
+                            item.TextBoxValue,
+                            font.FontFamily,
+                            (int)font.Style,
+                            g.DpiY * font.Size / 72f,
+                            PointF.Empty,
+                            sf
+                        );
+
+                        var state = g.Save();
+
+                        g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias; // ✅ 안티에일리어싱 적용
+                        g.TranslateTransform(textPos.X, textPos.Y);
+                        g.RotateTransform(midAngle);
+
+                        using (Pen outlinePen = new Pen(Color.Black, 4f) { LineJoin = LineJoin.Round })
+                        {
+                            g.DrawPath(outlinePen, path);
+                        }
+
+                        g.FillPath(Brushes.White, path);
+
+                        g.Restore(state);
+                    }
                 }
+
+                //using (Font font = new Font("굴림", 16, FontStyle.Bold)) // Bold가 테두리 효과에 잘 보임
+                //using (StringFormat sf = new StringFormat())
+                //{
+                //    sf.Alignment = StringAlignment.Center;
+                //    sf.LineAlignment = StringAlignment.Center;
+
+                //    var state = g.Save();
+                //    g.TranslateTransform(textPos.X, textPos.Y);
+                //    g.RotateTransform(midAngle);
+
+                //    // 테두리용: 검정색을 여러 방향으로 오프셋하여 그림
+                //    int outlineSize = 2;
+                //    for (int dx = -outlineSize; dx <= outlineSize; dx++)
+                //    {
+                //        for (int dy = -outlineSize; dy <= outlineSize; dy++)
+                //        {
+                //            if (dx == 0 && dy == 0) continue;
+                //            PointF offsetPoint = new PointF(dx, dy);
+                //            g.DrawString(item.TextBoxValue, font, Brushes.Black, offsetPoint, sf);
+                //        }
+                //    }
+
+                //    // 본문용: 중심에 흰색으로 텍스트 그림
+                //    g.DrawString(item.TextBoxValue, font, Brushes.White, PointF.Empty, sf);
+
+                //    g.Restore(state);
+                //}
 
                 // 현재 당첨 아이템
                 if (startAngle <= PointDegree(rotationAngle) && PointDegree(rotationAngle) <= startAngle + sweepAngle)
                 {
-                    prizeLabel.Text = item.TextBoxValue;
+                    prizeItem = item;
+                    PrizeLabelUpdate();
+                    //PrizeLabelUpdate(item.TextBoxValue, e);
+
                 }
 
                 startAngle += sweepAngle;
@@ -365,8 +455,6 @@ namespace ForDaku
 
                 g.TranslateTransform(-rouletteBorderWidth * 0.5f, -rouletteBorderWidth * 0.5f); // 돌아가기
             }
-
-
         }
 
         float PointDegree(float degree)
@@ -571,6 +659,13 @@ namespace ForDaku
 
         }
 
+        void PrizeLabelUpdate()
+        {
+            prizePanel.Invalidate();
+            prizePanel.Update();
+        }
+
+
         private void timerControl1_Load(object sender, EventArgs e)
         {
 
@@ -593,7 +688,46 @@ namespace ForDaku
             };
         }
 
-        
+        private void prizePanel_Paint(object sender, PaintEventArgs e)
+        {
+            if (prizeItem == null)
+            {
+                return;
+            }
+            // 텍스트 설정
+            string text = prizeItem.TextBoxValue;
+            Font font = prizeFont;
+            Brush innerBrush = new SolidBrush(prizeItem.ItemColor);  // 텍스트 내부 색 (지정색)
+            Pen outerPen = new Pen(Color.Black, 5f) { LineJoin = System.Drawing.Drawing2D.LineJoin.Round };  // 텍스트 외곽 색 (검은색)
+
+            // StringFormat 설정
+            StringFormat stringFormat = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias; // ✅ 안티에일리어싱 적용
+
+            //// 텍스트 크기 계산
+            //SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            //// 텍스트를 중앙에 배치하기 위한 좌표 계산
+            //float x = (prizeLabel.Width - textSize.Width) / 2;
+            //float y = (prizeLabel.Height - textSize.Height) / 2;
+
+            // GraphicsPath를 사용하여 텍스트를 추가
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddString(text, font.FontFamily, (int)font.Style, e.Graphics.DpiY * font.Size / 72f, new PointF(prizePanel.Width * 0.5f, prizePanel.Height * 0.5f), stringFormat);
+
+                // 텍스트 외곽선 그리기 (검은색)
+                e.Graphics.DrawPath(outerPen, path);
+
+                // 텍스트 내부 채우기 (지정색)
+                e.Graphics.FillPath(innerBrush, path);
+            }
+        }
     }
 
     public class DoubleBufferedPanel : Panel

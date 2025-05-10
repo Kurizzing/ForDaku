@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RouletteForm));
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.prizeLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rotateButton = new System.Windows.Forms.Button();
             this.triangleDrawPanel = new System.Windows.Forms.Panel();
+            this.prizePanel = new System.Windows.Forms.Panel();
             this.addListItem = new ForDaku.MyListItem();
             this.timerControl1 = new ForDaku.TimerControl();
             this.roulettePanel = new ForDaku.DoubleBufferedPanel();
@@ -48,17 +48,6 @@
             this.flowLayoutPanel.Size = new System.Drawing.Size(572, 460);
             this.flowLayoutPanel.TabIndex = 1;
             this.flowLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
-            // 
-            // prizeLabel
-            // 
-            this.prizeLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.prizeLabel.Font = new System.Drawing.Font("굴림", 20F);
-            this.prizeLabel.Location = new System.Drawing.Point(10, 9);
-            this.prizeLabel.Name = "prizeLabel";
-            this.prizeLabel.Size = new System.Drawing.Size(950, 27);
-            this.prizeLabel.TabIndex = 6;
-            this.prizeLabel.Text = "label1111111111111111";
-            this.prizeLabel.Click += new System.EventHandler(this.prizeLabel_Click);
             // 
             // label1
             // 
@@ -89,6 +78,14 @@
             this.triangleDrawPanel.Size = new System.Drawing.Size(93, 53);
             this.triangleDrawPanel.TabIndex = 9;
             this.triangleDrawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.triangleDrawPanel_Paint);
+            // 
+            // prizePanel
+            // 
+            this.prizePanel.Location = new System.Drawing.Point(12, 12);
+            this.prizePanel.Name = "prizePanel";
+            this.prizePanel.Size = new System.Drawing.Size(948, 52);
+            this.prizePanel.TabIndex = 10;
+            this.prizePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.prizePanel_Paint);
             // 
             // addListItem
             // 
@@ -123,12 +120,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.prizePanel);
             this.Controls.Add(this.triangleDrawPanel);
             this.Controls.Add(this.rotateButton);
             this.Controls.Add(this.addListItem);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.timerControl1);
-            this.Controls.Add(this.prizeLabel);
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.roulettePanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -148,10 +145,10 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
         private MyListItem addListItem;
         private System.Windows.Forms.Button rotateButton;
-        private System.Windows.Forms.Label prizeLabel;
         private TimerControl timerControl1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel triangleDrawPanel;
+        private System.Windows.Forms.Panel prizePanel;
     }
 }
 
