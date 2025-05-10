@@ -303,6 +303,7 @@ namespace ForDaku
             g.RotateTransform(rotationAngle);
             g.TranslateTransform(-center.X, -center.Y);
 
+            // 원 그리기
             foreach (MyListItem item in itemList)
             {
                 brush = new SolidBrush(item.ItemColor);
@@ -310,6 +311,17 @@ namespace ForDaku
                 sweepAngle = ProbabilityToDegree(probability);
 
                 g.FillPie(brush, rect, startAngle, sweepAngle);
+
+                startAngle += sweepAngle;
+            }
+
+            // 항목 이름 그리기
+            startAngle = 0; // 시작 각도 초기화
+            sweepAngle = 0;
+            foreach (MyListItem item in itemList)
+            {
+                float probability = item.NumericUpDownValue / (float)GetAllCount();
+                sweepAngle = ProbabilityToDegree(probability);
 
                 // 중간 각도
                 float midAngle = startAngle + sweepAngle / 2;
@@ -338,6 +350,9 @@ namespace ForDaku
 
                 startAngle += sweepAngle;
             }
+
+
+            // 원 테두리 그리기
 
             // borderWidth는 그린 영역 안으로 절반 밖으로 절반 생김
             // 원 주위에 20픽셀 정도 검은색 테두리 추가
