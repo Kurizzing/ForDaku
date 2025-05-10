@@ -141,6 +141,7 @@ namespace ForDaku
 
             // rotateButton은 남은 공간 중앙에 위치
             float remainingSpace = ClientSize.Height - (panelT + roulettePanel.Height);
+            rotateButton.Width = (int)(roulettePanel.Width * 0.5f);
             float rotateButtonX = panelX;
             float rotateButtonY = panelT + roulettePanel.Height + remainingSpace / 2;
             (float rotateButtonL, float rotateButtonT) = CenterToLT(rotateButtonX, rotateButtonY, rotateButton.Width, rotateButton.Height);
@@ -261,6 +262,8 @@ namespace ForDaku
                     isDecelerating = false;
 
                     rotateButton.Text = "시작";
+                    rotateButton.BackColor = SystemColors.ControlLight; // 색상 변경
+
                     rotateButton.Enabled = true;
                 }
             }
@@ -512,6 +515,7 @@ namespace ForDaku
             {
                 StartSpin();                   // 회전 시작
                 rotateButton.Text = "정지!";         // 텍스트 변경
+                rotateButton.BackColor = Color.LightPink; // 색상 변경
                 timer1.Start();
 
             }

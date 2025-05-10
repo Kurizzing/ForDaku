@@ -72,12 +72,14 @@
             // rotateButton
             // 
             this.rotateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.rotateButton.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.rotateButton.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.rotateButton.Location = new System.Drawing.Point(981, 946);
             this.rotateButton.Name = "rotateButton";
             this.rotateButton.Size = new System.Drawing.Size(126, 69);
             this.rotateButton.TabIndex = 5;
             this.rotateButton.Text = "시작";
-            this.rotateButton.UseVisualStyleBackColor = true;
+            this.rotateButton.UseVisualStyleBackColor = false;
             this.rotateButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // triangleDrawPanel
