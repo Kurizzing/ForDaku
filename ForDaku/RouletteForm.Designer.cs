@@ -33,6 +33,7 @@
             this.prizeLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.rotateButton = new System.Windows.Forms.Button();
+            this.triangleDrawPanel = new System.Windows.Forms.Panel();
             this.addListItem = new ForDaku.MyListItem();
             this.timerControl1 = new ForDaku.TimerControl();
             this.roulettePanel = new ForDaku.DoubleBufferedPanel();
@@ -79,6 +80,14 @@
             this.rotateButton.UseVisualStyleBackColor = true;
             this.rotateButton.Click += new System.EventHandler(this.button2_Click);
             // 
+            // triangleDrawPanel
+            // 
+            this.triangleDrawPanel.Location = new System.Drawing.Point(402, 58);
+            this.triangleDrawPanel.Name = "triangleDrawPanel";
+            this.triangleDrawPanel.Size = new System.Drawing.Size(93, 53);
+            this.triangleDrawPanel.TabIndex = 9;
+            this.triangleDrawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.triangleDrawPanel_Paint);
+            // 
             // addListItem
             // 
             this.addListItem.ItemColor = System.Drawing.SystemColors.Control;
@@ -101,9 +110,9 @@
             // 
             // roulettePanel
             // 
-            this.roulettePanel.Location = new System.Drawing.Point(10, 50);
+            this.roulettePanel.Location = new System.Drawing.Point(10, 117);
             this.roulettePanel.Name = "roulettePanel";
-            this.roulettePanel.Size = new System.Drawing.Size(950, 990);
+            this.roulettePanel.Size = new System.Drawing.Size(950, 923);
             this.roulettePanel.TabIndex = 0;
             this.roulettePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -112,6 +121,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.triangleDrawPanel);
             this.Controls.Add(this.rotateButton);
             this.Controls.Add(this.addListItem);
             this.Controls.Add(this.label1);
@@ -139,6 +149,7 @@
         private System.Windows.Forms.Label prizeLabel;
         private TimerControl timerControl1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel triangleDrawPanel;
     }
 }
 

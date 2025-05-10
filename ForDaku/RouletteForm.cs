@@ -27,6 +27,7 @@ namespace ForDaku
         bool isDecelerating = false;
         float minVelocity = 0.1f; // 멈출 기준 속도
 
+        int rouletteBorderWidth = 5; // 룰렛 테두리 두께
         int triangleHeight = 40; // 삼각형 높이
         int triangleWidth = 40; // 삼각형 너비
         float margin = 20;
@@ -101,8 +102,8 @@ namespace ForDaku
         {
             // ! 룰렛 연관 컨트롤들 화면 배치
             // 크기 조정
-            roulettePanel.Height = (ClientSize.Height - rotateButton.Height - prizeLabel.Height - 150);
-            roulettePanel.Width = roulettePanel.Height - triangleHeight;
+            roulettePanel.Height = (ClientSize.Height - rotateButton.Height - prizeLabel.Height - triangleHeight - 150);
+            roulettePanel.Width = roulettePanel.Height;
 
             // 위치 조정
             float panelX = this.ClientSize.Width / 4;
@@ -113,8 +114,16 @@ namespace ForDaku
             float prizeLabelT = margin;
             prizeLabel.Location = new Point((int)prizeLabelL, (int)prizeLabelT);
 
+            triangleDrawPanel.Width = triangleWidth;
+            triangleDrawPanel.Height = triangleHeight;
+            float trianglePanelX = panelX;
+            float trianglePanelL = CenterToLT(trianglePanelX, 20, triangleDrawPanel.Width, triangleDrawPanel.Height).Item1;
+            float trianglePanelT = prizeLabelT + prizeLabel.Height + margin;
+
+            triangleDrawPanel.Location = new Point((int)trianglePanelL, (int)trianglePanelT);
+
             float panelL = CenterToLT(panelX, panelY, roulettePanel.Width, roulettePanel.Height).Item1;
-            float panelT = prizeLabelT + prizeLabel.Height + margin;
+            float panelT = trianglePanelT + triangleDrawPanel.Height;
             roulettePanel.Location = new Point((int)panelL, (int)panelT);
 
             // rotateButton은 남은 공간 중앙에 위치
@@ -174,12 +183,12 @@ namespace ForDaku
 
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void triangleDrawPanel_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
 
-            // 중심을 panel1의 위로 이동
-            g.TranslateTransform(roulettePanel.ClientSize.Width / 2, 0);
+            // 중심을 가운데로 이동
+            g.TranslateTransform(triangleDrawPanel.Width / 2, 0);
 
             // 삼각형 좌표 (아래쪽을 향하는 삼각형)
             Point[] triangle =
@@ -189,12 +198,17 @@ namespace ForDaku
                 new Point((int)(+triangleWidth/2.0f), 0)     // 오른쪽 위
             };
             g.FillPolygon(Brushes.Red, triangle);
-            
-            g.ResetTransform(); // 변환 초기화
-            g.TranslateTransform(0, triangleHeight);
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            //g.ResetTransform(); // 변환 초기화
+            //g.TranslateTransform(0, triangleHeight);
             // todo: 패널 높이 조절 자동화 필요
 
-            DrawRoulette(g, roulettePanel.Width, roulettePanel.Height - triangleHeight);  // 이 결과가 가로세로 비율 1:1이 되어야 원이 됨
+            DrawRoulette(g, roulettePanel.Width, roulettePanel.Height);  // 이 결과가 가로세로 비율 1:1이 되어야 원이 됨
         }
 
         void StartSpin()
@@ -243,6 +257,7 @@ namespace ForDaku
 
         void DrawRoulette(Graphics g, int width, int height)
         {
+            label1.Text = $"{width} {height}";
             if (GetAllCount() == 0)
             {
                 return;
@@ -308,7 +323,19 @@ namespace ForDaku
                 startAngle += sweepAngle;
             }
 
-            
+            // borderWidth는 그린 영역 안으로 절반 밖으로 절반 생김
+            // 원 주위에 20픽셀 정도 검은색 테두리 추가
+            using (Pen borderPen = new Pen(Color.Black, rouletteBorderWidth)) // 테두리 색상과 두께 설정
+            {
+                //Rectangle borderRect = new Rectangle(rect.X + rouletteBorderWidth, rect.Y + rouletteBorderWidth, rect.Width - rouletteBorderWidth, rect.Height - rouletteBorderWidth);
+                g.TranslateTransform(rouletteBorderWidth * 0.5f, rouletteBorderWidth * 0.5f);
+                Rectangle borderRect = new Rectangle(0, 0, width - rouletteBorderWidth, height - rouletteBorderWidth);
+                g.DrawEllipse(borderPen, borderRect); // 원 테두리 그리기
+
+                g.TranslateTransform(-rouletteBorderWidth * 0.5f, -rouletteBorderWidth * 0.5f); // 돌아가기
+            }
+
+
         }
 
         float PointDegree(float degree)
@@ -358,6 +385,7 @@ namespace ForDaku
             };
             item.NumericUpDownValue = numericUpDownValue;
             item.ButtonControl.Text = "-";
+            item.ButtonControl.BackColor = Color.LightPink;
             item.NumericUpDownControl.ValueChanged += (s, ev) =>
             {
                 UpdateProbability();
@@ -402,24 +430,38 @@ namespace ForDaku
         List<double> usedHues = new List<double>();
         Random rnd = new Random();
 
+        // (newHue, 0.6, 0.95); -> 153, 242.25
         Color GenerateDistinctColor()
         {
             int maxAttempts = 100;
+            // s: 채도 색의 선명한 정도, 맑고 탁한 정도, 채도가 높으면 다른 색이 섞이지 않음
+            int sMin = 130;
+            int sMax = 150;
+            // v: 명도 색의 밝기 정도, 색이 얼마나 밝은지 어두운지
+            int vMin = 220;
+            int vMax = 240;
             for (int attempt = 0; attempt < maxAttempts; attempt++)
             {
                 double newHue = rnd.NextDouble() * 360;
 
-                // 최소 거리 기준: 다른 색상과 최소 30도 이상 떨어질 것
                 if (usedHues.All(h => Math.Abs(h - newHue) >= 30 || Math.Abs(h - newHue) >= 330))
                 {
                     usedHues.Add(newHue);
-                    return ColorFromHSV(newHue, 0.6, 0.95);
+
+                    double s = rnd.Next(sMin, sMax) / 255.0;
+
+                    double v = rnd.Next(vMin, vMax) / 255.0;
+
+                    return ColorFromHSV(newHue, s, v);
                 }
             }
 
             // fallback (비슷한 색이라도 무조건 하나 리턴)
             double fallbackHue = rnd.NextDouble() * 360;
-            return ColorFromHSV(fallbackHue, 0.6, 0.95);
+            double fallbackS = rnd.Next(sMin, sMax) / 255.0;
+            double fallbackV = rnd.Next(vMin, vMax) / 255.0;
+
+            return ColorFromHSV(fallbackHue, fallbackS, fallbackV);
         }
 
         public static Color ColorFromHSV(double hue, double saturation, double value)
@@ -482,6 +524,7 @@ namespace ForDaku
         private void myListItem1_Load_1(object sender, EventArgs e)
         {
             addListItem.ButtonControl.Text = "+";
+            addListItem.ButtonControl.BackColor = Color.LightGreen;
             addListItem.LabelText = "";
             addListItem.ButtonControl.Click += (s, ev) =>
             {
@@ -494,6 +537,8 @@ namespace ForDaku
                 flowLayoutPanel.ScrollControlIntoView(flowLayoutPanel.Controls[flowLayoutPanel.Controls.Count-1]);
             };
         }
+
+        
     }
 
     public class DoubleBufferedPanel : Panel
