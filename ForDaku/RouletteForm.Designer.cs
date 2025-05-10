@@ -76,7 +76,7 @@
             this.rotateButton.Name = "rotateButton";
             this.rotateButton.Size = new System.Drawing.Size(126, 69);
             this.rotateButton.TabIndex = 5;
-            this.rotateButton.Text = "회전";
+            this.rotateButton.Text = "시작";
             this.rotateButton.UseVisualStyleBackColor = true;
             this.rotateButton.Click += new System.EventHandler(this.button2_Click);
             // 

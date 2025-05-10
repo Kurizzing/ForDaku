@@ -32,6 +32,13 @@ namespace ForDaku
         int triangleWidth = 40; // 삼각형 너비
         float margin = 20;
 
+        // 회전 버튼
+        int originalRotateButtonY;          // 버튼의 원래 Y 위치
+        bool moveUp = true;     // 위로 움직일지 아래로 움직일지 플래그
+        int amplitude = 5;      // 진동 범위
+        int speed = 75;         // 타이머 간격(ms)
+        Timer timer1 = new Timer();
+
 
         // for test
         public RouletteForm()
@@ -69,8 +76,11 @@ namespace ForDaku
             prizeLabel.AutoEllipsis = true; // 텍스트가 길어지면 ...
             prizeLabel.TextAlign = ContentAlignment.MiddleCenter;
 
-            RepositionControls();
 
+            RepositionControls();
+            
+            timer1.Interval = speed;
+            timer1.Tick += Timer1_Tick;
 
         }
 
@@ -96,6 +106,9 @@ namespace ForDaku
             prizeLabel.TextAlign = ContentAlignment.MiddleCenter;
 
             RepositionControls();
+            timer1.Interval = speed;
+            timer1.Tick += Timer1_Tick;
+
         }
 
         private void RepositionControls()
@@ -133,6 +146,7 @@ namespace ForDaku
             (float rotateButtonL, float rotateButtonT) = CenterToLT(rotateButtonX, rotateButtonY, rotateButton.Width, rotateButton.Height);
             //float rotateButtonT = panelT + roulettePanel.Height + margin;
             rotateButton.Location = new Point((int)rotateButtonL, (int)rotateButtonT);
+            originalRotateButtonY = rotateButton.Location.Y; // 버튼의 원래 Y 위치 저장
 
             UpdateRoulette();
 
@@ -150,7 +164,6 @@ namespace ForDaku
             flowLayoutPanel.Location = new Point((int)(flowLayoutPanelL), (int)(timerControl1.Location.Y + timerControl1.Height + margin));
 
             addListItem.Location = new Point((int)(flowLayoutPanel.Location.X), (int)(flowLayoutPanel.Location.Y + flowLayoutPanel.Height + margin));
-
 
 
             //flowLayoutPanel.Height = (int)(ClientSize.Height - (timerControl1.Height + addListItem.Height + margin * 4));
@@ -247,7 +260,7 @@ namespace ForDaku
                     spinTimer.Stop();
                     isDecelerating = false;
 
-                    rotateButton.Text = "회전";
+                    rotateButton.Text = "시작";
                     rotateButton.Enabled = true;
                 }
             }
@@ -493,16 +506,39 @@ namespace ForDaku
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (rotateButton.Text == "회전")
+            
+
+            if (rotateButton.Text == "시작")
             {
                 StartSpin();                   // 회전 시작
-                rotateButton.Text = "정지";         // 텍스트 변경
+                rotateButton.Text = "정지!";         // 텍스트 변경
+                timer1.Start();
+
             }
-            else if (rotateButton.Text == "정지")
+            else if (rotateButton.Text == "정지!")
             {
+                // 버튼 클릭 시 애니메이션 중지
+                timer1.Stop();
+                rotateButton.Location = new Point(rotateButton.Location.X, originalRotateButtonY); // 원래 위치로 복원
+
                 StartDeceleration();           // 감속 시작
                 rotateButton.Enabled = false;       // 버튼 비활성화
             }
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            // 위아래로 움직임
+            if (moveUp)
+            {
+                rotateButton.Top = originalRotateButtonY - amplitude;
+            }
+            else
+            {
+                rotateButton.Top = originalRotateButtonY + amplitude;
+            }
+
+            moveUp = !moveUp; // 방향 반전
         }
 
         private void ToMemoFormButton_Click(object sender, EventArgs e)
