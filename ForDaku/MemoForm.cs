@@ -32,6 +32,8 @@ namespace ForDaku
         {
             InitializeComponent();
 
+            itemList = new List<(string, int)>();
+
             sortButton.FlatStyle = FlatStyle.Flat;
             sortButton.FlatAppearance.BorderSize = 0;
             SetResizedButtonImageWithAspect(sortButton, sortButton.Image);
@@ -105,6 +107,7 @@ namespace ForDaku
             sortOption.Items.Add("무작위");
             sortOption.Items.Add("최대최소순");
             sortOption.SelectedIndex = 0; // 기본값 설정
+
             //sortOption.SelectedIndexChanged += (sender, e) => {
             //    label1.Text = "선택된 항목: " + sortOption.SelectedItem.ToString();
             //    // 선택된 항목에 따른 정렬 처리
@@ -329,7 +332,26 @@ namespace ForDaku
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MakeList();
+            List<(string, int)> listTemp;
+            try
+            {
+                listTemp = MakeList();
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show($"입력 오류: {ex.Message}", "오류");
+                return; // 여기서 이후 코드 실행을 중지
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"알 수 없는 오류: {ex.Message}", "오류");
+                return;
+            }
+            itemList = listTemp;
+            //itemList = MakeList();
+
+
+
             rouletteForm = new RouletteForm(this, itemList);
             
             rouletteForm.Show();
@@ -352,24 +374,38 @@ namespace ForDaku
 
         private List<(string, int)> MakeList()
         {
-            itemList = new List<(string, int)>();
+            var itemList = new List<(string, int)>();
 
             string textBoxString = richTextBox1.Text;
             string[] lines = textBoxString.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
 
-
             foreach (var line in lines)
             {
-                string[] parts = line.Split(new[] { ' ' }, StringSplitOptions.None);
+                if (string.IsNullOrWhiteSpace(line))
+                    continue; // 빈 줄은 무시
 
-                if (parts.Length == 2)
+                string[] parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (parts.Length != 2)
                 {
-                    string deckName = parts[0];
-                    int count = int.Parse(parts[1]);
-
-                    itemList.Add((deckName, count));
+                    throw new FormatException($"입력 형식이 잘못되었습니다: (라인: '{line}')");
                 }
+
+                string deckName = parts[0];
+                int count;
+
+                try
+                {
+                    count = int.Parse(parts[1]);
+                }
+                catch (FormatException)
+                {
+                    throw new FormatException($"숫자 형식이 잘못되었습니다: '{parts[1]}' (라인: '{line}')");
+                }
+
+                itemList.Add((deckName, count));
             }
+
             return itemList;
         }
 
@@ -377,7 +413,24 @@ namespace ForDaku
         {
             RichTextBox richTextBox = richTextBox1;
 
-            MakeList();
+            List<(string, int)> listTemp;
+            try
+            {
+                listTemp = MakeList();
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show($"입력 오류: {ex.Message}", "오류");
+                return; // 여기서 이후 코드 실행을 중지
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"알 수 없는 오류: {ex.Message}", "오류");
+                return;
+            }
+            itemList = listTemp;
+            //itemList = MakeList();
+
 
             // 선택된 정렬 옵션에 따라 정렬
             switch (optionComboBox.SelectedIndex)
