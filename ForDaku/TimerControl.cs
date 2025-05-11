@@ -27,6 +27,9 @@ namespace ForDaku
             timer = new Timer();
             timer.Interval = 1000;
             timer.Tick += Timer_Tick;
+
+            btnStart.BackColor = Color.LightGreen;
+            resetButton.BackColor = Color.LightGray;
         }
 
         private void InitializeCustomUI()
@@ -89,7 +92,8 @@ namespace ForDaku
                 btnStart.Click -= btnStop_Click;
 
                 btnStart.Click += btnStart_Click;
-                btnStart.Text = "Start";
+                btnStart.Text = "START";
+                btnStart.BackColor = Color.LightGreen;
                 MessageBox.Show("타이머 종료!");
             }
         }
@@ -98,7 +102,6 @@ namespace ForDaku
         {
             numericMinute.Value = remainingTime.Minutes;
             numericSecond.Value = remainingTime.Seconds;
-            label3.Text = $"{remainingTime.Hours:D2}:{remainingTime.Minutes:D2}:{remainingTime.Seconds:D2}";
         }
 
         private void StartTimer()
@@ -110,7 +113,9 @@ namespace ForDaku
                 //numericSecond.Enabled = false;
                 timer.Start();
 
-                startButton.Text = "Stop";
+                btnStart.Text = "STOP";
+                btnStart.BackColor = Color.LightPink;
+
                 btnStart.Click -= btnStart_Click;
                 btnStart.Click += btnStop_Click;
             }
@@ -120,7 +125,9 @@ namespace ForDaku
         {
             timer.Start();
 
-            startButton.Text = "Stop";
+            btnStart.Text = "STOP";
+            btnStart.BackColor = Color.LightPink;
+
             btnStart.Click -= btnRestart_Click;
             btnStart.Click += btnStop_Click;
         }
@@ -129,7 +136,9 @@ namespace ForDaku
         {
             timer.Stop();
 
-            btnStart.Text = "ReStart";
+            btnStart.Text = "RESTART";
+            btnStart.BackColor = Color.LightGreen;
+
             btnStart.Click -= btnStop_Click;
             btnStart.Click += btnRestart_Click;
         }
@@ -140,7 +149,9 @@ namespace ForDaku
             remainingTime = TimeSpan.Zero;
             numericMinute.Value = numericSecond.Value = 0;
 
-            btnStart.Text = "Start";
+            btnStart.Text = "START";
+            btnStart.BackColor = Color.LightGreen;
+
             // clear
             btnStart.Click -= btnStart_Click;
             btnStart.Click -= btnRestart_Click;

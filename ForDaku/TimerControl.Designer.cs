@@ -32,7 +32,6 @@ namespace ForDaku
             this.tenMinButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // resetButton
@@ -117,20 +116,12 @@ namespace ForDaku
             this.label2.TabIndex = 9;
             this.label2.Text = "초";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(258, 77);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 12);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "label3";
-            // 
             // TimerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label3);
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tenMinButton);
@@ -140,7 +131,7 @@ namespace ForDaku
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.resetButton);
             this.Name = "TimerControl";
-            this.Size = new System.Drawing.Size(340, 140);
+            this.Size = new System.Drawing.Size(338, 138);
             this.Load += new System.EventHandler(this.TimerControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -156,6 +147,5 @@ namespace ForDaku
         private Button tenMinButton;
         private Label label1;
         private Label label2;
-        private Label label3;
     }
 }
