@@ -45,7 +45,7 @@
             this.flowLayoutPanel.Location = new System.Drawing.Point(981, 210);
             this.flowLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
-            this.flowLayoutPanel.Size = new System.Drawing.Size(572, 460);
+            this.flowLayoutPanel.Size = new System.Drawing.Size(505, 460);
             this.flowLayoutPanel.TabIndex = 1;
             this.flowLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
             // 

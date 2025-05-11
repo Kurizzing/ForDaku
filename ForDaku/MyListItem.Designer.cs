@@ -38,52 +38,54 @@
             // 
             // textBox1
             // 
-            this.textBox1.Font = new System.Drawing.Font("굴림", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox1.Location = new System.Drawing.Point(37, 14);
+            this.textBox1.Font = new System.Drawing.Font("굴림", 16F);
+            this.textBox1.Location = new System.Drawing.Point(35, 10);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(244, 35);
+            this.textBox1.Size = new System.Drawing.Size(250, 32);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Font = new System.Drawing.Font("굴림", 18F);
-            this.numericUpDown1.Location = new System.Drawing.Point(330, 14);
+            this.numericUpDown1.Font = new System.Drawing.Font("굴림", 16F);
+            this.numericUpDown1.Location = new System.Drawing.Point(290, 10);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             999999,
             0,
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(86, 35);
+            this.numericUpDown1.Size = new System.Drawing.Size(70, 32);
             this.numericUpDown1.TabIndex = 2;
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(4, 15);
+            this.panel1.Location = new System.Drawing.Point(5, 10);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(27, 34);
+            this.panel1.Size = new System.Drawing.Size(25, 30);
             this.panel1.TabIndex = 4;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(482, 15);
+            this.button1.Location = new System.Drawing.Point(420, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(35, 34);
+            this.button1.Size = new System.Drawing.Size(30, 30);
             this.button1.TabIndex = 5;
-            this.button1.Text = "button1";
+            this.button1.Text = "-";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(422, 16);
+            this.label1.Font = new System.Drawing.Font("굴림", 12F);
+            this.label1.Location = new System.Drawing.Point(365, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(54, 34);
+            this.label1.Size = new System.Drawing.Size(50, 30);
             this.label1.TabIndex = 3;
-            this.label1.Text = "label1";
+            this.label1.Text = "99.9%";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MyListItem
             // 
@@ -95,7 +97,7 @@
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.textBox1);
             this.Name = "MyListItem";
-            this.Size = new System.Drawing.Size(520, 57);
+            this.Size = new System.Drawing.Size(460, 50);
             this.Load += new System.EventHandler(this.MyListItem_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
