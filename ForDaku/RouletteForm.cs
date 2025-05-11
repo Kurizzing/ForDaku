@@ -690,7 +690,7 @@ namespace ForDaku
         {
             
 
-            if (rotateButton.Text == "시작")
+            if (rotateButton.Text == "시작" && GetAllCount() > 0)
             {
                 StartSpin();                   // 회전 시작
                 rotateButton.Text = "정지!";         // 텍스트 변경
