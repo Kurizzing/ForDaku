@@ -382,7 +382,20 @@ namespace ForDaku
                 //    g.Restore(state);
                 //}
 
-                using (Font font = new Font("굴림", 20, FontStyle.Bold))
+                Font font = new Font("굴림", 20, FontStyle.Bold);
+                string text = item.TextBoxValue;
+
+                // 텍스트 크기 계산
+                SizeF textSize = g.MeasureString(text, font);
+
+                if (textSize.Width > roulettePanel.Width * 0.4f)
+                {
+                    // 텍스트가 패널보다 길 경우
+                    float scale = (roulettePanel.Width * 0.4f) / textSize.Width;
+                    font = new Font(font.FontFamily, font.Size * scale, font.Style);
+                    textSize = g.MeasureString(text, font);
+                }
+
                 using (StringFormat sf = new StringFormat())
                 {
                     sf.Alignment = StringAlignment.Center;
@@ -391,7 +404,7 @@ namespace ForDaku
                     using (GraphicsPath path = new GraphicsPath())
                     {
                         path.AddString(
-                            item.TextBoxValue,
+                            text,
                             font.FontFamily,
                             (int)font.Style,
                             g.DpiY * font.Size / 72f,
@@ -720,8 +733,16 @@ namespace ForDaku
 
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias; // ✅ 안티에일리어싱 적용
 
-            //// 텍스트 크기 계산
-            //SizeF textSize = e.Graphics.MeasureString(text, font);
+            // 텍스트 크기 계산
+            SizeF textSize = e.Graphics.MeasureString(text, font);
+
+            if (textSize.Width > prizePanel.Width)
+            {
+                // 텍스트가 패널보다 길 경우
+                float scale = prizePanel.Width / textSize.Width;
+                font = new Font(font.FontFamily, font.Size * scale, font.Style);
+                textSize = e.Graphics.MeasureString(text, font);
+            }
 
             //// 텍스트를 중앙에 배치하기 위한 좌표 계산
             //float x = (prizeLabel.Width - textSize.Width) / 2;
