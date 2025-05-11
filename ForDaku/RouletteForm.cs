@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
@@ -23,12 +24,19 @@ namespace ForDaku
     
     public partial class RouletteForm : Form
     {
+        Random random = new Random(); // 클래스 맨 위에 선언
+        float targetAngle = 0f;          // 감속 후 도달할 목표 각도
+        float totalRotation = 0f;        // 회전 누적 각도
+        float startAngle = 0f;           // 감속 시작 각도
+        bool isDecelerating = false;
+        bool isStopping = false;         // 정지 중 플래그
+        float decelerationDuration = 10f; // 감속 시간 (초)
+        float elapsedTime = 0f;          // 경과 시간
+
         private float rotationAngle = 0f;  // 현재 회전 각도
         private float spinVelocity;        // 회전 속도
-        private float targetAngle;         // 정지할 목표 각도
         private float cumulativeAngle = 0f; // 누적 회전 각도
         private const float extraRotation = 1800f; // 5바퀴 추가 (5 * 360)
-        private bool isDecelerating = false;  // 감속 상태
         private Timer spinTimer;           // 타이머
 
         // 감속 속도
@@ -257,6 +265,65 @@ namespace ForDaku
             DrawRoulette(g, roulettePanel.Width, roulettePanel.Height);  // 이 결과가 가로세로 비율 1:1이 되어야 원이 됨
         }
 
+        void StartDeceleration()
+        {
+            if (isDecelerating || isStopping) return;
+
+            isStopping = true;
+            elapsedTime = 0f;
+            startAngle = rotationAngle;
+
+            float randomTargetOffset = random.Next(0, 360);
+            float fullSpins = 15 * 360;
+            targetAngle = startAngle + fullSpins + randomTargetOffset;
+        }
+
+        float Lerp(float a, float b, float t)
+        {
+            return a + (b - a) * t;
+        }
+
+        private void SpinTimer_Tick(object sender, EventArgs e)
+        {
+            if (isStopping)
+            {
+                elapsedTime += spinTimer.Interval / 1000f;
+                float t = Math.Min(elapsedTime / decelerationDuration, 1f); // 0~1 보간
+
+                // 부드러운 ease-out 감속 (곡선 사용)
+                //float smoothT = t; // t
+                //float smoothT = 1 - (1 - t) * (1 - t); // easeOutQuad
+                float smoothT = 1 - (float)Math.Pow(1 - t, 3); // EaseOutCubic
+
+                rotationAngle = Lerp(startAngle, targetAngle, smoothT);
+
+                if (t >= 1f)
+                {
+                    isStopping = false;
+                    spinTimer.Stop();
+                    spinVelocity = 0f;
+
+                    // 🎯 당첨 항목 계산 여기서
+
+                    rotateButton.Text = "시작";
+                    rotateButton.BackColor = SystemColors.ControlLight; // 색상 변경
+                    rotateButton.Enabled = true;
+                }
+            }
+            else
+            {
+                // 계속 회전 중
+                rotationAngle += spinVelocity;
+                if (rotationAngle >= 360f) rotationAngle -= 360f;
+            }
+
+            //label2.Text = $"회전 각도: {rotationAngle:F2}°";
+
+            UpdateRoulette();
+        }
+
+
+
 
         void StartSpin()
         {
@@ -274,85 +341,6 @@ namespace ForDaku
 
             // 타이머 시작
             spinTimer.Start();
-        }
-
-        void StartDeceleration()
-        {
-            // 정지 신호가 오면 목표 각도를 랜덤하게 설정하고 5바퀴 추가 회전
-            targetAngle = new Random().Next(0, 360);
-            isDecelerating = true;
-            stopwatch.Restart(); // 스톱워치 시작
-        }
-
-        private void SpinTimer_Tick(object sender, EventArgs e)
-        {
-            // 일정 속도로 회전
-            if (!isDecelerating || spinVelocity > 0)
-            {
-                rotationAngle += spinVelocity;
-
-                // 360도를 넘으면 나머지 각도로 설정 (한 바퀴 돌 때마다 초기화)
-                if (rotationAngle >= 360f)
-                {
-                    rotationAngle -= 360f;
-                }
-            }
-
-            
-
-            // 감속 중일 때
-            if (isDecelerating)
-            {
-                float elapsedSeconds = (float)stopwatch.Elapsed.TotalSeconds;
-                // 예: 6초 동안 이징 처리
-                float T = 6.0f;
-                float t = Math.Min(elapsedSeconds, T);
-                float k = 1f;
-
-                //float progress = k / (T * T) * (float)Math.Pow(t - T, 2);
-                //float progressDerivative = 2 * k / (T * T) * (t - T);
-
-                k = 0.6f;
-                float progress = (float)Math.Exp(-k * t);
-                float progressDerivative = -k * (float)Math.Exp(-k * t);
-
-                // 목표 각도와의 차이 계산
-                float angleDifference = Math.Abs(targetAngle - rotationAngle);
-
-                if (angleDifference > 0)
-                {
-                    spinVelocity += progressDerivative;
-                }
-
-                label2.Text = $"spinrV:{spinVelocity}, proDeriv:{progressDerivative}, time:{elapsedSeconds}";
-
-
-                // spinVelocity가 0보다 작아지지 않도록 설정
-                if (spinVelocity <= 0)
-                {
-                    spinVelocity = 1;
-                }
-
-                // 목표 각도에 충분히 가까워지면 멈춤
-                if (angleDifference <= 1f && spinVelocity <= 1f)
-                {
-                    label2.Text = $"멈춰";
-                    rotationAngle = targetAngle;  // 정확히 목표 각도로 설정
-                    spinVelocity = 0;
-                    spinTimer.Stop();
-                    isDecelerating = false;
-
-                    // 버튼 텍스트와 색상 변경
-                    rotateButton.Text = "시작";
-                    rotateButton.BackColor = SystemColors.ControlLight;
-                    rotateButton.Enabled = true;
-                }
-
-                
-            }
-
-            // 룰렛 상태 업데이트
-            UpdateRoulette();
         }
 
         void DrawRoulette(Graphics g, int width, int height)
@@ -541,7 +529,9 @@ namespace ForDaku
 
         float PointDegree(float degree)
         {
-            return (270 - degree + 360) % 360;
+            float result = ((270 - degree) % 360 + 360) % 360;
+            //label2.Text = $"회전 각도: {result:F2}°";
+            return result;
         }
 
         void UpdateRoulette()
