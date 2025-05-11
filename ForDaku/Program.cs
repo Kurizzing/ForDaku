@@ -16,9 +16,9 @@ namespace ForDaku
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MemoForm());
-            //// for test
-            //Application.Run(new RouletteForm());
+            //Application.Run(new MemoForm());
+            // for test
+            Application.Run(new RouletteForm());
         }
     }
 }

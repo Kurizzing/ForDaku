@@ -37,6 +37,7 @@
             this.addListItem = new ForDaku.MyListItem();
             this.timerControl1 = new ForDaku.TimerControl();
             this.roulettePanel = new ForDaku.DoubleBufferedPanel();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // flowLayoutPanel
@@ -102,6 +103,8 @@
             // timerControl1
             // 
             this.timerControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.timerControl1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.timerControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.timerControl1.Location = new System.Drawing.Point(981, 50);
             this.timerControl1.Name = "timerControl1";
             this.timerControl1.Size = new System.Drawing.Size(340, 140);
@@ -115,11 +118,21 @@
             this.roulettePanel.TabIndex = 0;
             this.roulettePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(1715, 99);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(38, 12);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "label2";
+            // 
             // RouletteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.prizePanel);
             this.Controls.Add(this.triangleDrawPanel);
             this.Controls.Add(this.rotateButton);
@@ -149,6 +162,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel triangleDrawPanel;
         private System.Windows.Forms.Panel prizePanel;
+        private System.Windows.Forms.Label label2;
     }
 }
 

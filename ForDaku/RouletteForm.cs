@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
@@ -22,15 +23,22 @@ namespace ForDaku
     
     public partial class RouletteForm : Form
     {
+        private float rotationAngle = 0f;  // 현재 회전 각도
+        private float spinVelocity;        // 회전 속도
+        private float targetAngle;         // 정지할 목표 각도
+        private float cumulativeAngle = 0f; // 누적 회전 각도
+        private const float extraRotation = 1800f; // 5바퀴 추가 (5 * 360)
+        private bool isDecelerating = false;  // 감속 상태
+        private Timer spinTimer;           // 타이머
+
+        // 감속 속도
+        private float spinDeceleration = 0.2f;
+        private float minVelocity = 1f; // 최소 속도
+
         private MemoForm memoForm;
         List<(string, int)> itemList;
-        float rotationAngle = 0f;
-        Timer spinTimer;
-        float spinVelocity = 40f; // 초기 속도
-        float spinDeceleration = 0.5f; // 감속도
+        //float spinDeceleration = 0.5f; // 감속도
 
-        bool isDecelerating = false;
-        float minVelocity = 0.1f; // 멈출 기준 속도
 
         int rouletteBorderWidth = 5; // 룰렛 테두리 두께
         int triangleHeight = 40; // 삼각형 높이
@@ -47,12 +55,14 @@ namespace ForDaku
         MyListItem prizeItem = null; // 당첨 아이템
         Font prizeFont = new Font("굴림", 30, FontStyle.Bold);
 
+        private Stopwatch stopwatch;
+
         // for test
         public RouletteForm()
         {
             InitializeComponent();
             this.DoubleBuffered = true; // 더블 버퍼링 활성화
-
+            stopwatch = new Stopwatch();
 
             string txt = File.ReadAllText("C:/Users/lkuku/Desktop/a.txt");
 
@@ -247,49 +257,101 @@ namespace ForDaku
             DrawRoulette(g, roulettePanel.Width, roulettePanel.Height);  // 이 결과가 가로세로 비율 1:1이 되어야 원이 됨
         }
 
+
         void StartSpin()
         {
+            // 회전 속도 초기화
             spinVelocity = 40f;
-            isDecelerating = false;
+            cumulativeAngle = 0f;
 
+            // 타이머가 없으면 새로 생성
             if (spinTimer == null)
             {
                 spinTimer = new Timer();
-                spinTimer.Interval = 16;
+                spinTimer.Interval = 16;  // 16ms마다 타이머 틱 (약 60FPS)
                 spinTimer.Tick += SpinTimer_Tick;
             }
 
+            // 타이머 시작
             spinTimer.Start();
         }
 
         void StartDeceleration()
         {
+            // 정지 신호가 오면 목표 각도를 랜덤하게 설정하고 5바퀴 추가 회전
+            targetAngle = new Random().Next(0, 360);
             isDecelerating = true;
+            stopwatch.Restart(); // 스톱워치 시작
         }
 
         private void SpinTimer_Tick(object sender, EventArgs e)
         {
-            rotationAngle += spinVelocity;
-            if (rotationAngle >= 360f)
-                rotationAngle -= 360f;
+            // 일정 속도로 회전
+            if (!isDecelerating || spinVelocity > 0)
+            {
+                rotationAngle += spinVelocity;
 
-            // 감속 중일 때만 속도 감소
+                // 360도를 넘으면 나머지 각도로 설정 (한 바퀴 돌 때마다 초기화)
+                if (rotationAngle >= 360f)
+                {
+                    rotationAngle -= 360f;
+                }
+            }
+
+            
+
+            // 감속 중일 때
             if (isDecelerating)
             {
-                spinVelocity -= spinDeceleration;
-                if (spinVelocity <= minVelocity)
+                float elapsedSeconds = (float)stopwatch.Elapsed.TotalSeconds;
+                // 예: 6초 동안 이징 처리
+                float T = 6.0f;
+                float t = Math.Min(elapsedSeconds, T);
+                float k = 1f;
+
+                //float progress = k / (T * T) * (float)Math.Pow(t - T, 2);
+                //float progressDerivative = 2 * k / (T * T) * (t - T);
+
+                k = 0.6f;
+                float progress = (float)Math.Exp(-k * t);
+                float progressDerivative = -k * (float)Math.Exp(-k * t);
+
+                // 목표 각도와의 차이 계산
+                float angleDifference = Math.Abs(targetAngle - rotationAngle);
+
+                if (angleDifference > 0)
                 {
+                    spinVelocity += progressDerivative;
+                }
+
+                label2.Text = $"spinrV:{spinVelocity}, proDeriv:{progressDerivative}, time:{elapsedSeconds}";
+
+
+                // spinVelocity가 0보다 작아지지 않도록 설정
+                if (spinVelocity <= 0)
+                {
+                    spinVelocity = 1;
+                }
+
+                // 목표 각도에 충분히 가까워지면 멈춤
+                if (angleDifference <= 1f && spinVelocity <= 1f)
+                {
+                    label2.Text = $"멈춰";
+                    rotationAngle = targetAngle;  // 정확히 목표 각도로 설정
                     spinVelocity = 0;
                     spinTimer.Stop();
                     isDecelerating = false;
 
+                    // 버튼 텍스트와 색상 변경
                     rotateButton.Text = "시작";
-                    rotateButton.BackColor = SystemColors.ControlLight; // 색상 변경
-
+                    rotateButton.BackColor = SystemColors.ControlLight;
                     rotateButton.Enabled = true;
                 }
+
+                
             }
 
+            // 룰렛 상태 업데이트
             UpdateRoulette();
         }
 
