@@ -132,7 +132,7 @@ namespace ForDaku
             //prizePanel.Width = (int)(textSize.Width);
             //prizePanel.Height = (int)(textSize.Height); // 텍스트 크기 조정
 
-            prizePanel.Width = (int)(roulettePanel.Width * 0.5f);
+            prizePanel.Width = (int)(roulettePanel.Width * 0.9f);
 
             // 위치 조정
             float panelX = this.ClientSize.Width / 4;
@@ -171,6 +171,7 @@ namespace ForDaku
             originalRotateButtonY = rotateButton.Location.Y; // 버튼의 원래 Y 위치 저장
 
             UpdateRoulette();
+            UpdatePrizePanel();
 
             // ! 항목 리스트, 타이머 화면 배치
             // 항목 리스트 가로: 클라이언트의 1/4
@@ -336,6 +337,20 @@ namespace ForDaku
                 startAngle += sweepAngle;
             }
 
+            // 원 테두리 그리기
+
+            // borderWidth는 그린 영역 안으로 절반 밖으로 절반 생김
+            // 원 주위에 20픽셀 정도 검은색 테두리 추가
+            using (Pen borderPen = new Pen(Color.Black, rouletteBorderWidth)) // 테두리 색상과 두께 설정
+            {
+                //Rectangle borderRect = new Rectangle(rect.X + rouletteBorderWidth, rect.Y + rouletteBorderWidth, rect.Width - rouletteBorderWidth, rect.Height - rouletteBorderWidth);
+                g.TranslateTransform(rouletteBorderWidth * 0.5f, rouletteBorderWidth * 0.5f);
+                Rectangle borderRect = new Rectangle(0, 0, width - rouletteBorderWidth, height - rouletteBorderWidth);
+                g.DrawEllipse(borderPen, borderRect); // 원 테두리 그리기
+
+                g.TranslateTransform(-rouletteBorderWidth * 0.5f, -rouletteBorderWidth * 0.5f); // 돌아가기
+            }
+
             // 항목 이름 그리기
             startAngle = 0; // 시작 각도 초기화
             sweepAngle = 0;
@@ -432,8 +447,12 @@ namespace ForDaku
                 // 현재 당첨 아이템
                 if (startAngle <= PointDegree(rotationAngle) && PointDegree(rotationAngle) <= startAngle + sweepAngle)
                 {
-                    prizeItem = item;
-                    PrizeLabelUpdate();
+                    if (prizeItem != item)
+                    {
+                        prizeItem = item;
+                        UpdatePrizePanel();
+                    }
+                    
                     //PrizeLabelUpdate(item.TextBoxValue, e);
 
                 }
@@ -442,19 +461,7 @@ namespace ForDaku
             }
 
 
-            // 원 테두리 그리기
-
-            // borderWidth는 그린 영역 안으로 절반 밖으로 절반 생김
-            // 원 주위에 20픽셀 정도 검은색 테두리 추가
-            using (Pen borderPen = new Pen(Color.Black, rouletteBorderWidth)) // 테두리 색상과 두께 설정
-            {
-                //Rectangle borderRect = new Rectangle(rect.X + rouletteBorderWidth, rect.Y + rouletteBorderWidth, rect.Width - rouletteBorderWidth, rect.Height - rouletteBorderWidth);
-                g.TranslateTransform(rouletteBorderWidth * 0.5f, rouletteBorderWidth * 0.5f);
-                Rectangle borderRect = new Rectangle(0, 0, width - rouletteBorderWidth, height - rouletteBorderWidth);
-                g.DrawEllipse(borderPen, borderRect); // 원 테두리 그리기
-
-                g.TranslateTransform(-rouletteBorderWidth * 0.5f, -rouletteBorderWidth * 0.5f); // 돌아가기
-            }
+            
         }
 
         float PointDegree(float degree)
@@ -501,6 +508,7 @@ namespace ForDaku
             item.TextBoxControl.TextChanged += (s, ev) =>
             {
                 UpdateRoulette();
+                UpdatePrizePanel();
             };
             item.NumericUpDownValue = numericUpDownValue;
             item.ButtonControl.Text = "-";
@@ -509,16 +517,19 @@ namespace ForDaku
             {
                 UpdateProbability();
                 UpdateRoulette();
+                UpdatePrizePanel();
             };
             item.ButtonControl.Click += (s, ev) =>
             {
                 flowLayoutPanel.Controls.Remove(item);
                 UpdateProbability();
                 UpdateRoulette();
+                UpdatePrizePanel();
             };
             flowLayoutPanel.Controls.Add(item);
             UpdateProbability();
             UpdateRoulette();
+            UpdatePrizePanel();
         }
 
         /// <summary>
@@ -659,7 +670,7 @@ namespace ForDaku
 
         }
 
-        void PrizeLabelUpdate()
+        void UpdatePrizePanel()
         {
             prizePanel.Invalidate();
             prizePanel.Update();
