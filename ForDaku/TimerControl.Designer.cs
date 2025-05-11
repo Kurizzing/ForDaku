@@ -42,6 +42,7 @@ namespace ForDaku
             this.resetButton.TabIndex = 2;
             this.resetButton.Text = "RESET";
             this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // startButton
             // 

@@ -28,7 +28,7 @@ namespace ForDaku
             timer.Interval = 1000;
             timer.Tick += Timer_Tick;
 
-            btnStart.BackColor = Color.LightGreen;
+            btnStart.BackColor = Color.LightGray;
             resetButton.BackColor = Color.LightGray;
         }
 
@@ -93,7 +93,7 @@ namespace ForDaku
 
                 btnStart.Click += btnStart_Click;
                 btnStart.Text = "START";
-                btnStart.BackColor = Color.LightGreen;
+                btnStart.BackColor = Color.LightGray;
                 MessageBox.Show("타이머 종료!");
             }
         }
@@ -150,7 +150,7 @@ namespace ForDaku
             numericMinute.Value = numericSecond.Value = 0;
 
             btnStart.Text = "START";
-            btnStart.BackColor = Color.LightGreen;
+            btnStart.BackColor = SystemColors.ControlLight;
 
             // clear
             btnStart.Click -= btnStart_Click;
@@ -245,6 +245,11 @@ namespace ForDaku
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
         {
 
         }

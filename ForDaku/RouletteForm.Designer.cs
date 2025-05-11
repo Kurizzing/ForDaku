@@ -30,14 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RouletteForm));
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
             this.rotateButton = new System.Windows.Forms.Button();
             this.triangleDrawPanel = new System.Windows.Forms.Panel();
             this.prizePanel = new System.Windows.Forms.Panel();
             this.addListItem = new ForDaku.MyListItem();
             this.timerControl1 = new ForDaku.TimerControl();
             this.roulettePanel = new ForDaku.DoubleBufferedPanel();
-            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // flowLayoutPanel
@@ -49,15 +47,6 @@
             this.flowLayoutPanel.Size = new System.Drawing.Size(505, 460);
             this.flowLayoutPanel.TabIndex = 1;
             this.flowLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1715, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 12);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "label1";
             // 
             // rotateButton
             // 
@@ -109,6 +98,7 @@
             this.timerControl1.Name = "timerControl1";
             this.timerControl1.Size = new System.Drawing.Size(340, 140);
             this.timerControl1.TabIndex = 7;
+            this.timerControl1.Load += new System.EventHandler(this.timerControl1_Load_1);
             // 
             // roulettePanel
             // 
@@ -118,26 +108,15 @@
             this.roulettePanel.TabIndex = 0;
             this.roulettePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1715, 99);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 12);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "label2";
-            // 
             // RouletteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.prizePanel);
             this.Controls.Add(this.triangleDrawPanel);
             this.Controls.Add(this.rotateButton);
             this.Controls.Add(this.addListItem);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.timerControl1);
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.roulettePanel);
@@ -148,7 +127,6 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -159,10 +137,8 @@
         private MyListItem addListItem;
         private System.Windows.Forms.Button rotateButton;
         private TimerControl timerControl1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel triangleDrawPanel;
         private System.Windows.Forms.Panel prizePanel;
-        private System.Windows.Forms.Label label2;
     }
 }
 

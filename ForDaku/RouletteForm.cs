@@ -345,7 +345,6 @@ namespace ForDaku
 
         void DrawRoulette(Graphics g, int width, int height)
         {
-            label1.Text = $"{width} {height}";
             if (GetAllCount() == 0)
             {
                 return;
@@ -811,6 +810,11 @@ namespace ForDaku
                 // 텍스트 내부 채우기 (지정색)
                 e.Graphics.FillPath(innerBrush, path);
             }
+        }
+
+        private void timerControl1_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 
