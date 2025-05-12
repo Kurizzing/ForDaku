@@ -35,7 +35,7 @@ namespace ForDaku
 
         private void InitializeControls()
         {
-            int numericPosT = label1.Location.Y + label1.Size.Height - numericSize.Height;
+            int numericPosT = minLabel.Location.Y + minLabel.Size.Height - numericSize.Height;
             numericMinute = new CustomNumericUpDown();
             numericMinute.Location = new Point(35, numericPosT);
             numericMinute.Maximum = 59;

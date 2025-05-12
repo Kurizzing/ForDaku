@@ -30,8 +30,8 @@ namespace ForDaku
             oneMinButton = new Button();
             fiveMinButton = new Button();
             tenMinButton = new Button();
-            label1 = new Label();
-            label2 = new Label();
+            minLabel = new Label();
+            secLabel = new Label();
             SuspendLayout();
             // 
             // resetButton
@@ -102,25 +102,25 @@ namespace ForDaku
             tenMinButton.Text = "+10분";
             tenMinButton.UseVisualStyleBackColor = false;
             // 
-            // label1
+            // minLabel
             // 
-            label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(110, 70);
-            label1.Margin = new Padding(0);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(19, 15);
-            label1.TabIndex = 8;
-            label1.Text = "분";
+            minLabel.AutoSize = true;
+            minLabel.Location = new System.Drawing.Point(110, 70);
+            minLabel.Margin = new Padding(0);
+            minLabel.Name = "minLabel";
+            minLabel.Size = new System.Drawing.Size(19, 15);
+            minLabel.TabIndex = 8;
+            minLabel.Text = "분";
             // 
-            // label2
+            // secLabel
             // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(209, 70);
-            label2.Margin = new Padding(0);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(19, 15);
-            label2.TabIndex = 9;
-            label2.Text = "초";
+            secLabel.AutoSize = true;
+            secLabel.Location = new System.Drawing.Point(209, 70);
+            secLabel.Margin = new Padding(0);
+            secLabel.Name = "secLabel";
+            secLabel.Size = new System.Drawing.Size(19, 15);
+            secLabel.TabIndex = 9;
+            secLabel.Text = "초";
             // 
             // TimerControl
             // 
@@ -128,8 +128,8 @@ namespace ForDaku
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.ControlLight;
             BorderStyle = BorderStyle.FixedSingle;
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(secLabel);
+            Controls.Add(minLabel);
             Controls.Add(tenMinButton);
             Controls.Add(fiveMinButton);
             Controls.Add(oneMinButton);
@@ -150,7 +150,7 @@ namespace ForDaku
         private Button oneMinButton;
         private Button fiveMinButton;
         private Button tenMinButton;
-        private Label label1;
-        private Label label2;
+        private Label minLabel;
+        private Label secLabel;
     }
 }
