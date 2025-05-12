@@ -35,8 +35,8 @@
             prizePanel = new System.Windows.Forms.Panel();
             addListItem = new MyListItem();
             roulettePanel = new DoubleBufferedPanel();
-            timerControl1 = new TimerControl();
-            labelResult = new System.Windows.Forms.Label();
+            timerControl = new TimerControl();
+            resultLabel = new System.Windows.Forms.Label();
             SuspendLayout();
             // 
             // flowLayoutPanel
@@ -47,7 +47,6 @@
             flowLayoutPanel.Name = "flowLayoutPanel";
             flowLayoutPanel.Size = new System.Drawing.Size(505, 575);
             flowLayoutPanel.TabIndex = 1;
-            flowLayoutPanel.Paint += flowLayoutPanel1_Paint;
             // 
             // rotateButton
             // 
@@ -61,7 +60,7 @@
             rotateButton.TabIndex = 5;
             rotateButton.Text = "시작";
             rotateButton.UseVisualStyleBackColor = false;
-            rotateButton.Click += button2_Click;
+            rotateButton.Click += RotateButton_Click;
             // 
             // triangleDrawPanel
             // 
@@ -70,7 +69,7 @@
             triangleDrawPanel.Name = "triangleDrawPanel";
             triangleDrawPanel.Size = new System.Drawing.Size(93, 66);
             triangleDrawPanel.TabIndex = 9;
-            triangleDrawPanel.Paint += triangleDrawPanel_Paint;
+            triangleDrawPanel.Paint += TriangleDrawPanel_Paint;
             // 
             // prizePanel
             // 
@@ -79,7 +78,7 @@
             prizePanel.Name = "prizePanel";
             prizePanel.Size = new System.Drawing.Size(948, 65);
             prizePanel.TabIndex = 10;
-            prizePanel.Paint += prizePanel_Paint;
+            prizePanel.Paint += PrizePanel_Paint;
             // 
             // addListItem
             // 
@@ -92,7 +91,7 @@
             addListItem.Size = new System.Drawing.Size(520, 71);
             addListItem.TabIndex = 4;
             addListItem.TextBoxValue = "";
-            addListItem.Load += myListItem1_Load_1;
+            addListItem.Load += AddListItem_Load;
             // 
             // roulettePanel
             // 
@@ -101,35 +100,34 @@
             roulettePanel.Name = "roulettePanel";
             roulettePanel.Size = new System.Drawing.Size(950, 1154);
             roulettePanel.TabIndex = 0;
-            roulettePanel.Paint += panel1_Paint;
+            roulettePanel.Paint += RoulettePanel_Paint;
             // 
-            // timerControl1
+            // timerControl
             // 
-            timerControl1.BackColor = System.Drawing.SystemColors.ControlLight;
-            timerControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            timerControl1.Location = new System.Drawing.Point(1019, 55);
-            timerControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            timerControl1.Name = "timerControl1";
-            timerControl1.Size = new System.Drawing.Size(338, 160);
-            timerControl1.TabIndex = 11;
+            timerControl.BackColor = System.Drawing.SystemColors.ControlLight;
+            timerControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            timerControl.Location = new System.Drawing.Point(1019, 55);
+            timerControl.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            timerControl.Name = "timerControl";
+            timerControl.Size = new System.Drawing.Size(338, 160);
+            timerControl.TabIndex = 11;
             // 
-            // labelResult
+            // resultLabel
             // 
-            labelResult.AutoSize = true;
-            labelResult.Location = new System.Drawing.Point(1583, 212);
-            labelResult.Name = "labelResult";
-            labelResult.Size = new System.Drawing.Size(36, 15);
-            labelResult.TabIndex = 12;
-            labelResult.Text = "result";
-            labelResult.Click += labelResult_Click;
+            resultLabel.AutoSize = true;
+            resultLabel.Location = new System.Drawing.Point(1583, 212);
+            resultLabel.Name = "resultLabel";
+            resultLabel.Size = new System.Drawing.Size(36, 15);
+            resultLabel.TabIndex = 12;
+            resultLabel.Text = "result";
             // 
             // RouletteForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1904, 1301);
-            Controls.Add(labelResult);
-            Controls.Add(timerControl1);
+            Controls.Add(resultLabel);
+            Controls.Add(timerControl);
             Controls.Add(prizePanel);
             Controls.Add(triangleDrawPanel);
             Controls.Add(rotateButton);
@@ -142,7 +140,6 @@
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "룰렛";
             WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
 
@@ -156,8 +153,8 @@
         private System.Windows.Forms.Button rotateButton;
         private System.Windows.Forms.Panel triangleDrawPanel;
         private System.Windows.Forms.Panel prizePanel;
-        private TimerControl timerControl1;
-        private System.Windows.Forms.Label labelResult;
+        private TimerControl timerControl;
+        private System.Windows.Forms.Label resultLabel;
     }
 }
 
