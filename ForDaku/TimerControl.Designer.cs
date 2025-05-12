@@ -43,7 +43,6 @@ namespace ForDaku
             resetButton.TabIndex = 2;
             resetButton.Text = "RESET";
             resetButton.UseVisualStyleBackColor = true;
-            resetButton.Click += resetButton_Click;
             // 
             // startButton
             // 
@@ -54,7 +53,6 @@ namespace ForDaku
             startButton.TabIndex = 3;
             startButton.Text = "START";
             startButton.UseVisualStyleBackColor = true;
-            startButton.Click += button2_Click;
             // 
             // tenSecButton
             // 
@@ -113,7 +111,6 @@ namespace ForDaku
             label1.Size = new System.Drawing.Size(19, 15);
             label1.TabIndex = 8;
             label1.Text = "분";
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -142,10 +139,8 @@ namespace ForDaku
             Margin = new Padding(3, 4, 3, 4);
             Name = "TimerControl";
             Size = new System.Drawing.Size(338, 160);
-            Load += TimerControl_Load;
             ResumeLayout(false);
             PerformLayout();
-
         }
 
         #endregion
