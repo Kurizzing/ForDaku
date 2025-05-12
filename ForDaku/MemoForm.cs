@@ -15,76 +15,38 @@ namespace ForDaku
 {
     public partial class MemoForm : Form
     {
+        private const string urlMM = "https://www.masterduelmeta.com/";
+        private const string urlMD = "https://gall.dcinside.com/mgallery/board/lists/?id=masterduel";
+        private const string urlYT = "https://www.youtube.com/@Kim_Daku";
+        private const string urlCF = "https://cafe.naver.com/kimdaku";
+
+        private readonly Font richTextBoxFont = new Font("굴림체", 30);
+        private readonly List<string> optionList = new List<string>() { "빈도순", "이름순", "무작위", "최대최소순" };
+
+        private RouletteForm rouletteForm;
+        private List<(string, int)> itemList = new List<(string, int)>();
+
         private TextBox searchTextBox;
         private Button searchButton;
         private int lastSelectionLength = -1; // 마지막 선택 영역 길이
         private int lastSearchIndex = 0;
 
-        private Panel resizablePanel;
-        private bool isResizing = false;
-        private Point lastMousePosition;
-
-        List<(string, int)> itemList;
-
-
-        private RouletteForm rouletteForm;
         public MemoForm()
         {
             InitializeComponent();
+            InitializeControls();
+            SetHotkeys();
+        }
 
-            itemList = new List<(string, int)>();
-
-            sortButton.FlatStyle = FlatStyle.Flat;
-            sortButton.FlatAppearance.BorderSize = 0;
-            SetResizedButtonImageWithAspect(sortButton, sortButton.Image);
-            saveButton.FlatStyle = FlatStyle.Flat;
-            saveButton.FlatAppearance.BorderSize = 0;
-            SetResizedButtonImageWithAspect(saveButton, saveButton.Image);
-            loadButton.FlatStyle = FlatStyle.Flat;
-            loadButton.FlatAppearance.BorderSize = 0;
-            SetResizedButtonImageWithAspect(loadButton, loadButton.Image);
-
-            urlButtonMM.FlatStyle = FlatStyle.Flat;
-            urlButtonMM.FlatAppearance.BorderSize = 0;
-            SetResizedButtonImageWithAspect(urlButtonMM, urlButtonMM.Image);
-            urlButtonDC.FlatStyle = FlatStyle.Flat;
-            urlButtonDC.FlatAppearance.BorderSize = 0;
-            SetResizedButtonImageWithAspect(urlButtonDC, urlButtonDC.Image);
-            urlButtonYT.FlatStyle = FlatStyle.Flat;
-            urlButtonYT.FlatAppearance.BorderSize = 0;
-            SetResizedButtonImageWithAspect(urlButtonYT, urlButtonYT.Image);
-            urlButtonCF.FlatStyle = FlatStyle.Flat;
-            urlButtonCF.FlatAppearance.BorderSize = 0;
-            SetResizedButtonImageWithAspect(urlButtonCF, urlButtonCF.Image);
-
-            // RichTextBox 설정
-            RichTextBox richTextBox = richTextBox1;
-            richTextBox.Font = new Font("굴림", 30);
-            richTextBox.SelectionFont = new Font("굴림", 30);
-            richTextBox.ImeMode = ImeMode.Hangul;
-            richTextBox.LanguageOption = 0;
-            richTextBox.Text = "드래곤메이드 5";
-
-            richTextBox1.GotFocus += RichTextBox_Focus;
-
-            richTextBox2.Font = new Font("굴림", 30);
-            richTextBox2.SelectionFont = new Font("굴림", 30);
-            richTextBox2.ImeMode = ImeMode.Hangul;
-            richTextBox2.LanguageOption = 0;
-
-            //richTextBox1.LostFocus += (sender, e) =>
-            //{
-            //    label1.Text = "리치텍스트박스 포커스 아웃";
-            //};
-
-            // Ctrl + F 핫키 처리
+        private void SetHotkeys()
+        {
             this.KeyPreview = true;
             this.KeyDown += (sender, e) =>
             {
                 if (e.Control && e.KeyCode == Keys.F)
                 {
                     // 'Ctrl + F' 눌렀을 때 찾기 대화상자 표시
-                    ShowFindDialog(richTextBox);
+                    ShowFindDialog(deckTextBox);
                 }
                 if (e.Control && e.KeyCode == Keys.S)
                 {
@@ -96,103 +58,60 @@ namespace ForDaku
                     e.Handled = true;           // 기본 동작(예: 새로고침 등) 막기
 
                     sortButton.PerformClick();  // 버튼 클릭 동작 실행
-                    richTextBox1.SelectionStart = 0;  // 커서를 텍스트의 첫 번째로 설정
-                    richTextBox1.ScrollToCaret();     // 스크롤을 커서 위치로 이동시킴
+                    deckTextBox.SelectionStart = 0;  // 커서를 텍스트의 첫 번째로 설정
+                    deckTextBox.ScrollToCaret();     // 스크롤을 커서 위치로 이동시킴
                 }
             };
-
-            ComboBox sortOption = optionComboBox;
-            sortOption.Items.Add("빈도순");
-            sortOption.Items.Add("이름순");
-            sortOption.Items.Add("무작위");
-            sortOption.Items.Add("최대최소순");
-            sortOption.SelectedIndex = 0; // 기본값 설정
-
-            //sortOption.SelectedIndexChanged += (sender, e) => {
-            //    label1.Text = "선택된 항목: " + sortOption.SelectedItem.ToString();
-            //    // 선택된 항목에 따른 정렬 처리
-            //};
-
-            //// 폼이 비활성화되면 선택 영역 상태 저장
-            //this.Deactivate += (sender, e) =>
-            //{
-            //    lastSelectionStart = richTextBox.SelectionStart;
-            //    lastSelectionLength = richTextBox.SelectionLength;
-            //};
-
-            //// 폼이 활성화되면 선택 영역 복원
-            //this.Activated += (sender, e) =>
-            //{
-            //    if (lastSelectionStart >= 0 && lastSelectionLength >= 0)
-            //    {
-            //        // 선택 영역 복원
-            //        richTextBox.Select(lastSelectionStart, lastSelectionLength);
-            //    }
-            //};
-
-
-            //// Panel 생성
-            //resizablePanel = new Panel
-            //{
-            //    BorderStyle = BorderStyle.FixedSingle,
-            //    BackColor = Color.LightGray,
-            //    Location = new Point(50, 50),
-            //    Size = new Size(200, 150)
-            //};
-
-            //// 패널에 마우스 이벤트 추가
-            //resizablePanel.MouseDown += ResizablePanel_MouseDown;
-            //resizablePanel.MouseMove += ResizablePanel_MouseMove;
-            //resizablePanel.MouseUp += ResizablePanel_MouseUp;
-
-            //// 폼에 패널 추가
-            //this.Controls.Add(resizablePanel);
         }
 
-        //// 마우스 버튼을 누르면 크기 조정을 시작합니다.
-        //private void ResizablePanel_MouseDown(object sender, MouseEventArgs e)
-        //{
-        //    // 패널의 오른쪽 아래 모서리에서 클릭하면 크기 조정 시작
-        //    if (e.X >= resizablePanel.Width - 10 && e.Y >= resizablePanel.Height - 10)
-        //    {
-        //        isResizing = true;
-        //        lastMousePosition = e.Location;
-        //        this.Cursor = Cursors.SizeNWSE; // 크기 조정 커서로 변경
-        //    }
-        //}
+        private void InitializeControls()
+        {
+            sortButton.FlatStyle = FlatStyle.Flat;
+            sortButton.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(sortButton, sortButton.Image);
 
-        //// 마우스를 이동시킬 때마다 크기를 조정합니다.
-        //private void ResizablePanel_MouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if (isResizing)
-        //    {
-        //        // 크기 조정
-        //        int deltaX = e.X - lastMousePosition.X;
-        //        int deltaY = e.Y - lastMousePosition.Y;
+            saveButton.FlatStyle = FlatStyle.Flat;
+            saveButton.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(saveButton, saveButton.Image);
 
-        //        // 패널의 크기 조정
-        //        resizablePanel.Width += deltaX;
-        //        resizablePanel.Height += deltaY;
+            loadButton.FlatStyle = FlatStyle.Flat;
+            loadButton.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(loadButton, loadButton.Image);
 
-        //        // 마지막 마우스 위치 갱신
-        //        lastMousePosition = e.Location;
-        //    }
-        //    else
-        //    {
-        //        // 크기 조정 모드가 아닐 때는 기본 커서
-        //        if (e.X >= resizablePanel.Width - 10 && e.Y >= resizablePanel.Height - 10)
-        //            this.Cursor = Cursors.SizeNWSE; // 크기 조정 모양 커서
-        //        else
-        //            this.Cursor = Cursors.Default;  // 기본 커서
-        //    }
-        //}
+            urlButtonMM.FlatStyle = FlatStyle.Flat;
+            urlButtonMM.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(urlButtonMM, urlButtonMM.Image);
 
-        //// 마우스 버튼을 떼면 크기 조정을 종료합니다.
-        //private void ResizablePanel_MouseUp(object sender, MouseEventArgs e)
-        //{
-        //    isResizing = false;
-        //    this.Cursor = Cursors.Default;  // 크기 조정 완료 후 기본 커서로 돌아감
-        //}
+            urlButtonDC.FlatStyle = FlatStyle.Flat;
+            urlButtonDC.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(urlButtonDC, urlButtonDC.Image);
+
+            urlButtonYT.FlatStyle = FlatStyle.Flat;
+            urlButtonYT.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(urlButtonYT, urlButtonYT.Image);
+
+            urlButtonCF.FlatStyle = FlatStyle.Flat;
+            urlButtonCF.FlatAppearance.BorderSize = 0;
+            SetResizedButtonImageWithAspect(urlButtonCF, urlButtonCF.Image);
+
+            deckTextBox.Font = richTextBoxFont;
+            deckTextBox.SelectionFont = richTextBoxFont;
+            deckTextBox.ImeMode = ImeMode.Hangul;
+            deckTextBox.LanguageOption = 0;         // 영어 폰트 사용 못하게 설정
+            deckTextBox.Text = "";
+            deckTextBox.GotFocus += DeckTextBoxFocused;
+
+            memoTextBox.Font = richTextBoxFont;
+            memoTextBox.SelectionFont = richTextBoxFont;
+            memoTextBox.ImeMode = ImeMode.Hangul;
+            memoTextBox.LanguageOption = 0;
+
+            foreach (var option in optionList)
+            {
+                optionComboBox.Items.Add(option);
+            }
+            optionComboBox.SelectedIndex = 0; // 기본값 설정
+        }
 
         private void SetResizedButtonImageWithAspect(Button btn, Image originalImage)
         {
@@ -230,9 +149,9 @@ namespace ForDaku
             btn.ImageAlign = ContentAlignment.MiddleCenter;
         }
 
-        private void RichTextBox_Focus(object sender, EventArgs e)
+        private void DeckTextBoxFocused(object sender, EventArgs e)
         {
-            RichTextBox richTextBox = richTextBox1;
+            RichTextBox richTextBox = deckTextBox;
             // RichTextBox에 포커스가 들어오면 선택 영역 복원
             if (lastSearchIndex >= 0 && lastSelectionLength >= 0)
             {
@@ -244,13 +163,13 @@ namespace ForDaku
         private void ShowFindDialog(RichTextBox richTextBox)
         {
             Form findForm = new Form();
-            findForm.Text = "Find";
+            findForm.Text = "찾기";
             findForm.Size = new Size(300, 120);
             findForm.StartPosition = FormStartPosition.Manual;
             findForm.Location = new Point(this.Location.X + 800, this.Location.Y + 100); // 메모장 폼 위치에 따라 대화상자 위치 조정
 
             searchTextBox = new TextBox { Dock = DockStyle.Top };
-            searchButton = new Button { Text = "Find", Dock = DockStyle.Bottom };
+            searchButton = new Button { Text = "찾기", Dock = DockStyle.Bottom };
 
             findForm.Controls.Add(searchTextBox);
             findForm.Controls.Add(searchButton);
@@ -304,79 +223,29 @@ namespace ForDaku
             {
                 if (lastSearchIndex >= 0 && lastSelectionLength >= 0)
                 {
-                    // 이전 선택 영역 복원
-                    richTextBox.Select(lastSearchIndex, lastSelectionLength);
-                    richTextBox.SelectionBackColor = richTextBox.BackColor; // 배경색 복원
+                    richTextBox.Select(lastSearchIndex, lastSelectionLength);   // 이전 선택 영역 복원
+                    richTextBox.SelectionBackColor = richTextBox.BackColor;     // 배경색 복원
                 }
-                // 텍스트를 찾으면 해당 부분을 선택(강조)
-                richTextBox.Select(foundIndex, searchText.Length);
-                richTextBox.ScrollToCaret(); // 스크롤을 선택된 텍스트로 이동
-                richTextBox.SelectionBackColor = Color.LightBlue; // 강조 색상 설정
+                
+                richTextBox.Select(foundIndex, searchText.Length);  // 텍스트를 찾으면 해당 부분을 선택(강조)
+                richTextBox.ScrollToCaret();                        // 스크롤을 선택된 텍스트로 이동
+                richTextBox.SelectionBackColor = Color.LightBlue;   // 강조 색상 설정
 
-
-                // 강조된 텍스트가 잘 보이도록 포커스를 searchTextBox로 다시 돌려줍니다.
-                //searchTextBox.Focus();   // 포커스를 searchTextBox로 되돌림
-
-                // 추가된 부분: 텍스트 강조 후, RichTextBox가 포커스를 잃지 않도록 하여 강조 상태 유지
-                //richTextBox.Focus();
-
-                lastSearchIndex = foundIndex; // 마지막 검색 위치 갱신
-                lastSelectionLength = searchText.Length; // 마지막 선택 영역 길이 갱신
+                lastSearchIndex = foundIndex;                       // 마지막 검색 위치 갱신
+                lastSelectionLength = searchText.Length;            // 마지막 선택 영역 길이 갱신
             }
             else
             {
                 // 텍스트를 못 찾은 경우에는 메시지 표시
-                MessageBox.Show("Text not found!");
+                MessageBox.Show("해당 텍스트가 존재하지 않습니다!");
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            List<(string, int)> listTemp;
-            try
-            {
-                listTemp = MakeList();
-            }
-            catch (FormatException ex)
-            {
-                MessageBox.Show($"입력 오류: {ex.Message}", "오류");
-                return; // 여기서 이후 코드 실행을 중지
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"알 수 없는 오류: {ex.Message}", "오류");
-                return;
-            }
-            itemList = listTemp;
-            //itemList = MakeList();
-
-
-
-            rouletteForm = new RouletteForm(this, itemList);
-            
-            rouletteForm.Show();
-        }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void MemoForm_Load(object sender, EventArgs e)
-        {
-
         }
 
         private List<(string, int)> MakeList()
         {
             var itemList = new List<(string, int)>();
 
-            string textBoxString = richTextBox1.Text;
+            string textBoxString = deckTextBox.Text;
             string[] lines = textBoxString.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
 
             foreach (var line in lines)
@@ -409,9 +278,33 @@ namespace ForDaku
             return itemList;
         }
 
+        private void makeRouletteButton_Click(object sender, EventArgs e)
+        {
+            List<(string, int)> listTemp;
+            try
+            {
+                listTemp = MakeList();
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show($"입력 오류: {ex.Message}", "오류");
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"알 수 없는 오류: {ex.Message}", "오류");
+                return;
+            }
+            itemList = listTemp;
+
+            rouletteForm = new RouletteForm(this, itemList);
+
+            rouletteForm.Show();
+        }
+
         private void sortButton_Click(object sender, EventArgs e)
         {
-            RichTextBox richTextBox = richTextBox1;
+            RichTextBox richTextBox = deckTextBox;
 
             List<(string, int)> listTemp;
             try
@@ -429,8 +322,6 @@ namespace ForDaku
                 return;
             }
             itemList = listTemp;
-            //itemList = MakeList();
-
 
             // 선택된 정렬 옵션에 따라 정렬
             switch (optionComboBox.SelectedIndex)
@@ -450,14 +341,12 @@ namespace ForDaku
                     var ascending = itemList.OrderBy(x => x.Item2).ToList();             // 적은 값부터
 
                     var result = new List<(string, int)>();
-                    int i = 0;
-                    while (i < descending.Count || i < ascending.Count)
+                    for (int i = 0; i < descending.Count || i < ascending.Count; i++)
                     {
                         if (i < descending.Count)
                             result.Add(descending[i]);
                         if (i < ascending.Count)
                             result.Add(ascending[i]);
-                        i++;
                     }
 
                     // 중복 제거 (많은 값 == 적은 값인 항목이 중복될 수 있음)
@@ -475,26 +364,6 @@ namespace ForDaku
             }
         }
 
-        private void optionComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void richTextBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
-        {
-
-        }
-
         private void SaveToFile()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -503,7 +372,7 @@ namespace ForDaku
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                File.WriteAllText(saveFileDialog.FileName, richTextBox1.Text);
+                File.WriteAllText(saveFileDialog.FileName, deckTextBox.Text);
             }
         }
 
@@ -515,25 +384,21 @@ namespace ForDaku
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                richTextBox1.Text = File.ReadAllText(openFileDialog.FileName);
+                deckTextBox.Text = File.ReadAllText(openFileDialog.FileName);
             }
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
             SaveToFile();
         }
 
-        private void loadButton_Click(object sender, EventArgs e)
+        private void LoadButton_Click(object sender, EventArgs e)
         {
             LoadFromFile();
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void openURL(string url)
+        private void OpenURL(string url)
         {
             try
             {
@@ -549,24 +414,24 @@ namespace ForDaku
             }
         }
 
-        private void urlButtonMM_Click(object sender, EventArgs e)
+        private void UrlButtonMM_Click(object sender, EventArgs e)
         {
-            openURL("https://www.masterduelmeta.com/");
+            OpenURL(urlMM);
         }
 
-        private void urlButtonDC_Click(object sender, EventArgs e)
+        private void UrlButtonDC_Click(object sender, EventArgs e)
         {
-            openURL("https://gall.dcinside.com/mgallery/board/lists/?id=masterduel");
+            OpenURL(urlMD);
         }
 
-        private void urlButtonYT_Click(object sender, EventArgs e)
+        private void UrlButtonYT_Click(object sender, EventArgs e)
         {
-            openURL("https://www.youtube.com/@Kim_Daku");
+            OpenURL(urlYT);
         }
 
-        private void urlButtonCF_Click(object sender, EventArgs e)
+        private void UrlButtonCF_Click(object sender, EventArgs e)
         {
-            openURL("https://cafe.naver.com/kimdaku");
+            OpenURL(urlCF);
         }
     }
 }

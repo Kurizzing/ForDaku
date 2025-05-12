@@ -15,8 +15,6 @@ namespace ForDaku
         public MyListItem()
         {
             InitializeComponent();
-
-            button1.Click += button1_Click;
         }
 
         public string TextBoxValue
@@ -56,42 +54,6 @@ namespace ForDaku
         {
             get { return panel1.BackColor; }
             set { panel1.BackColor = value; }
-        }
-
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //// UserControl을 포함한 FlowLayoutPanel에서 자신을 제거
-            //FlowLayoutPanel parentPanel = this.Parent as FlowLayoutPanel;
-            //if (parentPanel != null)
-            //{
-            //    parentPanel.Controls.Remove(this);  // UserControl 제거
-            //}
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void MyListItem_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

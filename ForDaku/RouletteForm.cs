@@ -27,7 +27,6 @@ namespace ForDaku
     {
         Random random = new Random(); // 클래스 맨 위에 선언
         float targetAngle = 0f;          // 감속 후 도달할 목표 각도
-        float totalRotation = 0f;        // 회전 누적 각도
         float startAngle = 0f;           // 감속 시작 각도
         bool isDecelerating = false;
         bool isStopping = false;         // 정지 중 플래그
@@ -36,13 +35,7 @@ namespace ForDaku
 
         private float rotationAngle = 0f;  // 현재 회전 각도
         private float spinVelocity;        // 회전 속도
-        private float cumulativeAngle = 0f; // 누적 회전 각도
-        private const float extraRotation = 1800f; // 5바퀴 추가 (5 * 360)
         private Timer spinTimer;           // 타이머
-
-        // 감속 속도
-        private float spinDeceleration = 0.2f;
-        private float minVelocity = 1f; // 최소 속도
 
         private MemoForm memoForm;
         List<(string, int)> itemList;
@@ -235,7 +228,7 @@ namespace ForDaku
 
             //flowLayoutPanel.Width = (int)(ClientSize.Width / 4);
             flowLayoutPanel.Height = (int)(ClientSize.Height - (timerControl1.Height + addListItem.Height + margin * 4));
-            float flowLayoutPanelL = roulettePanel.Location.X + roulettePanel.Width + margin;
+            float flowLayoutPanelL = roulettePanel.Location.X + roulettePanel.Width + margin * 5;
 
             timerControl1.Location = new Point((int)(flowLayoutPanelL), (int)(margin));
             flowLayoutPanel.Location = new Point((int)(flowLayoutPanelL), (int)(timerControl1.Location.Y + timerControl1.Height + margin));
@@ -366,7 +359,6 @@ namespace ForDaku
         {
             // 회전 속도 초기화
             spinVelocity = 40f;
-            cumulativeAngle = 0f;
 
             // 타이머가 없으면 새로 생성
             if (spinTimer == null)

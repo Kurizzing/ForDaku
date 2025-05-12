@@ -38,51 +38,48 @@
             // 
             // textBox1
             // 
-            textBox1.Font = new System.Drawing.Font("굴림", 16F);
-            textBox1.Location = new System.Drawing.Point(35, 12);
+            textBox1.Font = new System.Drawing.Font("굴림체", 16F);
+            textBox1.Location = new System.Drawing.Point(35, 14);
             textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             textBox1.Name = "textBox1";
             textBox1.Size = new System.Drawing.Size(250, 32);
             textBox1.TabIndex = 0;
-            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // numericUpDown1
             // 
-            numericUpDown1.Font = new System.Drawing.Font("굴림", 16F);
-            numericUpDown1.Location = new System.Drawing.Point(290, 12);
+            numericUpDown1.Font = new System.Drawing.Font("굴림체", 16F);
+            numericUpDown1.Location = new System.Drawing.Point(290, 14);
             numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             numericUpDown1.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new System.Drawing.Size(70, 32);
             numericUpDown1.TabIndex = 2;
-            numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
             // panel1
             // 
-            panel1.Location = new System.Drawing.Point(5, 12);
+            panel1.Location = new System.Drawing.Point(5, 14);
             panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(25, 38);
+            panel1.Size = new System.Drawing.Size(25, 32);
             panel1.TabIndex = 4;
-            panel1.Paint += panel1_Paint;
             // 
             // button1
             // 
-            button1.Location = new System.Drawing.Point(430, 12);
+            button1.Font = new System.Drawing.Font("굴림체", 9F);
+            button1.Location = new System.Drawing.Point(430, 14);
             button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(30, 38);
+            button1.Size = new System.Drawing.Size(30, 32);
             button1.TabIndex = 5;
             button1.Text = "-";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // label1
             // 
-            label1.Font = new System.Drawing.Font("굴림", 12F);
-            label1.Location = new System.Drawing.Point(365, 12);
+            label1.Font = new System.Drawing.Font("굴림체", 12F);
+            label1.Location = new System.Drawing.Point(365, 14);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(60, 38);
+            label1.Size = new System.Drawing.Size(60, 32);
             label1.TabIndex = 3;
             label1.Text = "99.9%";
             label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -98,8 +95,7 @@
             Controls.Add(textBox1);
             Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "MyListItem";
-            Size = new System.Drawing.Size(470, 62);
-            Load += MyListItem_Load;
+            Size = new System.Drawing.Size(470, 60);
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
             PerformLayout();
