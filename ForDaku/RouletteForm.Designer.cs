@@ -36,6 +36,7 @@
             addListItem = new MyListItem();
             roulettePanel = new DoubleBufferedPanel();
             timerControl1 = new TimerControl();
+            labelResult = new System.Windows.Forms.Label();
             SuspendLayout();
             // 
             // flowLayoutPanel
@@ -112,11 +113,22 @@
             timerControl1.Size = new System.Drawing.Size(338, 160);
             timerControl1.TabIndex = 11;
             // 
+            // labelResult
+            // 
+            labelResult.AutoSize = true;
+            labelResult.Location = new System.Drawing.Point(1583, 212);
+            labelResult.Name = "labelResult";
+            labelResult.Size = new System.Drawing.Size(36, 15);
+            labelResult.TabIndex = 12;
+            labelResult.Text = "result";
+            labelResult.Click += labelResult_Click;
+            // 
             // RouletteForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1904, 1301);
+            Controls.Add(labelResult);
             Controls.Add(timerControl1);
             Controls.Add(prizePanel);
             Controls.Add(triangleDrawPanel);
@@ -132,6 +144,7 @@
             WindowState = System.Windows.Forms.FormWindowState.Maximized;
             Load += Form1_Load;
             ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -144,6 +157,7 @@
         private System.Windows.Forms.Panel triangleDrawPanel;
         private System.Windows.Forms.Panel prizePanel;
         private TimerControl timerControl1;
+        private System.Windows.Forms.Label labelResult;
     }
 }
 

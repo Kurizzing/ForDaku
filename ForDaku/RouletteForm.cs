@@ -22,7 +22,7 @@ using Font = System.Drawing.Font;
 
 namespace ForDaku
 {
-    
+
     public partial class RouletteForm : Form
     {
         Random random = new Random(); // 클래스 맨 위에 선언
@@ -31,7 +31,7 @@ namespace ForDaku
         float startAngle = 0f;           // 감속 시작 각도
         bool isDecelerating = false;
         bool isStopping = false;         // 정지 중 플래그
-        float decelerationDuration = 10f; // 감속 시간 (초)
+        float decelerationDuration = 8f; // 감속 시간 (초)
         float elapsedTime = 0f;          // 경과 시간
 
         private float rotationAngle = 0f;  // 현재 회전 각도
@@ -60,9 +60,9 @@ namespace ForDaku
         int amplitude = 5;      // 진동 범위
         int speed = 75;         // 타이머 간격(ms)
         Timer timer1 = new Timer();
-        
+
         MyListItem prizeItem = null; // 당첨 아이템
-        Font prizeFont = new Font("굴림", 30, FontStyle.Bold);
+        Font prizeFont = new Font("굴림", 40, FontStyle.Bold);
 
         private Stopwatch stopwatch;
 
@@ -102,10 +102,10 @@ namespace ForDaku
 
 
             RepositionControls();
-            
+
             timer1.Interval = speed;
             timer1.Tick += Timer1_Tick;
-
+            InitializeControls();
         }
 
         public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
@@ -130,8 +130,39 @@ namespace ForDaku
             RepositionControls();
             timer1.Interval = speed;
             timer1.Tick += Timer1_Tick;
+            InitializeControls();
 
+        }
 
+        private void InitializeControls()
+        {
+            labelResult.AutoSize = false;
+            labelResult.BackColor = Color.White;  // 필요 시 반투명도 색 설정
+            labelResult.ForeColor = Color.Black;
+            labelResult.Font = new Font("굴림", 30, FontStyle.Bold);
+            labelResult.TextAlign = ContentAlignment.MiddleCenter;
+            labelResult.BringToFront(); // 다른 컨트롤보다 앞에 오도록
+            labelResult.Width = this.ClientSize.Width;
+            labelResult.Height = 70; // 높이 설정
+            labelResult.Location = new Point(0, (this.ClientSize.Height - labelResult.Height) / 2);
+            labelResult.Visible = false;
+        }
+
+        private void ShowResult(string result)
+        {
+            labelResult.Text = result;
+            labelResult.BringToFront();  // 가장 앞에 위치시킴
+            labelResult.Visible = true;
+
+            Timer timer = new Timer();
+            timer.Interval = 2000;
+            timer.Tick += (s, e) =>
+            {
+                timer.Stop();
+                labelResult.Visible = false;
+                timer.Dispose();
+            };
+            timer.Start();
         }
 
         private void RepositionControls()
@@ -140,6 +171,10 @@ namespace ForDaku
             // 크기 조정
             roulettePanel.Height = (ClientSize.Height - rotateButton.Height - prizePanel.Height - triangleHeight - 150);
             roulettePanel.Width = roulettePanel.Height;
+
+            labelResult.Width = this.ClientSize.Width;
+            labelResult.Height = 50; // 높이 설정
+            labelResult.Location = new Point(0, (this.ClientSize.Height - labelResult.Height) / 2);
 
             //// prizePanel 크기 조정
             //// 텍스트 크기 계산
@@ -221,7 +256,7 @@ namespace ForDaku
             RepositionControls();
         }
 
-        
+
 
         private (float, float) LTToCenter(float x, float y, float width, float height)
         {
@@ -305,6 +340,7 @@ namespace ForDaku
                     spinVelocity = 0f;
 
                     // 🎯 당첨 항목 계산 여기서
+                    ShowResult(prizeItem.TextBoxValue);
 
                     rotateButton.Text = "시작";
                     rotateButton.BackColor = SystemColors.ControlLight; // 색상 변경
@@ -432,7 +468,7 @@ namespace ForDaku
                 //    g.Restore(state);
                 //}
 
-                Font font = new Font("굴림", 20, FontStyle.Bold);
+                Font font = new Font("굴림", 30, FontStyle.Bold);
                 string text = item.TextBoxValue;
 
                 // 텍스트 크기 계산
@@ -515,7 +551,7 @@ namespace ForDaku
                         prizeItem = item;
                         UpdatePrizePanel();
                     }
-                    
+
                     //PrizeLabelUpdate(item.TextBoxValue, e);
 
                 }
@@ -524,7 +560,7 @@ namespace ForDaku
             }
 
 
-            
+
         }
 
         float PointDegree(float degree)
@@ -688,7 +724,7 @@ namespace ForDaku
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+
 
             if (rotateButton.Text == "시작" && GetAllCount() > 0)
             {
@@ -760,7 +796,7 @@ namespace ForDaku
 
                 flowLayoutPanel.ResumeLayout(true);
                 // 스크롤 맨 아래로
-                flowLayoutPanel.ScrollControlIntoView(flowLayoutPanel.Controls[flowLayoutPanel.Controls.Count-1]);
+                flowLayoutPanel.ScrollControlIntoView(flowLayoutPanel.Controls[flowLayoutPanel.Controls.Count - 1]);
             };
         }
 
@@ -814,6 +850,11 @@ namespace ForDaku
         }
 
         private void timerControl1_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelResult_Click(object sender, EventArgs e)
         {
 
         }
