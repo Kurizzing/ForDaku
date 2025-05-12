@@ -29,104 +29,109 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RouletteForm));
-            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.rotateButton = new System.Windows.Forms.Button();
-            this.triangleDrawPanel = new System.Windows.Forms.Panel();
-            this.prizePanel = new System.Windows.Forms.Panel();
-            this.addListItem = new ForDaku.MyListItem();
-            this.timerControl1 = new ForDaku.TimerControl();
-            this.roulettePanel = new ForDaku.DoubleBufferedPanel();
-            this.SuspendLayout();
+            flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            rotateButton = new System.Windows.Forms.Button();
+            triangleDrawPanel = new System.Windows.Forms.Panel();
+            prizePanel = new System.Windows.Forms.Panel();
+            addListItem = new MyListItem();
+            roulettePanel = new DoubleBufferedPanel();
+            timerControl1 = new TimerControl();
+            SuspendLayout();
             // 
             // flowLayoutPanel
             // 
-            this.flowLayoutPanel.AutoScroll = true;
-            this.flowLayoutPanel.Location = new System.Drawing.Point(981, 210);
-            this.flowLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel.Name = "flowLayoutPanel";
-            this.flowLayoutPanel.Size = new System.Drawing.Size(505, 460);
-            this.flowLayoutPanel.TabIndex = 1;
-            this.flowLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
+            flowLayoutPanel.AutoScroll = true;
+            flowLayoutPanel.Location = new System.Drawing.Point(981, 262);
+            flowLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
+            flowLayoutPanel.Name = "flowLayoutPanel";
+            flowLayoutPanel.Size = new System.Drawing.Size(505, 575);
+            flowLayoutPanel.TabIndex = 1;
+            flowLayoutPanel.Paint += flowLayoutPanel1_Paint;
             // 
             // rotateButton
             // 
-            this.rotateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.rotateButton.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.rotateButton.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.rotateButton.Location = new System.Drawing.Point(981, 946);
-            this.rotateButton.Name = "rotateButton";
-            this.rotateButton.Size = new System.Drawing.Size(126, 69);
-            this.rotateButton.TabIndex = 5;
-            this.rotateButton.Text = "시작";
-            this.rotateButton.UseVisualStyleBackColor = false;
-            this.rotateButton.Click += new System.EventHandler(this.button2_Click);
+            rotateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            rotateButton.BackColor = System.Drawing.SystemColors.ControlLight;
+            rotateButton.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 129);
+            rotateButton.Location = new System.Drawing.Point(981, 1182);
+            rotateButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            rotateButton.Name = "rotateButton";
+            rotateButton.Size = new System.Drawing.Size(126, 86);
+            rotateButton.TabIndex = 5;
+            rotateButton.Text = "시작";
+            rotateButton.UseVisualStyleBackColor = false;
+            rotateButton.Click += button2_Click;
             // 
             // triangleDrawPanel
             // 
-            this.triangleDrawPanel.Location = new System.Drawing.Point(402, 58);
-            this.triangleDrawPanel.Name = "triangleDrawPanel";
-            this.triangleDrawPanel.Size = new System.Drawing.Size(93, 53);
-            this.triangleDrawPanel.TabIndex = 9;
-            this.triangleDrawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.triangleDrawPanel_Paint);
+            triangleDrawPanel.Location = new System.Drawing.Point(402, 72);
+            triangleDrawPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            triangleDrawPanel.Name = "triangleDrawPanel";
+            triangleDrawPanel.Size = new System.Drawing.Size(93, 66);
+            triangleDrawPanel.TabIndex = 9;
+            triangleDrawPanel.Paint += triangleDrawPanel_Paint;
             // 
             // prizePanel
             // 
-            this.prizePanel.Location = new System.Drawing.Point(12, 12);
-            this.prizePanel.Name = "prizePanel";
-            this.prizePanel.Size = new System.Drawing.Size(948, 52);
-            this.prizePanel.TabIndex = 10;
-            this.prizePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.prizePanel_Paint);
+            prizePanel.Location = new System.Drawing.Point(12, 15);
+            prizePanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            prizePanel.Name = "prizePanel";
+            prizePanel.Size = new System.Drawing.Size(948, 65);
+            prizePanel.TabIndex = 10;
+            prizePanel.Paint += prizePanel_Paint;
             // 
             // addListItem
             // 
-            this.addListItem.ItemColor = System.Drawing.SystemColors.Control;
-            this.addListItem.LabelText = "label1";
-            this.addListItem.Location = new System.Drawing.Point(981, 687);
-            this.addListItem.Name = "addListItem";
-            this.addListItem.NumericUpDownValue = 0;
-            this.addListItem.Size = new System.Drawing.Size(520, 57);
-            this.addListItem.TabIndex = 4;
-            this.addListItem.TextBoxValue = "";
-            this.addListItem.Load += new System.EventHandler(this.myListItem1_Load_1);
-            // 
-            // timerControl1
-            // 
-            this.timerControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.timerControl1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.timerControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.timerControl1.Location = new System.Drawing.Point(981, 50);
-            this.timerControl1.Name = "timerControl1";
-            this.timerControl1.Size = new System.Drawing.Size(340, 140);
-            this.timerControl1.TabIndex = 7;
-            this.timerControl1.Load += new System.EventHandler(this.timerControl1_Load_1);
+            addListItem.ItemColor = System.Drawing.SystemColors.Control;
+            addListItem.LabelText = "label1";
+            addListItem.Location = new System.Drawing.Point(981, 859);
+            addListItem.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            addListItem.Name = "addListItem";
+            addListItem.NumericUpDownValue = 0;
+            addListItem.Size = new System.Drawing.Size(520, 71);
+            addListItem.TabIndex = 4;
+            addListItem.TextBoxValue = "";
+            addListItem.Load += myListItem1_Load_1;
             // 
             // roulettePanel
             // 
-            this.roulettePanel.Location = new System.Drawing.Point(10, 117);
-            this.roulettePanel.Name = "roulettePanel";
-            this.roulettePanel.Size = new System.Drawing.Size(950, 923);
-            this.roulettePanel.TabIndex = 0;
-            this.roulettePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            roulettePanel.Location = new System.Drawing.Point(10, 146);
+            roulettePanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            roulettePanel.Name = "roulettePanel";
+            roulettePanel.Size = new System.Drawing.Size(950, 1154);
+            roulettePanel.TabIndex = 0;
+            roulettePanel.Paint += panel1_Paint;
+            // 
+            // timerControl1
+            // 
+            timerControl1.BackColor = System.Drawing.SystemColors.ControlLight;
+            timerControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            timerControl1.Location = new System.Drawing.Point(1019, 55);
+            timerControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            timerControl1.Name = "timerControl1";
+            timerControl1.Size = new System.Drawing.Size(338, 160);
+            timerControl1.TabIndex = 11;
             // 
             // RouletteForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1904, 1041);
-            this.Controls.Add(this.prizePanel);
-            this.Controls.Add(this.triangleDrawPanel);
-            this.Controls.Add(this.rotateButton);
-            this.Controls.Add(this.addListItem);
-            this.Controls.Add(this.timerControl1);
-            this.Controls.Add(this.flowLayoutPanel);
-            this.Controls.Add(this.roulettePanel);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "RouletteForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "룰렛";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1904, 1301);
+            Controls.Add(timerControl1);
+            Controls.Add(prizePanel);
+            Controls.Add(triangleDrawPanel);
+            Controls.Add(rotateButton);
+            Controls.Add(addListItem);
+            Controls.Add(flowLayoutPanel);
+            Controls.Add(roulettePanel);
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Name = "RouletteForm";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "룰렛";
+            WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            Load += Form1_Load;
+            ResumeLayout(false);
 
         }
 
@@ -136,9 +141,9 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
         private MyListItem addListItem;
         private System.Windows.Forms.Button rotateButton;
-        private TimerControl timerControl1;
         private System.Windows.Forms.Panel triangleDrawPanel;
         private System.Windows.Forms.Panel prizePanel;
+        private TimerControl timerControl1;
     }
 }
 

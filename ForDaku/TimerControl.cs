@@ -34,19 +34,21 @@ namespace ForDaku
 
         private void InitializeCustomUI()
         {
+            Size numericSize = new Size(70, 53);
+            int numericPosT = label1.Location.Y + label1.Size.Height - numericSize.Height;
             numericMinute = new CustomNumericUpDown();
-            numericMinute.Location = new Point(35, 17);
+            numericMinute.Location = new Point(35, numericPosT);
             numericMinute.Maximum = 59;
             numericMinute.Minimum = 0;
             numericMinute.Font = new Font("굴림", 30F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(129)));
-            numericMinute.Size = new Size(70, 53);
+            numericMinute.Size = numericSize;
             this.Controls.Add(numericMinute);
 
             numericSecond = new CustomNumericUpDown();
-            numericSecond.Location = new Point(133, 17);
+            numericSecond.Location = new Point(133, numericPosT);
             numericSecond.Maximum = 59;
             numericSecond.Minimum = 0;
-            numericSecond.Size = new Size(70, 53);
+            numericSecond.Size = numericSize;
             numericSecond.Font = new Font("굴림", 30F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(129)));
             this.Controls.Add(numericSecond);
 

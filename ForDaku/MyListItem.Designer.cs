@@ -28,80 +28,81 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            this.SuspendLayout();
+            textBox1 = new System.Windows.Forms.TextBox();
+            numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            panel1 = new System.Windows.Forms.Panel();
+            button1 = new System.Windows.Forms.Button();
+            label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            SuspendLayout();
             // 
             // textBox1
             // 
-            this.textBox1.Font = new System.Drawing.Font("굴림", 16F);
-            this.textBox1.Location = new System.Drawing.Point(35, 10);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(250, 32);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            textBox1.Font = new System.Drawing.Font("굴림", 16F);
+            textBox1.Location = new System.Drawing.Point(35, 12);
+            textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new System.Drawing.Size(250, 32);
+            textBox1.TabIndex = 0;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Font = new System.Drawing.Font("굴림", 16F);
-            this.numericUpDown1.Location = new System.Drawing.Point(290, 10);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            999999,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(70, 32);
-            this.numericUpDown1.TabIndex = 2;
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            numericUpDown1.Font = new System.Drawing.Font("굴림", 16F);
+            numericUpDown1.Location = new System.Drawing.Point(290, 12);
+            numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            numericUpDown1.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new System.Drawing.Size(70, 32);
+            numericUpDown1.TabIndex = 2;
+            numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(5, 10);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(25, 30);
-            this.panel1.TabIndex = 4;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            panel1.Location = new System.Drawing.Point(5, 12);
+            panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            panel1.Name = "panel1";
+            panel1.Size = new System.Drawing.Size(25, 38);
+            panel1.TabIndex = 4;
+            panel1.Paint += panel1_Paint;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(420, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(30, 30);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "-";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Location = new System.Drawing.Point(430, 12);
+            button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(30, 38);
+            button1.TabIndex = 5;
+            button1.Text = "-";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("굴림", 12F);
-            this.label1.Location = new System.Drawing.Point(365, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 30);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "99.9%";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            label1.Font = new System.Drawing.Font("굴림", 12F);
+            label1.Location = new System.Drawing.Point(365, 12);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(60, 38);
+            label1.TabIndex = 3;
+            label1.Text = "99.9%";
+            label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MyListItem
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.numericUpDown1);
-            this.Controls.Add(this.textBox1);
-            this.Name = "MyListItem";
-            this.Size = new System.Drawing.Size(460, 50);
-            this.Load += new System.EventHandler(this.MyListItem_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            Controls.Add(button1);
+            Controls.Add(panel1);
+            Controls.Add(label1);
+            Controls.Add(numericUpDown1);
+            Controls.Add(textBox1);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            Name = "MyListItem";
+            Size = new System.Drawing.Size(470, 62);
+            Load += MyListItem_Load;
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

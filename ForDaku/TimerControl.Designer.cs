@@ -24,118 +24,127 @@ namespace ForDaku
 
         private void InitializeComponent()
         {
-            this.resetButton = new System.Windows.Forms.Button();
-            this.startButton = new System.Windows.Forms.Button();
-            this.tenSecButton = new System.Windows.Forms.Button();
-            this.oneMinButton = new System.Windows.Forms.Button();
-            this.fiveMinButton = new System.Windows.Forms.Button();
-            this.tenMinButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            resetButton = new Button();
+            startButton = new Button();
+            tenSecButton = new Button();
+            oneMinButton = new Button();
+            fiveMinButton = new Button();
+            tenMinButton = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            SuspendLayout();
             // 
             // resetButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(238, 44);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(80, 26);
-            this.resetButton.TabIndex = 2;
-            this.resetButton.Text = "RESET";
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            resetButton.Location = new System.Drawing.Point(238, 53);
+            resetButton.Margin = new Padding(3, 4, 3, 4);
+            resetButton.Name = "resetButton";
+            resetButton.Size = new System.Drawing.Size(80, 32);
+            resetButton.TabIndex = 2;
+            resetButton.Text = "RESET";
+            resetButton.UseVisualStyleBackColor = true;
+            resetButton.Click += resetButton_Click;
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(238, 17);
-            this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(80, 25);
-            this.startButton.TabIndex = 3;
-            this.startButton.Text = "START";
-            this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.button2_Click);
+            startButton.Location = new System.Drawing.Point(238, 20);
+            startButton.Margin = new Padding(3, 4, 3, 4);
+            startButton.Name = "startButton";
+            startButton.Size = new System.Drawing.Size(80, 31);
+            startButton.TabIndex = 3;
+            startButton.Text = "START";
+            startButton.UseVisualStyleBackColor = true;
+            startButton.Click += button2_Click;
             // 
             // tenSecButton
             // 
-            this.tenSecButton.BackColor = System.Drawing.Color.Transparent;
-            this.tenSecButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.tenSecButton.Location = new System.Drawing.Point(17, 103);
-            this.tenSecButton.Name = "tenSecButton";
-            this.tenSecButton.Size = new System.Drawing.Size(60, 32);
-            this.tenSecButton.TabIndex = 4;
-            this.tenSecButton.Text = "+10초";
-            this.tenSecButton.UseVisualStyleBackColor = false;
+            tenSecButton.BackColor = System.Drawing.Color.Transparent;
+            tenSecButton.FlatStyle = FlatStyle.Flat;
+            tenSecButton.Location = new System.Drawing.Point(17, 105);
+            tenSecButton.Margin = new Padding(3, 4, 3, 4);
+            tenSecButton.Name = "tenSecButton";
+            tenSecButton.Size = new System.Drawing.Size(60, 40);
+            tenSecButton.TabIndex = 4;
+            tenSecButton.Text = "+10초";
+            tenSecButton.UseVisualStyleBackColor = false;
             // 
             // oneMinButton
             // 
-            this.oneMinButton.BackColor = System.Drawing.Color.Transparent;
-            this.oneMinButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.oneMinButton.Location = new System.Drawing.Point(92, 103);
-            this.oneMinButton.Name = "oneMinButton";
-            this.oneMinButton.Size = new System.Drawing.Size(60, 32);
-            this.oneMinButton.TabIndex = 5;
-            this.oneMinButton.Text = "+1분";
-            this.oneMinButton.UseVisualStyleBackColor = false;
+            oneMinButton.BackColor = System.Drawing.Color.Transparent;
+            oneMinButton.FlatStyle = FlatStyle.Flat;
+            oneMinButton.Location = new System.Drawing.Point(92, 105);
+            oneMinButton.Margin = new Padding(3, 4, 3, 4);
+            oneMinButton.Name = "oneMinButton";
+            oneMinButton.Size = new System.Drawing.Size(60, 40);
+            oneMinButton.TabIndex = 5;
+            oneMinButton.Text = "+1분";
+            oneMinButton.UseVisualStyleBackColor = false;
             // 
             // fiveMinButton
             // 
-            this.fiveMinButton.BackColor = System.Drawing.Color.Transparent;
-            this.fiveMinButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.fiveMinButton.Location = new System.Drawing.Point(175, 103);
-            this.fiveMinButton.Name = "fiveMinButton";
-            this.fiveMinButton.Size = new System.Drawing.Size(60, 32);
-            this.fiveMinButton.TabIndex = 6;
-            this.fiveMinButton.Text = "+5분";
-            this.fiveMinButton.UseVisualStyleBackColor = false;
+            fiveMinButton.BackColor = System.Drawing.Color.Transparent;
+            fiveMinButton.FlatStyle = FlatStyle.Flat;
+            fiveMinButton.Location = new System.Drawing.Point(175, 105);
+            fiveMinButton.Margin = new Padding(3, 4, 3, 4);
+            fiveMinButton.Name = "fiveMinButton";
+            fiveMinButton.Size = new System.Drawing.Size(60, 40);
+            fiveMinButton.TabIndex = 6;
+            fiveMinButton.Text = "+5분";
+            fiveMinButton.UseVisualStyleBackColor = false;
             // 
             // tenMinButton
             // 
-            this.tenMinButton.BackColor = System.Drawing.Color.Transparent;
-            this.tenMinButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.tenMinButton.Location = new System.Drawing.Point(258, 103);
-            this.tenMinButton.Name = "tenMinButton";
-            this.tenMinButton.Size = new System.Drawing.Size(60, 32);
-            this.tenMinButton.TabIndex = 7;
-            this.tenMinButton.Text = "+10분";
-            this.tenMinButton.UseVisualStyleBackColor = false;
+            tenMinButton.BackColor = System.Drawing.Color.Transparent;
+            tenMinButton.FlatStyle = FlatStyle.Flat;
+            tenMinButton.Location = new System.Drawing.Point(258, 105);
+            tenMinButton.Margin = new Padding(3, 4, 3, 4);
+            tenMinButton.Name = "tenMinButton";
+            tenMinButton.Size = new System.Drawing.Size(60, 40);
+            tenMinButton.TabIndex = 7;
+            tenMinButton.Text = "+10분";
+            tenMinButton.UseVisualStyleBackColor = false;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(110, 58);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(17, 12);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "분";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(110, 70);
+            label1.Margin = new Padding(0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(19, 15);
+            label1.TabIndex = 8;
+            label1.Text = "분";
+            label1.Click += label1_Click;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(209, 58);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(17, 12);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "초";
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(209, 70);
+            label2.Margin = new Padding(0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(19, 15);
+            label2.TabIndex = 9;
+            label2.Text = "초";
             // 
             // TimerControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.tenMinButton);
-            this.Controls.Add(this.fiveMinButton);
-            this.Controls.Add(this.oneMinButton);
-            this.Controls.Add(this.tenSecButton);
-            this.Controls.Add(this.startButton);
-            this.Controls.Add(this.resetButton);
-            this.Name = "TimerControl";
-            this.Size = new System.Drawing.Size(338, 138);
-            this.Load += new System.EventHandler(this.TimerControl_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = System.Drawing.SystemColors.ControlLight;
+            BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(tenMinButton);
+            Controls.Add(fiveMinButton);
+            Controls.Add(oneMinButton);
+            Controls.Add(tenSecButton);
+            Controls.Add(startButton);
+            Controls.Add(resetButton);
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "TimerControl";
+            Size = new System.Drawing.Size(338, 160);
+            Load += TimerControl_Load;
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
