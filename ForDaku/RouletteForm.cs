@@ -470,11 +470,28 @@ namespace ForDaku
             UpdateRoulette();
             UpdatePrizePanel();
         }
+        void StartSpin()
+        {
+            // 회전 속도 초기화
+            spinVelocity = spinStartVelocity;
+
+            // 타이머가 없으면 새로 생성
+            if (spinTimer == null)
+            {
+                spinTimer = new Timer();
+                spinTimer.Interval = 16;  // 16ms마다 타이머 틱 (약 60FPS)
+                spinTimer.Tick += SpinTimer_Tick;
+            }
+
+            // 타이머 시작
+            spinTimer.Start();
+        }
 
         void StartDeceleration()
         {
             if (isStopping) return;
 
+            spinStopwatch.Restart(); // 스톱워치 시작
             isStopping = true;
             //elapsedTime = 0f;
             startAngle = rotationAngle;
@@ -499,7 +516,8 @@ namespace ForDaku
 
                 // 부드러운 ease-out 감속 (곡선 사용)
                 //float smoothT = 1 - (1 - t) * (1 - t); // easeOutQuad
-                float smoothT = 1 - (float)Math.Pow(1 - t, 3); // EaseOutCubic
+                //float smoothT = 1 - (float)Math.Pow(1 - t, 3); // EaseOutCubic
+                float smoothT = 1 - (float)Math.Pow(1 - t, 4);
 
                 rotationAngle = Lerp(startAngle, targetAngle, smoothT);
 
@@ -526,24 +544,6 @@ namespace ForDaku
             }
 
             UpdateRoulette();
-        }
-
-        void StartSpin()
-        {
-            // 회전 속도 초기화
-            spinVelocity = spinStartVelocity;
-
-            // 타이머가 없으면 새로 생성
-            if (spinTimer == null)
-            {
-                spinTimer = new Timer();
-                spinTimer.Interval = 16;  // 16ms마다 타이머 틱 (약 60FPS)
-                spinTimer.Tick += SpinTimer_Tick;
-            }
-
-            // 타이머 시작
-            spinTimer.Start();
-            spinStopwatch.Restart(); // 스톱워치 시작
         }
 
         public void UpdateProbability()
