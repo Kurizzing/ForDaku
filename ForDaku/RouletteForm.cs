@@ -30,12 +30,13 @@ namespace ForDaku
 
         private float rotationAngle = 0f;  // 현재 회전 각도
         private float spinVelocity;        // 회전 속도
-        private Timer spinTimer;           // 타이머
+        private Timer spinTimer = null;           // 타이머
+        private Stopwatch spinStopwatch = new Stopwatch(); // 스톱워치 (회전 시간 측정)
         private const float spinStartVelocity = 40f; // 초기 회전 속도
 
         private readonly Brush triangleBrush = new SolidBrush(Color.Red); // 삼각형 색상
-        private readonly Font itemFont = new("굴림", 30, FontStyle.Bold);
-        private readonly Font prizeFont = new Font("굴림", 40, FontStyle.Bold);
+        private readonly Font itemFont = new("굴림체", 30, FontStyle.Bold);
+        private readonly Font prizeFont = new Font("굴림체", 40, FontStyle.Bold);
 
         private const int extraSpins = 15; // 추가 회전 수
         private const string rotateText = "시작";
@@ -60,14 +61,14 @@ namespace ForDaku
         bool moveUp = true;                 // 위로 움직일지 아래로 움직일지 플래그
         int amplitude = 5;                  // 진동 범위
         int speed = 75;                     // 타이머 간격(ms)
-        Timer timer = new Timer();
+        Timer buttonVibrationTimer = new Timer();
 
         Random random = new Random(); // 클래스 맨 위에 선언
         float targetAngle = 0f;          // 감속 후 도달할 목표 각도
         float startAngle = 0f;           // 감속 시작 각도
         bool isStopping = false;         // 정지 중 플래그
-        float decelerationDuration = 6f; // 감속 시간 (초)
-        float elapsedTime = 0f;          // 경과 시간
+        private const float decelerationDuration = 10f; // 감속 시간 (초)
+        //float elapsedTime = 0f;          // 경과 시간
 
         List<double> usedHues = new List<double>();
         MyListItem prizeItem = null; // 당첨 아이템
@@ -140,8 +141,8 @@ namespace ForDaku
 
         private void InitializeControls()
         {
-            timer.Interval = speed;
-            timer.Tick += Timer1_Tick;
+            buttonVibrationTimer.Interval = speed;
+            buttonVibrationTimer.Tick += Timer1_Tick;
 
             resultLabel.AutoSize = false;
             resultLabel.BackColor = Color.White;  // 필요 시 반투명도 색 설정
@@ -475,7 +476,7 @@ namespace ForDaku
             if (isStopping) return;
 
             isStopping = true;
-            elapsedTime = 0f;
+            //elapsedTime = 0f;
             startAngle = rotationAngle;
 
             float randomTargetOffset = random.Next(0, 360);
@@ -492,7 +493,8 @@ namespace ForDaku
         {
             if (isStopping)
             {
-                elapsedTime += spinTimer.Interval / 1000f;
+                //elapsedTime += spinTimer.Interval / 1000f;
+                float elapsedTime = spinStopwatch.ElapsedMilliseconds / 1000f;
                 float t = Math.Min(elapsedTime / decelerationDuration, 1f); // 0~1 보간
 
                 // 부드러운 ease-out 감속 (곡선 사용)
@@ -505,6 +507,7 @@ namespace ForDaku
                 {
                     isStopping = false;
                     spinTimer.Stop();
+                    spinStopwatch.Stop(); // 스톱워치 정지
                     spinVelocity = 0f;
 
                     // 당첨 항목 계산
@@ -540,6 +543,7 @@ namespace ForDaku
 
             // 타이머 시작
             spinTimer.Start();
+            spinStopwatch.Restart(); // 스톱워치 시작
         }
 
         public void UpdateProbability()
@@ -609,11 +613,11 @@ namespace ForDaku
                 StartSpin();                            // 회전 시작
                 rotateButton.Text = stopText;           // 텍스트 변경
                 rotateButton.BackColor = stopColor;     // 색상 변경
-                timer.Start();
+                buttonVibrationTimer.Start();
             }
             else if (rotateButton.Text == stopText)
             {
-                timer.Stop();                       // 버튼 클릭 시 애니메이션 중지
+                buttonVibrationTimer.Stop();                       // 버튼 클릭 시 애니메이션 중지
                 rotateButton.Location = new Point(rotateButton.Location.X, originalRotateButtonY); // 원래 위치로 복원
 
                 StartDeceleration();                // 감속 시작
