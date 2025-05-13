@@ -53,7 +53,7 @@
             rotateButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             rotateButton.BackColor = System.Drawing.SystemColors.ControlLight;
             rotateButton.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 129);
-            rotateButton.Location = new System.Drawing.Point(981, 1182);
+            rotateButton.Location = new System.Drawing.Point(981, 922);
             rotateButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             rotateButton.Name = "rotateButton";
             rotateButton.Size = new System.Drawing.Size(126, 86);
@@ -125,7 +125,7 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1904, 1301);
+            ClientSize = new System.Drawing.Size(1904, 1041);
             Controls.Add(resultLabel);
             Controls.Add(timerControl);
             Controls.Add(prizePanel);

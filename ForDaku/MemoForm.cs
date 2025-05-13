@@ -19,6 +19,7 @@ namespace ForDaku
         private const string urlMD = "https://gall.dcinside.com/mgallery/board/lists/?id=masterduel";
         private const string urlYT = "https://www.youtube.com/@Kim_Daku";
         private const string urlCF = "https://cafe.naver.com/kimdaku";
+        private const int margin = 20;
 
         private readonly Font richTextBoxFont = new Font("굴림체", 30);
         private readonly List<string> optionList = new List<string>() { "빈도순", "이름순", "무작위", "최대최소순" };
@@ -35,7 +36,9 @@ namespace ForDaku
         {
             InitializeComponent();
             InitializeControls();
+            RepositionControls();
             SetHotkeys();
+            this.SizeChanged += MemoForm_SizeChanged;
         }
 
         private void SetHotkeys()
@@ -62,6 +65,53 @@ namespace ForDaku
                     deckTextBox.ScrollToCaret();     // 스크롤을 커서 위치로 이동시킴
                 }
             };
+        }
+
+        private void MemoForm_SizeChanged(object sender, EventArgs e)
+        {
+            RepositionControls();
+        }
+
+        private void RepositionControls()
+        {
+            if (this.ClientSize.Width < 1920)
+            {
+                // deckTextBox
+                deckTextBox.Width = this.ClientSize.Width / 2;
+
+                // memoLabel
+                memoTitleLabel.Location = new Point(deckTextBox.Location.X + deckTextBox.Width + margin, margin);
+
+                // memoTextBox
+                memoTextBox.Width = this.ClientSize.Width / 2 - margin;
+                memoTextBox.Height = this.ClientSize.Height / 2;
+                memoTextBox.Location = new Point(deckTextBox.Location.X + deckTextBox.Width + margin, memoTitleLabel.Location.Y + memoTitleLabel.Height + margin);
+
+                // extraPanel: saveLoadPanel, sortPanel, urlPanel
+                extraPanel.Location = new Point(memoTextBox.Location.X, memoTextBox.Location.Y + memoTextBox.Height + margin);
+
+                // makeRouletteButton
+                makeRouletteButton.Location = new Point(memoTextBox.Location.X, this.ClientSize.Height - makeRouletteButton.Height - margin);
+            }
+            else
+            {
+                // deckTextBox
+                deckTextBox.Width = this.ClientSize.Width / 3 + 100;
+
+                // memoLabel
+                memoTitleLabel.Location = new Point(deckTextBox.Location.X + deckTextBox.Width + margin, margin);
+
+                // memoTextBox
+                memoTextBox.Width = this.ClientSize.Width / 3 + 100;
+                memoTextBox.Height = this.ClientSize.Height / 3;
+                memoTextBox.Location = new Point(deckTextBox.Location.X + deckTextBox.Width + margin, memoTitleLabel.Location.Y + memoTitleLabel.Height + margin);
+
+                // extraPanel: saveLoadPanel, sortPanel, urlPanel
+                extraPanel.Location = new Point(memoTextBox.Location.X, memoTextBox.Location.Y + memoTextBox.Height + margin);
+
+                // makeRouletteButton
+                makeRouletteButton.Location = new Point(memoTextBox.Location.X, this.ClientSize.Height - makeRouletteButton.Height - margin);
+            }
         }
 
         private void InitializeControls()
@@ -226,7 +276,7 @@ namespace ForDaku
                     richTextBox.Select(lastSearchIndex, lastSelectionLength);   // 이전 선택 영역 복원
                     richTextBox.SelectionBackColor = richTextBox.BackColor;     // 배경색 복원
                 }
-                
+
                 richTextBox.Select(foundIndex, searchText.Length);  // 텍스트를 찾으면 해당 부분을 선택(강조)
                 richTextBox.ScrollToCaret();                        // 스크롤을 선택된 텍스트로 이동
                 richTextBox.SelectionBackColor = Color.LightBlue;   // 강조 색상 설정

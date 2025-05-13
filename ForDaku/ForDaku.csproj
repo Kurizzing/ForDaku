@@ -9,10 +9,16 @@
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="MyListItem.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Update="TimerControl.cs">
       <SubType>UserControl</SubType>
@@ -22,5 +28,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="제목 없음.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>

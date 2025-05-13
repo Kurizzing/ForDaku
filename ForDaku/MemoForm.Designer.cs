@@ -34,8 +34,6 @@
             sortPanel = new System.Windows.Forms.Panel();
             optionComboBox = new System.Windows.Forms.ComboBox();
             sortButton = new System.Windows.Forms.Button();
-            memoTitleLabel = new System.Windows.Forms.Label();
-            memoTextBox = new System.Windows.Forms.RichTextBox();
             saveLoadPanel = new System.Windows.Forms.Panel();
             saveButton = new System.Windows.Forms.Button();
             loadButton = new System.Windows.Forms.Button();
@@ -45,15 +43,19 @@
             urlButtonMM = new System.Windows.Forms.Button();
             urlPanel = new System.Windows.Forms.Panel();
             madeByLabel = new System.Windows.Forms.Label();
+            extraPanel = new System.Windows.Forms.Panel();
+            memoTitleLabel = new System.Windows.Forms.Label();
+            memoTextBox = new System.Windows.Forms.RichTextBox();
             sortPanel.SuspendLayout();
             saveLoadPanel.SuspendLayout();
             urlPanel.SuspendLayout();
+            extraPanel.SuspendLayout();
             SuspendLayout();
             // 
             // makeRouletteButton
             // 
             makeRouletteButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-            makeRouletteButton.Location = new System.Drawing.Point(909, 1224);
+            makeRouletteButton.Location = new System.Drawing.Point(909, 964);
             makeRouletteButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             makeRouletteButton.Name = "makeRouletteButton";
             makeRouletteButton.Size = new System.Drawing.Size(90, 62);
@@ -69,7 +71,7 @@
             deckTextBox.Location = new System.Drawing.Point(0, 0);
             deckTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             deckTextBox.Name = "deckTextBox";
-            deckTextBox.Size = new System.Drawing.Size(900, 1300);
+            deckTextBox.Size = new System.Drawing.Size(900, 1040);
             deckTextBox.TabIndex = 1;
             deckTextBox.Text = "";
             // 
@@ -77,7 +79,7 @@
             // 
             sortPanel.Controls.Add(optionComboBox);
             sortPanel.Controls.Add(sortButton);
-            sortPanel.Location = new System.Drawing.Point(910, 609);
+            sortPanel.Location = new System.Drawing.Point(2, 108);
             sortPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             sortPanel.Name = "sortPanel";
             sortPanel.Size = new System.Drawing.Size(98, 131);
@@ -105,31 +107,11 @@
             sortButton.UseVisualStyleBackColor = false;
             sortButton.Click += sortButton_Click;
             // 
-            // memoTitleLabel
-            // 
-            memoTitleLabel.AutoSize = true;
-            memoTitleLabel.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 129);
-            memoTitleLabel.Location = new System.Drawing.Point(910, 12);
-            memoTitleLabel.Name = "memoTitleLabel";
-            memoTitleLabel.Size = new System.Drawing.Size(92, 27);
-            memoTitleLabel.TabIndex = 6;
-            memoTitleLabel.Text = "Memo";
-            // 
-            // memoTextBox
-            // 
-            memoTextBox.Font = new System.Drawing.Font("굴림", 30F);
-            memoTextBox.Location = new System.Drawing.Point(910, 50);
-            memoTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            memoTextBox.Name = "memoTextBox";
-            memoTextBox.Size = new System.Drawing.Size(900, 436);
-            memoTextBox.TabIndex = 7;
-            memoTextBox.Text = "";
-            // 
             // saveLoadPanel
             // 
             saveLoadPanel.Controls.Add(saveButton);
             saveLoadPanel.Controls.Add(loadButton);
-            saveLoadPanel.Location = new System.Drawing.Point(910, 509);
+            saveLoadPanel.Location = new System.Drawing.Point(2, 8);
             saveLoadPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             saveLoadPanel.Name = "saveLoadPanel";
             saveLoadPanel.Size = new System.Drawing.Size(93, 59);
@@ -213,7 +195,7 @@
             urlPanel.Controls.Add(urlButtonYT);
             urlPanel.Controls.Add(urlButtonDC);
             urlPanel.Controls.Add(urlButtonCF);
-            urlPanel.Location = new System.Drawing.Point(1049, 509);
+            urlPanel.Location = new System.Drawing.Point(141, 8);
             urlPanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             urlPanel.Name = "urlPanel";
             urlPanel.Size = new System.Drawing.Size(266, 59);
@@ -224,24 +206,52 @@
             madeByLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             madeByLabel.AutoSize = true;
             madeByLabel.ForeColor = System.Drawing.Color.Silver;
-            madeByLabel.Location = new System.Drawing.Point(1813, 1277);
+            madeByLabel.Location = new System.Drawing.Point(1813, 1017);
             madeByLabel.Name = "madeByLabel";
             madeByLabel.Size = new System.Drawing.Size(79, 15);
             madeByLabel.TabIndex = 16;
             madeByLabel.Text = "made by Kuri";
             madeByLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
+            // extraPanel
+            // 
+            extraPanel.Controls.Add(urlPanel);
+            extraPanel.Controls.Add(saveLoadPanel);
+            extraPanel.Controls.Add(sortPanel);
+            extraPanel.Location = new System.Drawing.Point(906, 483);
+            extraPanel.Name = "extraPanel";
+            extraPanel.Size = new System.Drawing.Size(412, 245);
+            extraPanel.TabIndex = 19;
+            // 
+            // memoTitleLabel
+            // 
+            memoTitleLabel.AutoSize = true;
+            memoTitleLabel.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 129);
+            memoTitleLabel.Location = new System.Drawing.Point(906, 9);
+            memoTitleLabel.Name = "memoTitleLabel";
+            memoTitleLabel.Size = new System.Drawing.Size(92, 27);
+            memoTitleLabel.TabIndex = 6;
+            memoTitleLabel.Text = "Memo";
+            // 
+            // memoTextBox
+            // 
+            memoTextBox.Font = new System.Drawing.Font("굴림", 30F);
+            memoTextBox.Location = new System.Drawing.Point(906, 40);
+            memoTextBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            memoTextBox.Name = "memoTextBox";
+            memoTextBox.Size = new System.Drawing.Size(910, 436);
+            memoTextBox.TabIndex = 7;
+            memoTextBox.Text = "";
+            // 
             // MemoForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1904, 1301);
-            Controls.Add(madeByLabel);
-            Controls.Add(urlPanel);
-            Controls.Add(saveLoadPanel);
-            Controls.Add(memoTextBox);
+            ClientSize = new System.Drawing.Size(1904, 1041);
             Controls.Add(memoTitleLabel);
-            Controls.Add(sortPanel);
+            Controls.Add(memoTextBox);
+            Controls.Add(extraPanel);
+            Controls.Add(madeByLabel);
             Controls.Add(deckTextBox);
             Controls.Add(makeRouletteButton);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
@@ -249,9 +259,11 @@
             Name = "MemoForm";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "For Daku";
+            WindowState = System.Windows.Forms.FormWindowState.Maximized;
             sortPanel.ResumeLayout(false);
             saveLoadPanel.ResumeLayout(false);
             urlPanel.ResumeLayout(false);
+            extraPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
 
@@ -263,8 +275,6 @@
         private System.Windows.Forms.RichTextBox deckTextBox;
         private System.Windows.Forms.Panel sortPanel;
         private System.Windows.Forms.ComboBox optionComboBox;
-        private System.Windows.Forms.Label memoTitleLabel;
-        private System.Windows.Forms.RichTextBox memoTextBox;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button sortButton;
@@ -275,5 +285,8 @@
         private System.Windows.Forms.Button urlButtonYT;
         private System.Windows.Forms.Panel urlPanel;
         private System.Windows.Forms.Label madeByLabel;
+        private System.Windows.Forms.Panel extraPanel;
+        private System.Windows.Forms.Label memoTitleLabel;
+        private System.Windows.Forms.RichTextBox memoTextBox;
     }
 }
