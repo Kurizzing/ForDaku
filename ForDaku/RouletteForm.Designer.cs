@@ -37,8 +37,6 @@
             roulettePanel = new DoubleBufferedPanel();
             timerControl = new TimerControl();
             resultLabel = new System.Windows.Forms.Label();
-            label1 = new System.Windows.Forms.Label();
-            label2 = new System.Windows.Forms.Label();
             SuspendLayout();
             // 
             // flowLayoutPanel
@@ -123,31 +121,11 @@
             resultLabel.TabIndex = 12;
             resultLabel.Text = "result";
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(1644, 58);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(39, 15);
-            label1.TabIndex = 13;
-            label1.Text = "label1";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(1644, 103);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(39, 15);
-            label2.TabIndex = 14;
-            label2.Text = "label2";
-            // 
             // RouletteForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1904, 1301);
-            Controls.Add(label2);
-            Controls.Add(label1);
             Controls.Add(resultLabel);
             Controls.Add(timerControl);
             Controls.Add(prizePanel);
@@ -177,8 +155,6 @@
         private System.Windows.Forms.Panel prizePanel;
         private TimerControl timerControl;
         private System.Windows.Forms.Label resultLabel;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
     }
 }
 
