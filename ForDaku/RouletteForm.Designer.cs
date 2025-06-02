@@ -100,7 +100,6 @@
             roulettePanel.Name = "roulettePanel";
             roulettePanel.Size = new System.Drawing.Size(950, 1154);
             roulettePanel.TabIndex = 0;
-            roulettePanel.Paint += RoulettePanel_Paint;
             // 
             // timerControl
             // 

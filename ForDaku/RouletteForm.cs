@@ -9,6 +9,7 @@ using System.Drawing.Printing;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,6 +20,9 @@ using static System.Windows.Forms.AxHost;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using Font = System.Drawing.Font;
+using SkiaSharp;
+using SkiaSharp.Views.Desktop;
+//using SkiaSharp.Views.WindowsForms;
 
 namespace ForDaku
 {
@@ -27,6 +31,8 @@ namespace ForDaku
     {
         private MemoForm memoForm;
         List<(string, int)> itemList;
+
+        private SKControl skiaControl;
 
         private float rotationAngle = 0f;  // 현재 회전 각도
         private float spinVelocity;        // 회전 속도
@@ -77,6 +83,8 @@ namespace ForDaku
         // for test
         public RouletteForm()
         {
+            InitializeComponent();
+            AttachSkiaControl();
             string txt = File.ReadAllText("C:/Users/lkuku/Desktop/a.txt");
 
             itemList = new List<(string, int)>();
@@ -95,10 +103,8 @@ namespace ForDaku
                     itemList.Add((deckName, count));
                 }
             }
-
-            InitializeComponent();
+            
             this.DoubleBuffered = true; // 더블 버퍼링 활성화
-
 
             if (itemList != null)
             {
@@ -115,13 +121,15 @@ namespace ForDaku
 
         public RouletteForm(MemoForm memoForm, List<(string, int)> itemList)
         {
+            InitializeComponent();
+            AttachSkiaControl();
+
             this.memoForm = memoForm;
             if (itemList != null)
             {
                 this.itemList = itemList;
             }
-
-            InitializeComponent();
+            
             this.DoubleBuffered = true; // 더블 버퍼링 활성화
 
             if (itemList != null)
@@ -136,11 +144,12 @@ namespace ForDaku
 
             RepositionControls();
             InitializeControls();
-
         }
 
         private void InitializeControls()
         {
+            
+
             buttonVibrationTimer.Interval = speed;
             buttonVibrationTimer.Tick += Timer1_Tick;
 
@@ -151,6 +160,27 @@ namespace ForDaku
             resultLabel.TextAlign = ContentAlignment.MiddleCenter;
             resultLabel.BringToFront(); // 다른 컨트롤보다 앞에 오도록
             resultLabel.Visible = false;
+        }
+
+        private void AttachSkiaControl()
+        {
+            skiaControl = new SKControl
+            {
+                Dock = DockStyle.Fill
+            };
+            skiaControl.PaintSurface += SkiaControl_PaintSurface;
+            roulettePanel.Controls.Add(skiaControl); // 기존 panel에 추가
+        }
+
+        private void SkiaControl_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        {
+            var canvas = e.Surface.Canvas;
+            canvas.Clear(SKColors.White); // 필요 시 배경색 설정
+
+            int width = e.Info.Width;
+            int height = e.Info.Height;
+
+            DrawRoulette(canvas, width, height); // SkiaSharp 버전의 DrawRoulette 사용
         }
 
         private void ShowResult(string result)
@@ -263,12 +293,137 @@ namespace ForDaku
             g.FillPolygon(triangleBrush, triangle);
         }
 
-        private void RoulettePanel_Paint(object sender, PaintEventArgs e)
-        {
-            Graphics g = e.Graphics;
+        //private void RoulettePanel_Paint(object sender, PaintEventArgs e)
+        //{
+        //    Graphics g = e.Graphics;
 
-            DrawRoulette(g, roulettePanel.Width, roulettePanel.Height);
+        //    DrawRoulette(g, roulettePanel.Width, roulettePanel.Height);
+        //}
+
+        void DrawRoulette(SKCanvas canvas, int width, int height)
+        {
+            if (GetAllCount() == 0)
+                return;
+
+            // 중심점 계산
+            SKPoint center = new SKPoint(width / 2f, height / 2f);
+            float radius = Math.Min(width, height) / 2f;
+
+            // 아이템 수집
+            List<MyListItem> itemList = new List<MyListItem>();
+            foreach (Control ctrl in flowLayoutPanel.Controls)
+            {
+                if (ctrl is MyListItem item)
+                    itemList.Add(item);
+            }
+
+            float startAngle = 0;
+            float sweepAngle = 0;
+
+            canvas.Save();
+            canvas.Translate(center);
+            canvas.RotateDegrees(rotationAngle);
+            canvas.Translate(-center.X, -center.Y);
+
+            // 부채꼴 그리기
+            foreach (MyListItem item in itemList)
+            {
+                float probability = item.NumericUpDownValue / (float)GetAllCount();
+                sweepAngle = ProbabilityToDegree(probability);
+
+                using var path = new SKPath();
+                path.MoveTo(center);
+                path.ArcTo(new SKRect(0, 0, width, height), startAngle, sweepAngle, false);
+                path.Close();
+
+                using var fillPaint = new SKPaint
+                {
+                    Style = SKPaintStyle.Fill,
+                    Color = item.ItemColor.ToSKColor(),
+                    IsAntialias = true
+                };
+                canvas.DrawPath(path, fillPaint);
+
+                startAngle += sweepAngle;
+            }
+
+            // 테두리
+            using var borderPaint = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = SKColors.Black,
+                StrokeWidth = rouletteBorderWidth,
+                IsAntialias = true
+            };
+            float halfBorder = rouletteBorderWidth / 2f;
+            canvas.DrawOval(new SKRect(halfBorder, halfBorder, width - halfBorder, height - halfBorder), borderPaint);
+
+            canvas.Restore();
+
+            // 항목 이름
+            startAngle = 0;
+            sweepAngle = 0;
+
+            foreach (MyListItem item in itemList)
+            {
+                float probability = item.NumericUpDownValue / (float)GetAllCount();
+                sweepAngle = ProbabilityToDegree(probability);
+                float midAngle = startAngle + sweepAngle / 2;
+                float labelRadius = radius * 0.7f;
+
+                double radians = midAngle * Math.PI / 180;
+                SKPoint textPos = new SKPoint(
+                    center.X + (float)(labelRadius * Math.Cos(radians)),
+                    center.Y + (float)(labelRadius * Math.Sin(radians))
+                );
+
+                string text = item.TextBoxValue;
+                float fontSize = itemFont.Size;
+
+                using var textPaint = new SKPaint
+                {
+                    TextSize = fontSize,
+                    IsAntialias = true,
+                    Color = SKColors.White,
+                    Typeface = SKTypeface.FromFamilyName(itemFont.FontFamily.Name, SKFontStyle.Bold),
+                    TextAlign = SKTextAlign.Center
+                };
+
+                float textWidth = textPaint.MeasureText(text);
+                if (textWidth > width * 0.4f)
+                {
+                    float scale = (width * 0.4f) / textWidth;
+                    textPaint.TextSize *= scale;
+                }
+
+                canvas.Save();
+                canvas.Translate(textPos);
+                canvas.RotateDegrees(midAngle);
+                canvas.DrawText(text, 0, 0, textPaint);
+
+                //// 텍스트 외곽선 (검정)
+                //textPaint.Style = SKPaintStyle.Stroke;
+                //textPaint.StrokeWidth = 4;
+                //textPaint.Color = SKColors.Black;
+                //canvas.DrawText(text, 0, 0, textPaint);
+
+                canvas.Restore();
+
+                // 현재 당첨 아이템 감지
+                if (startAngle <= PointDegree(rotationAngle) &&
+                    PointDegree(rotationAngle) <= startAngle + sweepAngle)
+                {
+                    if (prizeItem != item)
+                    {
+                        prizeItem = item;
+                        UpdatePrizePanel();
+                    }
+                }
+
+                startAngle += sweepAngle;
+            }
         }
+
 
         void DrawRoulette(Graphics g, int width, int height)
         {
@@ -410,8 +565,9 @@ namespace ForDaku
         }
         void UpdateRoulette()
         {
-            roulettePanel.Invalidate();
-            roulettePanel.Update();
+            //roulettePanel.Invalidate();
+            skiaControl.Invalidate(); // SkiaSharp 컨트롤 갱신
+            //roulettePanel.Update();
         }
 
         float ProbabilityToDegree(float probability)
