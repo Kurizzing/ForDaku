@@ -60,9 +60,9 @@ namespace ForDaku
             startButton.Click += BtnStart_Click;
             resetButton.Click += BtnReset_Click;
             tenSecButton.Click += BtnAdd10s_Click;
+            halfMinButton.Click += BtnAdd30s_Click;
             oneMinButton.Click += BtnAdd1m_Click;
             fiveMinButton.Click += BtnAdd5m_Click;
-            tenMinButton.Click += BtnAdd10m_Click;
 
             timer.Interval = 1000;
             timer.Tick += Timer_Tick;
@@ -197,9 +197,14 @@ namespace ForDaku
         private void BtnRestart_Click(object sender, EventArgs e) => RestartTimer();
         private void BtnStop_Click(object sender, EventArgs e) => StopTimer();
         private void BtnAdd10s_Click(object sender, EventArgs e) => AddSeconds(10);
+        private void BtnAdd30s_Click(object sender, EventArgs e) => AddSeconds(30);
         private void BtnAdd1m_Click(object sender, EventArgs e) => AddMinutes(1);
         private void BtnAdd5m_Click(object sender, EventArgs e) => AddMinutes(5);
-        private void BtnAdd10m_Click(object sender, EventArgs e) => AddMinutes(10);
+
+        private void oneMinButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class CustomNumericUpDown : NumericUpDown

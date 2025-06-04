@@ -27,9 +27,9 @@ namespace ForDaku
             resetButton = new Button();
             startButton = new Button();
             tenSecButton = new Button();
+            halfMinButton = new Button();
             oneMinButton = new Button();
             fiveMinButton = new Button();
-            tenMinButton = new Button();
             minLabel = new Label();
             secLabel = new Label();
             SuspendLayout();
@@ -66,15 +66,28 @@ namespace ForDaku
             tenSecButton.Text = "+10초";
             tenSecButton.UseVisualStyleBackColor = false;
             // 
+            // halfMinButton
+            // 
+            halfMinButton.BackColor = System.Drawing.Color.Transparent;
+            halfMinButton.FlatStyle = FlatStyle.Flat;
+            halfMinButton.Location = new System.Drawing.Point(92, 105);
+            halfMinButton.Margin = new Padding(3, 4, 3, 4);
+            halfMinButton.Name = "halfMinButton";
+            halfMinButton.Size = new System.Drawing.Size(60, 40);
+            halfMinButton.TabIndex = 5;
+            halfMinButton.Text = "+30초";
+            halfMinButton.UseVisualStyleBackColor = false;
+            halfMinButton.Click += oneMinButton_Click;
+            // 
             // oneMinButton
             // 
             oneMinButton.BackColor = System.Drawing.Color.Transparent;
             oneMinButton.FlatStyle = FlatStyle.Flat;
-            oneMinButton.Location = new System.Drawing.Point(92, 105);
+            oneMinButton.Location = new System.Drawing.Point(175, 105);
             oneMinButton.Margin = new Padding(3, 4, 3, 4);
             oneMinButton.Name = "oneMinButton";
             oneMinButton.Size = new System.Drawing.Size(60, 40);
-            oneMinButton.TabIndex = 5;
+            oneMinButton.TabIndex = 6;
             oneMinButton.Text = "+1분";
             oneMinButton.UseVisualStyleBackColor = false;
             // 
@@ -82,25 +95,13 @@ namespace ForDaku
             // 
             fiveMinButton.BackColor = System.Drawing.Color.Transparent;
             fiveMinButton.FlatStyle = FlatStyle.Flat;
-            fiveMinButton.Location = new System.Drawing.Point(175, 105);
+            fiveMinButton.Location = new System.Drawing.Point(258, 105);
             fiveMinButton.Margin = new Padding(3, 4, 3, 4);
             fiveMinButton.Name = "fiveMinButton";
             fiveMinButton.Size = new System.Drawing.Size(60, 40);
-            fiveMinButton.TabIndex = 6;
+            fiveMinButton.TabIndex = 7;
             fiveMinButton.Text = "+5분";
             fiveMinButton.UseVisualStyleBackColor = false;
-            // 
-            // tenMinButton
-            // 
-            tenMinButton.BackColor = System.Drawing.Color.Transparent;
-            tenMinButton.FlatStyle = FlatStyle.Flat;
-            tenMinButton.Location = new System.Drawing.Point(258, 105);
-            tenMinButton.Margin = new Padding(3, 4, 3, 4);
-            tenMinButton.Name = "tenMinButton";
-            tenMinButton.Size = new System.Drawing.Size(60, 40);
-            tenMinButton.TabIndex = 7;
-            tenMinButton.Text = "+10분";
-            tenMinButton.UseVisualStyleBackColor = false;
             // 
             // minLabel
             // 
@@ -130,9 +131,9 @@ namespace ForDaku
             BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(secLabel);
             Controls.Add(minLabel);
-            Controls.Add(tenMinButton);
             Controls.Add(fiveMinButton);
             Controls.Add(oneMinButton);
+            Controls.Add(halfMinButton);
             Controls.Add(tenSecButton);
             Controls.Add(startButton);
             Controls.Add(resetButton);
@@ -147,9 +148,9 @@ namespace ForDaku
         private Button resetButton;
         private Button startButton;
         private Button tenSecButton;
+        private Button halfMinButton;
         private Button oneMinButton;
         private Button fiveMinButton;
-        private Button tenMinButton;
         private Label minLabel;
         private Label secLabel;
     }

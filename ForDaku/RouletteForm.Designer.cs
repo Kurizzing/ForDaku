@@ -37,6 +37,7 @@
             roulettePanel = new DoubleBufferedPanel();
             timerControl = new TimerControl();
             resultLabel = new System.Windows.Forms.Label();
+            colorDialog1 = new System.Windows.Forms.ColorDialog();
             SuspendLayout();
             // 
             // flowLayoutPanel
@@ -110,6 +111,7 @@
             timerControl.Name = "timerControl";
             timerControl.Size = new System.Drawing.Size(338, 160);
             timerControl.TabIndex = 11;
+            timerControl.Load += timerControl_Load;
             // 
             // resultLabel
             // 
@@ -154,6 +156,7 @@
         private System.Windows.Forms.Panel prizePanel;
         private TimerControl timerControl;
         private System.Windows.Forms.Label resultLabel;
+        private System.Windows.Forms.ColorDialog colorDialog1;
     }
 }
 

@@ -29,8 +29,11 @@ namespace ForDaku
 
         private TextBox searchTextBox;
         private Button searchButton;
+        private Label label;
         private int lastSelectionLength = -1; // 마지막 선택 영역 길이
         private int lastSearchIndex = 0;
+
+        private int i = 0;
 
         public MemoForm()
         {
@@ -217,7 +220,20 @@ namespace ForDaku
             findForm.Size = new Size(300, 120);
             findForm.StartPosition = FormStartPosition.Manual;
             findForm.Location = new Point(this.Location.X + 800, this.Location.Y + 100); // 메모장 폼 위치에 따라 대화상자 위치 조정
-
+            findForm.Owner = this; // 메모장 폼을 소유자로 설정
+            // 폼 확대 축소 막기
+            findForm.FormBorderStyle = FormBorderStyle.FixedDialog;
+            findForm.MaximizeBox = false;
+            findForm.MinimizeBox = false;
+            findForm.Activated += (s, e) =>
+            {
+                if (lastSearchIndex >= 0 && lastSelectionLength >= 0)
+                {
+                    // 대화상자에 포커스가 들어오면 강조 복원 
+                    richTextBox.Select(lastSearchIndex, lastSelectionLength);
+                    richTextBox.SelectionBackColor = Color.LightBlue;   // 강조 색상 설정
+                }
+            };
             searchTextBox = new TextBox { Dock = DockStyle.Top };
             searchButton = new Button { Text = "찾기", Dock = DockStyle.Bottom };
 
@@ -245,6 +261,8 @@ namespace ForDaku
                     richTextBox.Select(lastSearchIndex, lastSelectionLength);
                     richTextBox.SelectionBackColor = richTextBox.BackColor; // 배경색 복원
                 }
+                lastSelectionLength = -1;
+                lastSearchIndex = 0;
             };
 
             // 엔터키 기본 동작을 Find 버튼으로 연결 (버튼 눌림 효과)

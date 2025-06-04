@@ -41,7 +41,9 @@ namespace ForDaku
         private const float spinStartVelocity = 40f; // 초기 회전 속도
 
         private readonly Brush triangleBrush = new SolidBrush(Color.Red); // 삼각형 색상
-        private readonly Font itemFont = new("굴림체", 30, FontStyle.Bold);
+        // 화면 크기에 따라 변경될 예정
+        private const int fontStandardSize = 35;
+        private Font itemFont;
         private readonly Font prizeFont = new Font("굴림체", 40, FontStyle.Bold);
 
         private const int extraSpins = 15; // 추가 회전 수
@@ -78,7 +80,7 @@ namespace ForDaku
 
         List<double> usedHues = new List<double>();
         MyListItem prizeItem = null; // 당첨 아이템
-        
+
 
         // for test
         public RouletteForm()
@@ -103,7 +105,7 @@ namespace ForDaku
                     itemList.Add((deckName, count));
                 }
             }
-            
+
             this.DoubleBuffered = true; // 더블 버퍼링 활성화
 
             if (itemList != null)
@@ -129,7 +131,7 @@ namespace ForDaku
             {
                 this.itemList = itemList;
             }
-            
+
             this.DoubleBuffered = true; // 더블 버퍼링 활성화
 
             if (itemList != null)
@@ -148,8 +150,6 @@ namespace ForDaku
 
         private void InitializeControls()
         {
-            
-
             buttonVibrationTimer.Interval = speed;
             buttonVibrationTimer.Tick += Timer1_Tick;
 
@@ -207,6 +207,10 @@ namespace ForDaku
             roulettePanel.Height = (ClientSize.Height - rotateButton.Height - prizePanel.Height - triangleHeight - 150);
             roulettePanel.Width = roulettePanel.Height;
 
+            // 크기 1000일때 폰트 크기 40 기준으로 함 
+            int fontSize = Math.Max((int)(fontStandardSize * roulettePanel.Height / 1000.0f), 1);
+            itemFont = new Font("굴림", fontSize, FontStyle.Bold);
+
             resultLabel.Width = this.ClientSize.Width;
             resultLabel.Height = 70; // 높이 설정
             resultLabel.Location = new Point(0, (this.ClientSize.Height - resultLabel.Height) / 2);
@@ -240,7 +244,7 @@ namespace ForDaku
             float rotateButtonX = panelX;
             float rotateButtonY = panelT + roulettePanel.Height + remainingSpace / 2;
             (float rotateButtonL, float rotateButtonT) = CenterToLT(rotateButtonX, rotateButtonY, rotateButton.Width, rotateButton.Height);
-            
+
             rotateButton.Location = new Point((int)rotateButtonL, (int)rotateButtonT);
             originalRotateButtonY = rotateButton.Location.Y; // 버튼의 원래 Y 위치 저장
 
@@ -302,6 +306,8 @@ namespace ForDaku
 
         void DrawRoulette(SKCanvas canvas, int width, int height)
         {
+            SKColor backColor = roulettePanel.BackColor.ToSKColor();
+            canvas.DrawColor(backColor); // 배경색 설정
             if (GetAllCount() == 0)
                 return;
 
@@ -358,7 +364,7 @@ namespace ForDaku
             float halfBorder = rouletteBorderWidth / 2f;
             canvas.DrawOval(new SKRect(halfBorder, halfBorder, width - halfBorder, height - halfBorder), borderPaint);
 
-            canvas.Restore();
+            //canvas.Restore();
 
             // 항목 이름
             startAngle = 0;
@@ -366,10 +372,30 @@ namespace ForDaku
 
             foreach (MyListItem item in itemList)
             {
+                string text = item.TextBoxValue;
+                float fontSize = itemFont.Size;
+
+                // 텍스트 스타일
+                using var typeface = SKTypeface.FromFamilyName(itemFont.FontFamily.Name, SKFontStyle.Bold);
+                using var font = new SKFont(typeface, fontSize);
+                font.Subpixel = true; // 서브픽셀 렌더링 활성화
+                float textWidth = font.MeasureText(text);
+                if (textWidth > width * 0.3f)
+                {
+                    float scale = (width * 0.3f) / textWidth;
+                    font.Size *= scale;
+                    textWidth = font.MeasureText(text);
+                }
+                // 텍스트 높이 보정 (중앙 정렬용)
+                font.GetFontMetrics(out var metrics);
+                float textHeight = metrics.Descent - metrics.Ascent;
+                float verticalOffset = -(metrics.Ascent + textHeight / 2);
+
+                // 텍스트 각도, 위치 계산 
                 float probability = item.NumericUpDownValue / (float)GetAllCount();
                 sweepAngle = ProbabilityToDegree(probability);
-                float midAngle = startAngle + sweepAngle / 2;
-                float labelRadius = radius * 0.7f;
+                float midAngle = startAngle + sweepAngle * 0.5f;
+                float labelRadius = radius * 0.7f - textWidth * 0.5f;
 
                 double radians = midAngle * Math.PI / 180;
                 SKPoint textPos = new SKPoint(
@@ -377,36 +403,31 @@ namespace ForDaku
                     center.Y + (float)(labelRadius * Math.Sin(radians))
                 );
 
-                string text = item.TextBoxValue;
-                float fontSize = itemFont.Size;
-
-                using var textPaint = new SKPaint
+                // 외곽선용 Paint
+                using var outlinePaint = new SKPaint
                 {
-                    TextSize = fontSize,
                     IsAntialias = true,
-                    Color = SKColors.White,
-                    Typeface = SKTypeface.FromFamilyName(itemFont.FontFamily.Name, SKFontStyle.Bold),
-                    TextAlign = SKTextAlign.Center
+                    Color = SKColors.Black, // 외곽선 색
+                    Style = SKPaintStyle.Stroke,
+                    StrokeWidth = 4,
                 };
 
-                float textWidth = textPaint.MeasureText(text);
-                if (textWidth > width * 0.4f)
+                // 본문용 Paint
+                using var fillPaint = new SKPaint
                 {
-                    float scale = (width * 0.4f) / textWidth;
-                    textPaint.TextSize *= scale;
-                }
+                    IsAntialias = true,
+                    Color = SKColors.White, // 본문 색
+                    Style = SKPaintStyle.Fill,
+                };
+
+                using var textPath = font.GetTextPath(text);
+                textPath.Transform(SKMatrix.CreateTranslation(0, verticalOffset));
 
                 canvas.Save();
                 canvas.Translate(textPos);
                 canvas.RotateDegrees(midAngle);
-                canvas.DrawText(text, 0, 0, textPaint);
-
-                //// 텍스트 외곽선 (검정)
-                //textPaint.Style = SKPaintStyle.Stroke;
-                //textPaint.StrokeWidth = 4;
-                //textPaint.Color = SKColors.Black;
-                //canvas.DrawText(text, 0, 0, textPaint);
-
+                canvas.DrawPath(textPath, outlinePaint);
+                canvas.DrawPath(textPath, fillPaint);
                 canvas.Restore();
 
                 // 현재 당첨 아이템 감지
@@ -424,7 +445,7 @@ namespace ForDaku
             }
         }
 
-
+        // gdi 사용
         void DrawRoulette(Graphics g, int width, int height)
         {
             if (GetAllCount() == 0)
@@ -715,7 +736,7 @@ namespace ForDaku
         Color GenerateDistinctColor()
         {
             int maxAttempts = 100;
-            
+
             for (int attempt = 0; attempt < maxAttempts; attempt++)
             {
                 double newHue = random.NextDouble() * 360;
@@ -832,6 +853,7 @@ namespace ForDaku
             // 텍스트 설정
             string text = prizeItem.TextBoxValue;
             Font font = prizeFont;
+            
             Brush innerBrush = new SolidBrush(prizeItem.ItemColor);  // 텍스트 내부 색 (지정색)
             Pen outerPen = new Pen(Color.Black, 5f) { LineJoin = System.Drawing.Drawing2D.LineJoin.Round };  // 텍스트 외곽 색 (검은색)
 
@@ -841,8 +863,9 @@ namespace ForDaku
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
             };
-
-            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; // 곡선/경로 품질
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias; // 텍스트 품질
+            e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality; // 픽셀 정렬
 
             // 텍스트 크기 계산
             SizeF textSize = e.Graphics.MeasureString(text, font);
@@ -866,6 +889,11 @@ namespace ForDaku
                 // 텍스트 내부 채우기 (지정색)
                 e.Graphics.FillPath(innerBrush, path);
             }
+        }
+
+        private void timerControl_Load(object sender, EventArgs e)
+        {
+
         }
     }
 
